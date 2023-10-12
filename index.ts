@@ -1,17 +1,26 @@
-import express, { Request, Response , Application } from 'express';
-import dotenv from 'dotenv';
-import router from 'express';
+// gateway/src/app.ts
+import express from 'express';
+import bodyParser from 'body-parser';
+import authRoute from './routes/auth.routes';
+import connectToDatabase from './database/db.connect';
+// import uploadServiceRoutes from './routes/uploadServiceRoutes';
+// import downloadServiceRoutes from './routes/downloadServiceRoutes';
+// import emailServiceRoutes from './routes/emailServiceRoutes';
 
-//For env File 
-dotenv.config();
+const app = express();
+const port = 3000;
 
-const app: Application = express();
-const port = process.env.PORT || 8000;
+app.use(bodyParser.json());
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('Welcome to Express & TypeScript Server');
-});
+connectToDatabase();
+
+
+// app.use('/upload', uploadServiceRoutes);
+// app.use('/download', downloadServiceRoutes);
+// app.use('/email', emailServiceRoutes);
+
+app.use("/auth", authRoute);
 
 app.listen(port, () => {
-  console.log(`Server is Fire at http://localhost:${port}`);
+  console.log(`Gateway is running on port ${port}`);
 });
