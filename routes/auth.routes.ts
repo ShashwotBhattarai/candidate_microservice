@@ -16,4 +16,14 @@ router.post("/signup", async (req: Request, res: Response) => {
   res.status(authServiceResponse.status).send(authServiceResponse.message);
 });
 
+router.post("/login", async (req: Request, res: Response) => {
+  const authService = new AuthService();
+  const authServiceResponse = await authService.login(
+    req.body.username,
+    req.body.password
+  );
+
+  res.status(authServiceResponse.status).send(authServiceResponse.message);
+});
+
 export default router;
