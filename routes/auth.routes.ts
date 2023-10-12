@@ -7,21 +7,17 @@ const router: Router = express.Router();
 
 // Define a route for user-related operations
 router.post("/signup", async (req: Request, res: Response) => {
-  const fullname = req.body.fullname;
-  const email = req.body.email;
-  const username = req.body.username;
-  const password = req.body.password;
-
-  const result = await AuthCredentials.findOne({ username: username });
+  
+  const result = await AuthCredentials.findOne({ username: req.body.username });
   if (result == null) {
     const authService = new AuthService();
     const status = await authService.registerNewUser(
-      fullname,
-      email,
-      username,
-      password
+      req.body.fullname,
+      req.body.email,
+      req.body.username,
+      req.body.password
     );
-    res.json(status);
+    res.status(200).send(status);
   } else {
     res.status(400).send({ message: "username already exists" });
   }
