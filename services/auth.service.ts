@@ -29,7 +29,7 @@ export class AuthService {
         };
       }
     } catch (error) {
-      throw {
+      return {
         status: 500,
         message: error,
       };
@@ -59,7 +59,7 @@ export class AuthService {
         };
       }
     } catch (error) {
-      throw {
+      return {
         status: 500,
         message: error,
       };
