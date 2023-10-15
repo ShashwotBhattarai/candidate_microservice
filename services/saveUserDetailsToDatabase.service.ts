@@ -1,5 +1,5 @@
 import { CandidateInfo } from "../database/models/cadidateInfo.models";
-import { findCurrentuserId } from "../utils/findCurrentUserId.utils";
+import { findCurrentuserId } from "./findCurrentUserId.service";
 
 export async function saveUserDetailsToDatabase(
   file: any,
