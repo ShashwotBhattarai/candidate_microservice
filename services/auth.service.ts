@@ -40,9 +40,10 @@ export class AuthService {
       const result = await AuthCredentials.findOne({ username: loginUsername });
 
       if (result !== null && loginPassword == result.password) {
+        console.log(process.env.JWTSECRET as string);
         const token = jwt.sign(
-          { username: loginUsername, password: loginPassword },
-          "YOUR_SECRETrefrerfre",
+          { userId: result.user_id, username: loginUsername, role: result.role },
+          process.env.JWTSECRET as string,
           {
             expiresIn: "1d",
           }

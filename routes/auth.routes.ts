@@ -6,7 +6,7 @@ import { validateSignupInput } from "../validators/signup.validate";
 const router: Router = express.Router();
 
 router.post("/signup", async (req: Request, res: Response)=> {
-  const { error, value } = validateSignupInput.validate(req.body);
+  const { error} = validateSignupInput.validate(req.body);
 
   if (error) {
     return res.status(400).json({ error: error.details[0].message });
