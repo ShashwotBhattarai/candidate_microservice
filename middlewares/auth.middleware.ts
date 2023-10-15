@@ -15,6 +15,7 @@ export function authMiddleware(allowedRoles: Array<string>) {
       };
 
       const userRole = decoded.role;
+      
 
       if (!allowedRoles.includes(userRole)) {
         return res.status(403).json({ message: "Access denied" });

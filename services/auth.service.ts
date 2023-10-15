@@ -42,7 +42,7 @@ export class AuthService {
       if (result !== null && loginPassword == result.password) {
         console.log(process.env.JWTSECRET as string);
         const token = jwt.sign(
-          { userId: result.user_id, username: loginUsername, role: result.role },
+          { user_id: result.user_id, username: loginUsername, role: result.role },
           process.env.JWTSECRET as string,
           {
             expiresIn: "1d",
