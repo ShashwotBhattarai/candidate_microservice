@@ -12,23 +12,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// src/routes/userRoutes.ts
 const express_1 = __importDefault(require("express"));
-const auth_service_1 = require("../services/auth.service");
-const signup_validate_1 = require("../validators/signup.validate");
+const uploadCandidateInfo_validate_1 = require("../validators/uploadCandidateInfo.validate");
+const checkFile_middleware_1 = require("../middlewares/checkFile.middleware");
+const auth_middleware_1 = require("../middlewares/auth.middleware");
+const multer_1 = __importDefault(require("multer"));
+const saveUserDetailsToDatabase_service_1 = require("../services/saveUserDetailsToDatabase.service");
+const upload = (0, multer_1.default)({
+    dest: "uploads/",
+});
 const router = express_1.default.Router();
-router.post("/signup", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { error } = signup_validate_1.validateSignupInput.validate(req.body);
+router.post("/", upload.single("cv"), (0, auth_middleware_1.authMiddleware)(["user"]), checkFile_middleware_1.checkFileMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { error } = uploadCandidateInfo_validate_1.validateCandidateInfo.validate(req.body);
     if (error) {
         return res.status(400).json({ error: error.details[0].message });
     }
-    const authService = new auth_service_1.AuthService();
-    const authServiceResponse = yield authService.registerNewUser(req.body.fullname, req.body.email, req.body.username, req.body.password);
-    res.status(authServiceResponse.status).send(authServiceResponse.message);
-}));
-router.post("/login", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const authService = new auth_service_1.AuthService();
-    const authServiceResponse = yield authService.login(req.body.username, req.body.password);
-    res.status(authServiceResponse.status).send(authServiceResponse.message);
+    const saveUserDetailsServiceResponse = yield (0, saveUserDetailsToDatabase_service_1.saveUserDetailsToDatabase)(req.file, req.body, req.headers.authorization || "");
+    res.status(saveUserDetailsServiceResponse.status).json(saveUserDetailsServiceResponse.message);
 }));
 exports.default = router;
