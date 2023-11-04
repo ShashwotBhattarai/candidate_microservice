@@ -1,4 +1,3 @@
-// gateway/src/app.ts
 import express from "express";
 import bodyParser from "body-parser";
 import authRoute from "./routes/auth.routes";

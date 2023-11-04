@@ -29,7 +29,7 @@ router.post("/login", async (req: Request, res: Response) => {
     req.body.password
   );
 
-  res.status(authServiceResponse.status).send(authServiceResponse.message);
+  res.status(authServiceResponse.status).json({message:authServiceResponse.message});
 });
 
 export default router;

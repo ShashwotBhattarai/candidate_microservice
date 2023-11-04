@@ -40,7 +40,6 @@ export class AuthService {
       const result = await AuthCredentials.findOne({ username: loginUsername });
 
       if (result !== null && loginPassword == result.password) {
-        console.log(process.env.JWTSECRET as string);
         const token = jwt.sign(
           { user_id: result.user_id, username: loginUsername, role: result.role },
           process.env.JWTSECRET as string,
@@ -51,7 +50,7 @@ export class AuthService {
 
         return {
           status: 200,
-          message: `token: ${token}`,
+          message: {token: token},
         };
       } else {
         return {
