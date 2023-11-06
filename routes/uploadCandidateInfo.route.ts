@@ -14,7 +14,7 @@ const router: Router = express.Router();
 router.post(
   "/",
   upload.single("cv"),
-  authMiddleware(["user"]),
+  authMiddleware(["candidate"]),
   checkFileMiddleware,
   async (req: Request, res: Response) => {
     const { error } = validateCandidateInfo.validate(req.body);

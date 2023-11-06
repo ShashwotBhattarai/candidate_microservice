@@ -6,7 +6,8 @@ export class AuthService {
     newFullname: string,
     newEmail: string,
     newUsername: string,
-    newPassword: string
+    newPassword: string,
+    newRole: string
   ) {
     try {
       const result = await AuthCredentials.findOne({ username: newUsername });
@@ -16,6 +17,7 @@ export class AuthService {
           email: newEmail,
           username: newUsername,
           password: newPassword,
+          role: newRole
         });
         await registerNewUser.save();
         return {
