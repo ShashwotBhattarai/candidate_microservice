@@ -5,6 +5,12 @@ import { authMiddleware } from "../middlewares/auth.middleware";
 import multer from "multer";
 import { saveUserDetailsToDatabase } from "../services/saveUserDetailsToDatabase.service";
 
+import { SQSService } from '../services/sqs.service';
+import { sqs } from '../config/aws.config';
+
+const sqsService = new SQSService(sqs);
+const queueUrl = 'https://sqs.us-east-1.amazonaws.com/750889590187/fileUploadQueue.fifo';
+
 const upload = multer({
   dest: "uploads/",
 });
@@ -26,7 +32,19 @@ router.post(
     // res.status(saveUserDetailsServiceResponse.status).json(saveUserDetailsServiceResponse.message);
 
     console.log(req.file);
+
+
+    try {
+      const messageBody = 'Hello from Express!';
+      const result = await sqsService.sendMessage(queueUrl, messageBody);
+      console.log(result)
+    } catch (error) {
+      console.error('Error sending message:', error);
+    }
+    
     res.status(200).json("ok");
+
+
   }
 );
 
