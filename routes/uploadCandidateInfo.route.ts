@@ -11,9 +11,8 @@ import { sqs } from '../config/aws.config';
 const sqsService = new SQSService(sqs);
 const queueUrl = 'https://sqs.us-east-1.amazonaws.com/750889590187/fileUploadQueue.fifo';
 
-const upload = multer({
-  dest: "uploads/",
-});
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 const router: Router = express.Router();
 
@@ -35,7 +34,7 @@ router.post(
 
 
     try {
-      const messageBody = 'Hello from Express!';
+      const messageBody = "req.file will go here";
       const result = await sqsService.sendMessage(queueUrl, messageBody);
       console.log(result)
     } catch (error) {
