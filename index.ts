@@ -8,7 +8,7 @@ import cors from "cors";
 
 const app = express();
 app.use(cors());
-const port = 3000;
+const port = 4000;
 
 app.use(bodyParser.json());
 
@@ -18,5 +18,5 @@ app.use("/upload", uploadCandidateInfoRoute);
 app.use("/getCandidateInfo", getCandidateInfoRoute);
 
 app.listen(port, () => {
-  console.log(`Gateway is running on port ${port}`);
+  console.log(`Candidate Microservice Running at port ${port}`);
 });
