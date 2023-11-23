@@ -4,10 +4,7 @@
   "description": "web application where users can sign in and upload there info with CV file. An admin can view all users and there data and download there CV's.users will be notified by email after their file has been  uploaded and downloaded.",
   "main": "index.ts",
   "scripts": {
-    "build": "npx tsc",
-    "start": "ts-node index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "nodemon": "npm run start"
+    "start": "tsc && node ./dist/index.js"
   },
   "author": "shashwot bhattarai",
   "license": "ISC",

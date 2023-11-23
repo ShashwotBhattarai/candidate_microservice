@@ -15,16 +15,14 @@ const findCurrentUserId_service_1 = require("./findCurrentUserId.service");
 function saveUserDetailsToDatabase(file, body, acesstoken) {
     return __awaiter(this, void 0, void 0, function* () {
         const current_user_id = (0, findCurrentUserId_service_1.findCurrentuserId)(acesstoken);
-        const cadidateInfo = new cadidateInfo_models_1.CandidateInfo({
-            user_id: current_user_id,
-            fullname: body.fullname,
-            email: body.email,
-            phone_number: body.phone_number,
-            local_file_name: file === null || file === void 0 ? void 0 : file.filename,
-            file_size_in_bytes: file === null || file === void 0 ? void 0 : file.size,
-        });
         try {
-            yield cadidateInfo.save();
+            const response = yield cadidateInfo_models_1.CandidateInfo.findOneAndUpdate({ user_id: current_user_id }, {
+                fullname: body.fullname,
+                email: body.email,
+                phone_number: body.phone_number,
+                local_file_name: file === null || file === void 0 ? void 0 : file.filename,
+                file_size_in_bytes: file === null || file === void 0 ? void 0 : file.size,
+            }, { upsert: true, new: true });
             return { status: 201, message: "User info Saved to database" };
         }
         catch (error) {
