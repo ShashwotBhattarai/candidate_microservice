@@ -3,7 +3,6 @@ import jwt from "jsonwebtoken";
 
 export class AuthService {
   async registerNewUser(
-    newFullname: string,
     newEmail: string,
     newUsername: string,
     newPassword: string,
@@ -13,11 +12,10 @@ export class AuthService {
       const result = await AuthCredentials.findOne({ username: newUsername });
       if (result == null) {
         const registerNewUser = new AuthCredentials({
-          fullname: newFullname,
           email: newEmail,
           username: newUsername,
           password: newPassword,
-          role: newRole
+          role: newRole,
         });
         await registerNewUser.save();
         return {
@@ -43,7 +41,11 @@ export class AuthService {
 
       if (result !== null && loginPassword == result.password) {
         const token = jwt.sign(
-          { user_id: result.user_id, username: loginUsername, role: result.role },
+          {
+            user_id: result.user_id,
+            username: loginUsername,
+            role: result.role,
+          },
           process.env.JWTSECRET as string,
           {
             expiresIn: "1d",
@@ -52,7 +54,7 @@ export class AuthService {
 
         return {
           status: 200,
-          message: {token: token},
+          message: { token: token },
         };
       } else {
         return {

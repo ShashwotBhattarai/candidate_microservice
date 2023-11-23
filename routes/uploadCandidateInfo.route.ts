@@ -8,11 +8,11 @@ import { saveUserDetailsToDatabase } from "../services/saveUserDetailsToDatabase
 import { S3UploadService } from "../services/s3-upload.service";
 
 import { SQSService } from "../services/sqs.service";
-import { sqs } from "../config/aws.config";
+// import { sqs } from "../config/aws.config";
 
-const sqsService = new SQSService(sqs);
-const queueUrl =
-  "https://sqs.us-east-1.amazonaws.com/750889590187/fileUploadQueue.fifo";
+// const sqsService = new SQSService(sqs);
+// const queueUrl =
+//   "https://sqs.us-east-1.amazonaws.com/750889590187/fileUploadQueue.fifo";
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });

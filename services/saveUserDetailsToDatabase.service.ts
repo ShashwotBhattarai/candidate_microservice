@@ -7,17 +7,20 @@ export async function saveUserDetailsToDatabase(
   acesstoken: string
 ) {
   const current_user_id = findCurrentuserId(acesstoken);
-  const cadidateInfo = new CandidateInfo({
-    user_id: current_user_id,
-    fullname: body.fullname,
-    email: body.email,
-    phone_number: body.phone_number,
-    local_file_name: file?.filename,
-    file_size_in_bytes: file?.size,
-  });
 
   try {
-    await cadidateInfo.save();
+    const response = await CandidateInfo.findOneAndUpdate(
+      { user_id: current_user_id },
+      {
+        fullname: body.fullname,
+        email: body.email,
+        phone_number: body.phone_number,
+        local_file_name: file?.filename,
+        file_size_in_bytes: file?.size,
+      },
+      { upsert: true, new: true }
+    );
+
     return { status: 201, message: "User info Saved to database" };
   } catch (error) {
     return {

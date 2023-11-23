@@ -12,12 +12,11 @@ router.post("/signup", async (req: Request, res: Response)=> {
   }
   const authService = new AuthService();
   const authServiceResponse = await authService.registerNewUser(
-    req.body.fullname,
     req.body.email,
     req.body.username,
     req.body.password,
     req.body.role,
-  );
+);
 
   res.status(authServiceResponse.status).send(authServiceResponse.message);
 });
