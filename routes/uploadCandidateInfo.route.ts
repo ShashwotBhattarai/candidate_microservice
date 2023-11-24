@@ -10,14 +10,9 @@ import {
 
 import { S3UploadService } from "../services/s3-upload.service";
 
-import { SQSService } from "../services/sqs.service";
 import { findSavedS3key } from "../services/findSavedS3key.service";
 import { S3DeleteService } from "../services/s3-delete.service";
-// import { sqs } from "../config/aws.config";
 
-// const sqsService = new SQSService(sqs);
-// const queueUrl =
-//   "https://sqs.us-east-1.amazonaws.com/750889590187/fileUploadQueue.fifo";
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
