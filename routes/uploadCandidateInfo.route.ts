@@ -99,6 +99,8 @@ router.post(
         status4 = 500;
         message4 = deleteFileResponse.message;
       }
+    } else {
+      message4 = "no file to delete from s3";
     }
 
     const updateAwsKeyInDatabaseResponse = await updateAwsKeyInDatabase(

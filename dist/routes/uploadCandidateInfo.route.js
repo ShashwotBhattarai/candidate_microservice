@@ -84,6 +84,9 @@ router.post("/", upload.single("cv"), (0, auth_middleware_1.authMiddleware)(["ca
             message4 = deleteFileResponse.message;
         }
     }
+    else {
+        message4 = "no file to delete from s3";
+    }
     const updateAwsKeyInDatabaseResponse = yield (0, saveUserDetailsToDatabase_service_1.updateAwsKeyInDatabase)(req.headers.authorization || "", newKey);
     if (updateAwsKeyInDatabaseResponse.status == 200) {
         status5 = 200;

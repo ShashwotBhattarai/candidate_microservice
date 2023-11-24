@@ -30,7 +30,7 @@ class S3DeleteService {
             try {
                 const response = yield client.send(command);
                 console.log(response);
-                return { status: 201, message: "file deleted form s3" };
+                return { status: 201, message: "old file deleted from s3" };
             }
             catch (err) {
                 return {

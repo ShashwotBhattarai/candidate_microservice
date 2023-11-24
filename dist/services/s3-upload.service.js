@@ -38,7 +38,7 @@ class S3UploadService {
                 const response = yield client.send(command);
                 return {
                     status: 201,
-                    message: "file uploaded s3 bucket",
+                    message: "new file uploaded to s3 bucket",
                     Key: currentKey,
                 };
             }
