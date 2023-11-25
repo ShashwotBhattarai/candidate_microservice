@@ -21,10 +21,8 @@ const saveUserDetailsToDatabase_service_1 = require("../services/saveUserDetails
 const s3_upload_service_1 = require("../services/s3-upload.service");
 const findSavedS3key_service_1 = require("../services/findSavedS3key.service");
 const s3_delete_service_1 = require("../services/s3-delete.service");
-// import { sqs } from "../config/aws.config";
-// const sqsService = new SQSService(sqs);
-// const queueUrl =
-//   "https://sqs.us-east-1.amazonaws.com/750889590187/fileUploadQueue.fifo";
+const sqs_service_1 = require("../services/sqs.service");
+const constructEmailPaylaod_service_1 = require("../services/constructEmailPaylaod.service");
 const storage = multer_1.default.memoryStorage();
 const upload = (0, multer_1.default)({ storage: storage });
 const router = express_1.default.Router();
@@ -32,6 +30,7 @@ router.post("/", upload.single("cv"), (0, auth_middleware_1.authMiddleware)(["ca
     if (!req.file || !req.file.buffer) {
         return res.status(400).json("File or file buffer is missing");
     }
+    const currentToken = req.headers.authorization || "";
     let status1;
     let message1;
     let status2;
@@ -44,7 +43,7 @@ router.post("/", upload.single("cv"), (0, auth_middleware_1.authMiddleware)(["ca
     let message4;
     let status5;
     let message5;
-    const saveUserDetailsServiceResponse = yield (0, saveUserDetailsToDatabase_service_1.saveUserDetailsToDatabase)(req.file, req.body, req.headers.authorization || "");
+    const saveUserDetailsServiceResponse = yield (0, saveUserDetailsToDatabase_service_1.saveUserDetailsToDatabase)(req.file, req.body, currentToken);
     if (saveUserDetailsServiceResponse.status == 201) {
         status1 = 200;
         message1 = saveUserDetailsServiceResponse.message;
@@ -58,6 +57,14 @@ router.post("/", upload.single("cv"), (0, auth_middleware_1.authMiddleware)(["ca
         status2 = 200;
         message2 = uploadFileResponse.message;
         newKey = uploadFileResponse.Key || "";
+        const subject = "Your CV has been uploaded";
+        const text = "Dear Candidate your CV has been uploaded successfully";
+        const constructPayloadResponse = yield new constructEmailPaylaod_service_1.ConstructEmailPayload().constructEmailPayload(currentToken, subject, text);
+        if (constructPayloadResponse.status == 200) {
+            const emailPayload = constructPayloadResponse.message;
+            const sqsResponse = yield new sqs_service_1.SQS_Service().sendMessageToQueue(emailPayload);
+            console.log(sqsResponse);
+        }
     }
     else {
         status2 = 500;

@@ -8,40 +8,44 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SQSService = void 0;
-class SQSService {
-    constructor(sqs) {
-        this.sqs = sqs;
-    }
-    sendMessage(queueUrl, messageBody) {
-        var _a;
+exports.SQS_Service = void 0;
+const client_sqs_1 = require("@aws-sdk/client-sqs");
+const generate_unique_id_1 = __importDefault(require("generate-unique-id"));
+class SQS_Service {
+    sendMessageToQueue(emailPayload) {
         return __awaiter(this, void 0, void 0, function* () {
-            // Get the queue attributes to check if ContentBasedDeduplication is enabled
-            const getQueueAttributesParams = {
-                QueueUrl: queueUrl,
-                AttributeNames: ['All'],
-            };
-            const queueAttributesResponse = yield this.sqs.getQueueAttributes(getQueueAttributesParams).promise();
-            const isContentBasedDeduplicationEnabled = ((_a = queueAttributesResponse.Attributes) === null || _a === void 0 ? void 0 : _a.ContentBasedDeduplication) === 'true';
-            // If ContentBasedDeduplication is not enabled, update the queue attributes
-            if (!isContentBasedDeduplicationEnabled) {
-                const setQueueAttributesParams = {
-                    QueueUrl: queueUrl,
-                    Attributes: {
-                        ContentBasedDeduplication: 'true',
+            const client = new client_sqs_1.SQSClient({
+                credentials: {
+                    accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
+                    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "",
+                },
+                region: process.env.AWS_REGION || "",
+            });
+            const sqsQueueUrl = process.env.SQS_QUEUE_URL;
+            const command = new client_sqs_1.SendMessageCommand({
+                QueueUrl: sqsQueueUrl,
+                MessageAttributes: {
+                    To: {
+                        DataType: "String",
+                        StringValue: emailPayload.to,
                     },
-                };
-                yield this.sqs.setQueueAttributes(setQueueAttributesParams).promise();
-            }
-            // Now, send the message
-            const sendMessageParams = {
-                QueueUrl: queueUrl,
-                MessageBody: messageBody,
-                MessageGroupId: "uploader",
-            };
-            return this.sqs.sendMessage(sendMessageParams).promise();
+                    Subject: {
+                        DataType: "String",
+                        StringValue: emailPayload.subject,
+                    },
+                },
+                MessageBody: emailPayload.text,
+                MessageGroupId: "sendEmailResumeTracker",
+                MessageDeduplicationId: (0, generate_unique_id_1.default)(),
+            });
+            const response = yield client.send(command);
+            // console.log(response);
+            return response;
         });
     }
 }
-exports.SQSService = SQSService;
+exports.SQS_Service = SQS_Service;
