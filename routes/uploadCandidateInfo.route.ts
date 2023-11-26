@@ -72,7 +72,7 @@ router.post(
 				const emailPayload = constructPayloadResponse.message;
 
 				const sqsResponse = await new SQS_Service().sendMessageToQueue(emailPayload);
-				console.log(sqsResponse);
+				console.log(sqsResponse.$metadata.httpStatusCode);
 			}
 		} else {
 			status2 = 500;

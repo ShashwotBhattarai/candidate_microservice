@@ -63,7 +63,7 @@ router.post("/", upload.single("cv"), (0, auth_middleware_1.authMiddleware)(["ca
         if (constructPayloadResponse.status == 200) {
             const emailPayload = constructPayloadResponse.message;
             const sqsResponse = yield new sqs_service_1.SQS_Service().sendMessageToQueue(emailPayload);
-            console.log(sqsResponse);
+            console.log(sqsResponse.$metadata.httpStatusCode);
         }
     }
     else {
