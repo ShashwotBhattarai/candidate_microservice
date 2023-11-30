@@ -4,7 +4,6 @@ import connectToDatabase from "./database/db.connect";
 import uploadCandidateInfoRoute from "./routes/uploadCandidateInfo.route";
 
 import cors from "cors";
-import { SQS_Service } from "./services/sqs.service";
 
 const app = express();
 app.use(cors());
@@ -14,7 +13,7 @@ app.use(bodyParser.json());
 
 connectToDatabase();
 
-app.use("/upload", uploadCandidateInfoRoute);
+app.use("/candidate/upload", uploadCandidateInfoRoute);
 
 app.listen(port, () => {
 	console.log(`Candidate Microservice Running at port ${port}`);

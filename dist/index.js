@@ -13,7 +13,7 @@ app.use((0, cors_1.default)());
 const port = 4000;
 app.use(body_parser_1.default.json());
 (0, db_connect_1.default)();
-app.use("/upload", uploadCandidateInfo_route_1.default);
+app.use("/candidate/upload", uploadCandidateInfo_route_1.default);
 app.listen(port, () => {
     console.log(`Candidate Microservice Running at port ${port}`);
 });
