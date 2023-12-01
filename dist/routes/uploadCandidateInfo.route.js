@@ -30,6 +30,7 @@ router.post("/", upload.single("cv"), (0, auth_middleware_1.authMiddleware)(["ca
     if (!req.file || !req.file.buffer) {
         return res.status(400).json("File or file buffer is missing");
     }
+    console.log(req.file);
     const currentToken = req.headers.authorization || "";
     let status1;
     let message1;
@@ -52,7 +53,7 @@ router.post("/", upload.single("cv"), (0, auth_middleware_1.authMiddleware)(["ca
         status1 = 500;
         message1 = saveUserDetailsServiceResponse.message;
     }
-    const uploadFileResponse = yield new s3_upload_service_1.S3UploadService().uploadFileToS3(req.file.buffer, req.file.mimetype);
+    const uploadFileResponse = yield new s3_upload_service_1.S3UploadService().uploadFileToS3(req.file.buffer, req.file.mimetype, req.file.originalname);
     if (uploadFileResponse.status == 201) {
         status2 = 200;
         message2 = uploadFileResponse.message;

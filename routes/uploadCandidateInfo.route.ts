@@ -4,9 +4,7 @@ import { checkFileMiddleware } from "../middlewares/checkFile.middleware";
 import { authMiddleware } from "../middlewares/auth.middleware";
 import multer from "multer";
 import { saveUserDetailsToDatabase, updateAwsKeyInDatabase } from "../services/saveUserDetailsToDatabase.service";
-
 import { S3UploadService } from "../services/s3-upload.service";
-
 import { findSavedS3key } from "../services/findSavedS3key.service";
 import { S3DeleteService } from "../services/s3-delete.service";
 import { SQS_Service } from "../services/sqs.service";
@@ -27,6 +25,8 @@ router.post(
 		if (!req.file || !req.file.buffer) {
 			return res.status(400).json("File or file buffer is missing");
 		}
+
+		console.log(req.file);
 
 		const currentToken = req.headers.authorization || "";
 
@@ -53,7 +53,7 @@ router.post(
 			message1 = saveUserDetailsServiceResponse.message;
 		}
 
-		const uploadFileResponse = await new S3UploadService().uploadFileToS3(req.file.buffer, req.file.mimetype);
+		const uploadFileResponse = await new S3UploadService().uploadFileToS3(req.file.buffer, req.file.mimetype, req.file.originalname);
 
 		if (uploadFileResponse.status == 201) {
 			status2 = 200;

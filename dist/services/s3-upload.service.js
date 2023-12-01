@@ -8,17 +8,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.S3UploadService = void 0;
 const client_s3_1 = require("@aws-sdk/client-s3");
 const dotenv_1 = require("dotenv");
-const generate_unique_id_1 = __importDefault(require("generate-unique-id"));
 (0, dotenv_1.config)();
 class S3UploadService {
-    uploadFileToS3(buffer, type) {
+    uploadFileToS3(buffer, type, filename) {
         return __awaiter(this, void 0, void 0, function* () {
             const client = new client_s3_1.S3Client({
                 credentials: {
@@ -27,7 +23,7 @@ class S3UploadService {
                 },
                 region: process.env.AWS_REGION || "",
             });
-            const currentKey = (0, generate_unique_id_1.default)();
+            const currentKey = Date.now() + "_" + filename;
             const command = new client_s3_1.PutObjectCommand({
                 Bucket: process.env.S3_BUCKET_NAME,
                 Key: currentKey,

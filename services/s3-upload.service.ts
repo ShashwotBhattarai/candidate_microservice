@@ -1,11 +1,9 @@
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { config } from "dotenv";
-import generateUniqueId from "generate-unique-id";
-import { SQS_Service } from "./sqs.service";
 config();
 
 export class S3UploadService {
-	async uploadFileToS3(buffer: Buffer, type: string) {
+	async uploadFileToS3(buffer: Buffer, type: string, filename: string) {
 		const client = new S3Client({
 			credentials: {
 				accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
@@ -14,7 +12,7 @@ export class S3UploadService {
 			region: process.env.AWS_REGION || "",
 		});
 
-		const currentKey = generateUniqueId();
+		const currentKey = Date.now() + "_" + filename;
 		const command = new PutObjectCommand({
 			Bucket: process.env.S3_BUCKET_NAME,
 			Key: currentKey,
