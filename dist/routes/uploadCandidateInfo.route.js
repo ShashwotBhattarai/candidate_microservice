@@ -30,7 +30,6 @@ router.post("/", upload.single("cv"), (0, auth_middleware_1.authMiddleware)(["ca
     if (!req.file || !req.file.buffer) {
         return res.status(400).json("File or file buffer is missing");
     }
-    console.log(req.file);
     const currentToken = req.headers.authorization || "";
     let status1;
     let message1;
