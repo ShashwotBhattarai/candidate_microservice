@@ -19,5 +19,23 @@ describe("registerNewUser", () => {
         mockingoose(cadidateInfo_models_1.CandidateInfo).toReturn({ email: "abcd@gmail.com", fullname: "shashwot" }, "findOne");
         const finalResult = yield new constructEmailPayload_service_1.ConstructEmailPayload().constructEmailPayload("23fsf", "subject", "text");
         expect(finalResult === null || finalResult === void 0 ? void 0 : finalResult.status).toBe(200);
+        expect(finalResult.message).toBe({
+            to: "abcd@gmail.com",
+            subject: "subject",
+            text: "text",
+        });
+    }));
+    test("database error", () => __awaiter(void 0, void 0, void 0, function* () {
+        // const findCurrentuserId = jest.fn().mockImplementation(() => "agvfe6");
+        mockingoose(cadidateInfo_models_1.CandidateInfo).toReturn(new Error("Database error"), "findOne");
+        const finalResult = yield new constructEmailPayload_service_1.ConstructEmailPayload().constructEmailPayload("23fsf", "subject", "text");
+        expect(finalResult === null || finalResult === void 0 ? void 0 : finalResult.status).toBe(500);
+    }));
+    test("database error", () => __awaiter(void 0, void 0, void 0, function* () {
+        // const findCurrentuserId = jest.fn().mockImplementation(() => "agvfe6");
+        mockingoose(cadidateInfo_models_1.CandidateInfo).toReturn(null, "findOne");
+        const finalResult = yield new constructEmailPayload_service_1.ConstructEmailPayload().constructEmailPayload("23fsf", "subject", "text");
+        expect(finalResult === null || finalResult === void 0 ? void 0 : finalResult.status).toBe(500);
+        expect(finalResult.message).toBe("unknown error occured");
     }));
 });

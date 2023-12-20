@@ -19,15 +19,23 @@ class ConstructEmailPayload {
             let namedSubject;
             try {
                 const response = yield cadidateInfo_models_1.CandidateInfo.findOne({ user_id: user_id });
-                const email = response === null || response === void 0 ? void 0 : response.email;
-                const fullname = response === null || response === void 0 ? void 0 : response.fullname;
-                namedSubject = "Hi " + fullname + " " + subject;
-                const emailPayload = {
-                    to: email || "",
-                    subject: namedSubject,
-                    text: text,
-                };
-                return { status: 200, message: emailPayload };
+                if (response instanceof cadidateInfo_models_1.CandidateInfo) {
+                    const email = response === null || response === void 0 ? void 0 : response.email;
+                    const fullname = response === null || response === void 0 ? void 0 : response.fullname;
+                    namedSubject = "Hi " + fullname + " " + subject;
+                    const emailPayload = {
+                        to: email,
+                        subject: namedSubject,
+                        text: text,
+                    };
+                    return { status: 200, message: emailPayload };
+                }
+                else {
+                    return {
+                        status: 500,
+                        message: "unknown error occured",
+                    };
+                }
             }
             catch (error) {
                 return {

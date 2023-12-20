@@ -12,13 +12,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.findCurrentuserId = void 0;
+const findCurrentUserId_service_1 = require("../services/findCurrentUserId.service");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-function findCurrentuserId(acesstoken) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const token = acesstoken.slice(7);
-        const decoded = jsonwebtoken_1.default.verify(token, process.env.JWTSECRET);
-        return decoded.user_id;
+describe("findCurrentUserId test", () => {
+    afterEach(() => {
+        jest.clearAllMocks();
     });
-}
-exports.findCurrentuserId = findCurrentuserId;
+    test("returns user id", () => __awaiter(void 0, void 0, void 0, function* () {
+        const signSpy = jest.spyOn(jsonwebtoken_1.default, "verify");
+        signSpy.mockImplementation(() => {
+            user_id: "ksvfhjsvfh";
+        });
+        const finalResult = yield (0, findCurrentUserId_service_1.findCurrentuserId)("kjfy64r532");
+        console.log(finalResult);
+        expect(finalResult).toBe("ksvfhjsvfh");
+        expect(yield findCurrentUserId_service_1.findCurrentuserId).toHaveReturned();
+    }));
+});
