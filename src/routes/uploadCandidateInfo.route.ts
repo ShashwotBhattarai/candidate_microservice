@@ -8,7 +8,7 @@ import { S3UploadService } from "../services/s3-upload.service";
 import { findSavedS3key } from "../services/findSavedS3key.service";
 import { S3DeleteService } from "../services/s3-delete.service";
 import { SQS_Service } from "../services/sqs.service";
-import { ConstructEmailPayload } from "../services/constructEmailPaylaod.service";
+import { ConstructEmailPayload } from "../services/constructEmailPayload.service";
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });

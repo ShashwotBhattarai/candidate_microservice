@@ -4,7 +4,8 @@
 	"description": "web application where users can sign in and upload there info with CV file. An admin can view all users and there data and download there CV's.users will be notified by email after their file has been  uploaded and downloaded.",
 	"main": "index.ts",
 	"scripts": {
-		"start": "tsc && node ./dist/index.js"
+		"start": "tsc && node ./dist/index.js",
+		"test": "jest --coverage"
 	},
 	"author": "shashwot bhattarai",
 	"license": "ISC",
@@ -21,6 +22,7 @@
 		"generate-unique-id": "^2.0.3",
 		"joi": "^17.11.0",
 		"jsonwebtoken": "^9.0.2",
+		"mockingoose": "^2.16.2",
 		"mongodb": "^6.1.0",
 		"mongoose": "^7.6.1",
 		"multer": "^1.4.5-lts.1",
@@ -28,13 +30,19 @@
 		"uuid": "^9.0.1"
 	},
 	"devDependencies": {
+		"@babel/core": "^7.23.6",
+		"@babel/preset-env": "^7.23.6",
+		"@babel/preset-typescript": "^7.23.3",
 		"@types/aws-sdk": "^2.7.0",
 		"@types/cors": "^2.8.14",
 		"@types/express": "^4.17.21",
+		"@types/jest": "^29.5.11",
 		"@types/jsonwebtoken": "^9.0.5",
 		"@types/multer": "^1.4.8",
 		"@types/node": "^20.9.4",
 		"@types/uuid": "^9.0.5",
+		"babel-jest": "^29.7.0",
+		"jest": "^29.7.0",
 		"ts-node-dev": "^2.0.0",
 		"typescript": "^5.3.2"
 	}

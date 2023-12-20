@@ -1,7 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
-import connectToDatabase from "./database/db.connect";
-import uploadCandidateInfoRoute from "./routes/uploadCandidateInfo.route";
+import connectToDatabase from "./src/database/db.connect";
+import uploadCandidateInfoRoute from "./src/routes/uploadCandidateInfo.route";
 
 import cors from "cors";
 

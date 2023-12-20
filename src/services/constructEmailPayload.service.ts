@@ -10,17 +10,25 @@ export class ConstructEmailPayload {
 
 		try {
 			const response = await CandidateInfo.findOne({ user_id: user_id });
-			const email = response?.email;
-			const fullname = response?.fullname;
 
-			namedSubject = "Hi " + fullname + " " + subject;
+			if (response instanceof CandidateInfo) {
+				const email = response?.email;
+				const fullname = response?.fullname;
 
-			const emailPayload: EmailPayload = {
-				to: email || "",
-				subject: namedSubject,
-				text: text,
-			};
-			return { status: 200, message: emailPayload };
+				namedSubject = "Hi " + fullname + " " + subject;
+
+				const emailPayload: EmailPayload = {
+					to: email,
+					subject: namedSubject,
+					text: text,
+				};
+				return { status: 200, message: emailPayload };
+			} else {
+				return {
+					status: 500,
+					message: "unknown error occured",
+				};
+			}
 		} catch (error) {
 			return {
 				status: 500,

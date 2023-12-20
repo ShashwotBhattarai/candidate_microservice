@@ -22,7 +22,7 @@ const s3_upload_service_1 = require("../services/s3-upload.service");
 const findSavedS3key_service_1 = require("../services/findSavedS3key.service");
 const s3_delete_service_1 = require("../services/s3-delete.service");
 const sqs_service_1 = require("../services/sqs.service");
-const constructEmailPaylaod_service_1 = require("../services/constructEmailPaylaod.service");
+const constructEmailPayload_service_1 = require("../services/constructEmailPayload.service");
 const storage = multer_1.default.memoryStorage();
 const upload = (0, multer_1.default)({ storage: storage });
 const router = express_1.default.Router();
@@ -59,7 +59,7 @@ router.post("/", upload.single("cv"), (0, auth_middleware_1.authMiddleware)(["ca
         newKey = uploadFileResponse.Key || "";
         const subject = "Your CV has been uploaded";
         const text = "Dear Candidate your CV has been uploaded successfully";
-        const constructPayloadResponse = yield new constructEmailPaylaod_service_1.ConstructEmailPayload().constructEmailPayload(currentToken, subject, text);
+        const constructPayloadResponse = yield new constructEmailPayload_service_1.ConstructEmailPayload().constructEmailPayload(currentToken, subject, text);
         if (constructPayloadResponse.status == 200) {
             const emailPayload = constructPayloadResponse.message;
             const sqsResponse = yield new sqs_service_1.SQS_Service().sendMessageToQueue(emailPayload);
