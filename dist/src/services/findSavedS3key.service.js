@@ -17,18 +17,24 @@ function findSavedS3key(acesstoken) {
         const current_user_id = (0, findCurrentUserId_service_1.findCurrentuserId)(acesstoken);
         try {
             const response = yield cadidateInfo_models_1.CandidateInfo.findOne({ user_id: current_user_id });
-            if ((response === null || response === void 0 ? void 0 : response.aws_file_key) == null) {
+            if (response instanceof cadidateInfo_models_1.CandidateInfo && response.aws_file_key == null) {
                 return {
-                    status: 500,
+                    status: 204,
                     key: null,
-                    message: "no old file key found",
+                    message: "old file key not found",
+                };
+            }
+            else if (response instanceof cadidateInfo_models_1.CandidateInfo && response.aws_file_key !== null) {
+                return {
+                    status: 200,
+                    key: response.aws_file_key,
+                    message: "old file key found",
                 };
             }
             else {
                 return {
-                    status: 200,
-                    key: response === null || response === void 0 ? void 0 : response.aws_file_key,
-                    message: "old file key found",
+                    status: 500,
+                    message: "unexpected error",
                 };
             }
         }

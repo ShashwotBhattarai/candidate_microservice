@@ -11,13 +11,13 @@ describe("registerNewUser", () => {
 		mockingoose(CandidateInfo).toReturn({ email: "abcd@gmail.com", fullname: "shashwot" }, "findOne");
 
 		const finalResult = await new ConstructEmailPayload().constructEmailPayload("23fsf", "subject", "text");
-
-		expect(finalResult?.status).toBe(200);
-		expect(finalResult.message).toBe({
+		const response = {
 			to: "abcd@gmail.com",
-			subject: "subject",
+			subject: "Hi shashwot subject",
 			text: "text",
-		});
+		};
+		expect(finalResult?.status).toBe(200);
+		expect(finalResult.message).toEqual(response);
 	});
 
 	test("database error", async () => {

@@ -46,6 +46,6 @@ describe("findSavedKey", () => {
 		const finalResult = await findSavedS3key("7ggfjafhyjfsf");
 
 		expect(finalResult.status).toBe(500);
-		expect(finalResult.message).toBe("db error");
+		expect(finalResult.message).toBeInstanceOf(Error);
 	});
 });

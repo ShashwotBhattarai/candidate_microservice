@@ -21,11 +21,10 @@ describe("findCurrentUserId test", () => {
     test("returns user id", () => __awaiter(void 0, void 0, void 0, function* () {
         const signSpy = jest.spyOn(jsonwebtoken_1.default, "verify");
         signSpy.mockImplementation(() => {
-            user_id: "ksvfhjsvfh";
+            return { user_id: "ksvfhjsvfh" };
         });
         const finalResult = yield (0, findCurrentUserId_service_1.findCurrentuserId)("kjfy64r532");
         console.log(finalResult);
         expect(finalResult).toBe("ksvfhjsvfh");
-        expect(yield findCurrentUserId_service_1.findCurrentuserId).toHaveReturned();
     }));
 });

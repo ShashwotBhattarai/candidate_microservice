@@ -9,11 +9,10 @@ describe("findCurrentUserId test", () => {
 	test("returns user id", async () => {
 		const signSpy = jest.spyOn(jwt, "verify");
 		signSpy.mockImplementation(() => {
-			user_id: "ksvfhjsvfh";
+			return { user_id: "ksvfhjsvfh" };
 		});
 		const finalResult = await findCurrentuserId("kjfy64r532");
 		console.log(finalResult);
 		expect(finalResult).toBe("ksvfhjsvfh");
-		expect(await findCurrentuserId).toHaveReturned();
 	});
 });

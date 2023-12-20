@@ -18,7 +18,9 @@ function findCurrentuserId(acesstoken) {
     return __awaiter(this, void 0, void 0, function* () {
         const token = acesstoken.slice(7);
         const decoded = jsonwebtoken_1.default.verify(token, process.env.JWTSECRET);
-        return decoded.user_id;
+        console.log(decoded.user_id);
+        const decodedUserId = decoded.user_id;
+        return decodedUserId;
     });
 }
 exports.findCurrentuserId = findCurrentuserId;
