@@ -7,17 +7,22 @@ export async function findSavedS3key(acesstoken: string) {
 	try {
 		const response = await CandidateInfo.findOne({ user_id: current_user_id });
 
-		if (response?.aws_file_key == null) {
+		if (response instanceof CandidateInfo && response.aws_file_key == null) {
 			return {
-				status: 500,
+				status: 204,
 				key: null,
-				message: "no old file key found",
+				message: "old file key not found",
+			};
+		} else if (response instanceof CandidateInfo && response.aws_file_key !== null) {
+			return {
+				status: 200,
+				key: response.aws_file_key,
+				message: "old file key found",
 			};
 		} else {
 			return {
-				status: 200,
-				key: response?.aws_file_key,
-				message: "old file key found",
+				status: 500,
+				message: "unexpected error",
 			};
 		}
 	} catch (error) {
