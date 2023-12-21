@@ -3,9 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkFileMiddleware = void 0;
 const checkFileMiddleware = (req, res, next) => {
     if (!req.file) {
-        return res
-            .status(400)
-            .json({ error: "No file uploaded. Please upload your CV" });
+        return res.status(400).json({ error: "No file uploaded. Please upload your CV" });
+    }
+    if (!req.file.buffer) {
+        return res.status(400).json("File buffer is missing");
     }
     if (req.file.size <= 100000) {
         return res.status(400).json({

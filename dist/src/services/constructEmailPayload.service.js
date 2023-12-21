@@ -9,41 +9,41 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ConstructEmailPayload = void 0;
+exports.constructEmailPayload = void 0;
 const cadidateInfo_models_1 = require("../database/models/cadidateInfo.models");
 const findCurrentUserId_service_1 = require("./findCurrentUserId.service");
-class ConstructEmailPayload {
-    constructEmailPayload(currentUserToken, subject, text) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const user_id = (0, findCurrentUserId_service_1.findCurrentuserId)(currentUserToken);
-            let namedSubject;
-            try {
-                const response = yield cadidateInfo_models_1.CandidateInfo.findOne({ user_id: user_id });
-                if (response instanceof cadidateInfo_models_1.CandidateInfo) {
-                    const email = response === null || response === void 0 ? void 0 : response.email;
-                    const fullname = response === null || response === void 0 ? void 0 : response.fullname;
-                    namedSubject = "Hi " + fullname + " " + subject;
-                    const emailPayload = {
-                        to: email,
-                        subject: namedSubject,
-                        text: text,
-                    };
-                    return { status: 200, message: emailPayload };
-                }
-                else {
-                    return {
-                        status: 500,
-                        message: "unknown error occured",
-                    };
-                }
+function constructEmailPayload(currentUserToken, subject, text) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const user_id = yield (0, findCurrentUserId_service_1.findCurrentuserId)(currentUserToken);
+        let namedSubject;
+        try {
+            const response = yield cadidateInfo_models_1.CandidateInfo.findOne({ user_id: user_id });
+            if (response instanceof cadidateInfo_models_1.CandidateInfo) {
+                const email = response.email;
+                const fullname = response.fullname;
+                namedSubject = "Hi " + fullname + " " + subject;
+                const emailPayload = {
+                    to: email,
+                    subject: namedSubject,
+                    text: text,
+                };
+                return { status: 200, message: "email payload created", data: emailPayload };
             }
-            catch (error) {
+            else {
                 return {
                     status: 500,
-                    message: error,
+                    message: "unknown error occured",
+                    data: response,
                 };
             }
-        });
-    }
+        }
+        catch (error) {
+            return {
+                status: 500,
+                message: "database error",
+                data: error,
+            };
+        }
+    });
 }
-exports.ConstructEmailPayload = ConstructEmailPayload;
+exports.constructEmailPayload = constructEmailPayload;

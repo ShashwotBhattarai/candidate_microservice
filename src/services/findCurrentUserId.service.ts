@@ -4,8 +4,6 @@ export async function findCurrentuserId(acesstoken: string) {
 	const decoded = jwt.verify(token, process.env.JWTSECRET as string) as {
 		user_id: string;
 	};
-
-	console.log(decoded.user_id);
 	const decodedUserId = decoded.user_id;
 	return decodedUserId;
 }

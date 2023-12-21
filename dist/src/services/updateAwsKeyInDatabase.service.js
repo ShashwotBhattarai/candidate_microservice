@@ -9,43 +9,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.findSavedS3key = void 0;
+exports.updateAwsKeyInDatabase = void 0;
 const cadidateInfo_models_1 = require("../database/models/cadidateInfo.models");
 const findCurrentUserId_service_1 = require("./findCurrentUserId.service");
-function findSavedS3key(acesstoken) {
+function updateAwsKeyInDatabase(acesstoken, newKey) {
     return __awaiter(this, void 0, void 0, function* () {
         const current_user_id = yield (0, findCurrentUserId_service_1.findCurrentuserId)(acesstoken);
         try {
-            const response = yield cadidateInfo_models_1.CandidateInfo.findOne({ user_id: current_user_id });
-            if (response instanceof cadidateInfo_models_1.CandidateInfo && response.aws_file_key == null) {
-                return {
-                    status: 204,
-                    message: "old file key not found",
-                    data: null,
-                };
-            }
-            else if (response instanceof cadidateInfo_models_1.CandidateInfo && response.aws_file_key !== null) {
-                return {
-                    status: 200,
-                    message: "old file key found",
-                    data: response.aws_file_key,
-                };
-            }
-            else {
-                return {
-                    status: 500,
-                    message: "unexpected error",
-                    data: null,
-                };
-            }
+            const response = yield cadidateInfo_models_1.CandidateInfo.findOneAndUpdate({ user_id: current_user_id }, {
+                aws_file_key: newKey,
+            });
+            return { status: 200, message: "new file key saved to database" };
         }
         catch (error) {
             return {
                 status: 500,
-                message: "database error",
-                data: error,
+                message: error,
             };
         }
     });
 }
-exports.findSavedS3key = findSavedS3key;
+exports.updateAwsKeyInDatabase = updateAwsKeyInDatabase;

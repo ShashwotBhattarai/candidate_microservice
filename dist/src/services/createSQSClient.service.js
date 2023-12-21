@@ -8,35 +8,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteFileFromS3 = void 0;
-const client_s3_1 = require("@aws-sdk/client-s3");
-const dotenv_1 = require("dotenv");
-(0, dotenv_1.config)();
-function deleteFileFromS3(key) {
+exports.createSQSClient = void 0;
+const client_sqs_1 = require("@aws-sdk/client-sqs");
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
+function createSQSClient() {
     return __awaiter(this, void 0, void 0, function* () {
-        const client = new client_s3_1.S3Client({
+        const client = new client_sqs_1.SQSClient({
             credentials: {
                 accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
                 secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "",
             },
             region: process.env.AWS_REGION || "",
         });
-        const command = new client_s3_1.DeleteObjectCommand({
-            Bucket: process.env.S3_BUCKET_NAME,
-            Key: key,
-        });
-        try {
-            const response = yield client.send(command);
-            return { status: 200, message: "old file deleted from s3", data: response };
-        }
-        catch (error) {
-            return {
-                status: 500,
-                message: "s3 delete error",
-                data: error,
-            };
-        }
+        return client;
     });
 }
-exports.deleteFileFromS3 = deleteFileFromS3;
+exports.createSQSClient = createSQSClient;

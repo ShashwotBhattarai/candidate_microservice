@@ -7,8 +7,10 @@ exports.authMiddleware = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 function authMiddleware(allowedRoles) {
     return (req, res, next) => {
-        var _a;
-        const token = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.slice(7);
+        if (!req.headers.authorization) {
+            return res.status(401).json({ message: "Authorization header missing" });
+        }
+        const token = req.headers.authorization.slice(7);
         if (!token) {
             return res.status(401).json({ message: "Access token is missing" });
         }

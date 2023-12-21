@@ -24,7 +24,6 @@ describe("findCurrentUserId test", () => {
             return { user_id: "ksvfhjsvfh" };
         });
         const finalResult = yield (0, findCurrentUserId_service_1.findCurrentuserId)("kjfy64r532");
-        console.log(finalResult);
         expect(finalResult).toBe("ksvfhjsvfh");
     }));
 });

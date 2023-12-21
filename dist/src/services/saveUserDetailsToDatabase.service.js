@@ -9,12 +9,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateAwsKeyInDatabase = exports.saveUserDetailsToDatabase = void 0;
+exports.saveUserDetailsToDatabase = void 0;
 const cadidateInfo_models_1 = require("../database/models/cadidateInfo.models");
 const findCurrentUserId_service_1 = require("./findCurrentUserId.service");
 function saveUserDetailsToDatabase(file, body, acesstoken) {
     return __awaiter(this, void 0, void 0, function* () {
-        const current_user_id = (0, findCurrentUserId_service_1.findCurrentuserId)(acesstoken);
+        const current_user_id = yield (0, findCurrentUserId_service_1.findCurrentuserId)(acesstoken);
         try {
             const response = yield cadidateInfo_models_1.CandidateInfo.findOneAndUpdate({ user_id: current_user_id }, {
                 fullname: body.fullname,
@@ -23,32 +23,15 @@ function saveUserDetailsToDatabase(file, body, acesstoken) {
                 local_file_name: file === null || file === void 0 ? void 0 : file.filename,
                 file_size_in_bytes: file === null || file === void 0 ? void 0 : file.size,
             }, { upsert: true, new: true });
-            return { status: 201, message: "User info Saved to database" };
+            return { status: 200, message: "User info Saved to database", data: response };
         }
         catch (error) {
             return {
                 status: 500,
-                message: error,
+                message: "error in database in saveUserDetailsToDatabase",
+                data: error,
             };
         }
     });
 }
 exports.saveUserDetailsToDatabase = saveUserDetailsToDatabase;
-function updateAwsKeyInDatabase(acesstoken, newKey) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const current_user_id = (0, findCurrentUserId_service_1.findCurrentuserId)(acesstoken);
-        try {
-            const response = yield cadidateInfo_models_1.CandidateInfo.findOneAndUpdate({ user_id: current_user_id }, {
-                aws_file_key: newKey,
-            });
-            return { status: 200, message: "new file key saved to database" };
-        }
-        catch (error) {
-            return {
-                status: 500,
-                message: error,
-            };
-        }
-    });
-}
-exports.updateAwsKeyInDatabase = updateAwsKeyInDatabase;

@@ -40,6 +40,7 @@ describe("findSavedKey", () => {
         mockingoose(cadidateInfo_models_1.CandidateInfo).toReturn(new Error("db error"), "findOne");
         const finalResult = yield (0, findSavedS3key_service_1.findSavedS3key)("7ggfjafhyjfsf");
         expect(finalResult.status).toBe(500);
-        expect(finalResult.message).toBeInstanceOf(Error);
+        // expect(finalResult.message).toBeInstanceOf(Error);
+        expect(finalResult.message).toBe("db error");
     }));
 });

@@ -12,7 +12,6 @@ describe("findCurrentUserId test", () => {
 			return { user_id: "ksvfhjsvfh" };
 		});
 		const finalResult = await findCurrentuserId("kjfy64r532");
-		console.log(finalResult);
 		expect(finalResult).toBe("ksvfhjsvfh");
 	});
 });

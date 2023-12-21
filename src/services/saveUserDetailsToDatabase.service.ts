@@ -2,7 +2,7 @@ import { CandidateInfo } from "../database/models/cadidateInfo.models";
 import { findCurrentuserId } from "./findCurrentUserId.service";
 
 export async function saveUserDetailsToDatabase(file: any, body: any, acesstoken: string) {
-	const current_user_id = findCurrentuserId(acesstoken);
+	const current_user_id = await findCurrentuserId(acesstoken);
 
 	try {
 		const response = await CandidateInfo.findOneAndUpdate(
@@ -17,31 +17,12 @@ export async function saveUserDetailsToDatabase(file: any, body: any, acesstoken
 			{ upsert: true, new: true }
 		);
 
-		return { status: 201, message: "User info Saved to database" };
+		return { status: 200, message: "User info Saved to database", data: response };
 	} catch (error) {
 		return {
 			status: 500,
-			message: error,
-		};
-	}
-}
-
-export async function updateAwsKeyInDatabase(acesstoken: string, newKey: string) {
-	const current_user_id = findCurrentuserId(acesstoken);
-
-	try {
-		const response = await CandidateInfo.findOneAndUpdate(
-			{ user_id: current_user_id },
-			{
-				aws_file_key: newKey,
-			}
-		);
-
-		return { status: 200, message: "new file key saved to database" };
-	} catch (error) {
-		return {
-			status: 500,
-			message: error,
+			message: "error in database in saveUserDetailsToDatabase",
+			data: error,
 		};
 	}
 }

@@ -15,36 +15,34 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.SQS_Service = void 0;
 const client_sqs_1 = require("@aws-sdk/client-sqs");
 const generate_unique_id_1 = __importDefault(require("generate-unique-id"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 class SQS_Service {
-    sendMessageToQueue(emailPayload) {
+    sendMessageToQueue(emailPayload, client) {
         return __awaiter(this, void 0, void 0, function* () {
-            const client = new client_sqs_1.SQSClient({
-                credentials: {
-                    accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
-                    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "",
-                },
-                region: process.env.AWS_REGION || "",
-            });
-            const sqsQueueUrl = process.env.SQS_QUEUE_URL;
-            const command = new client_sqs_1.SendMessageCommand({
-                QueueUrl: sqsQueueUrl,
-                MessageAttributes: {
-                    To: {
-                        DataType: "String",
-                        StringValue: emailPayload.to,
+            try {
+                const sqsQueueUrl = process.env.SQS_QUEUE_URL;
+                const response = yield client.send(new client_sqs_1.SendMessageCommand({
+                    QueueUrl: sqsQueueUrl,
+                    MessageAttributes: {
+                        To: {
+                            DataType: "String",
+                            StringValue: emailPayload.to,
+                        },
+                        Subject: {
+                            DataType: "String",
+                            StringValue: emailPayload.subject,
+                        },
                     },
-                    Subject: {
-                        DataType: "String",
-                        StringValue: emailPayload.subject,
-                    },
-                },
-                MessageBody: emailPayload.text,
-                MessageGroupId: "sendEmailResumeTracker",
-                MessageDeduplicationId: (0, generate_unique_id_1.default)(),
-            });
-            const response = yield client.send(command);
-            // console.log(response);
-            return response;
+                    MessageBody: emailPayload.text,
+                    MessageGroupId: "sendEmailResumeTracker",
+                    MessageDeduplicationId: (0, generate_unique_id_1.default)(),
+                }));
+                return { status: 200, message: "message sent to queue" };
+            }
+            catch (error) {
+                return { status: 500, message: error };
+            }
         });
     }
 }
