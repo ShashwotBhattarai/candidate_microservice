@@ -19,11 +19,10 @@ const sqs_service_1 = require("./sqs.service");
 const createSQSClient_service_1 = require("./createSQSClient.service");
 const email_templets_1 = require("../constants/email.templets");
 const createS3Client_service_1 = require("./createS3Client.service");
-function uploadCandidateInfoService(req) {
+function uploadCandidateInfoService(currentToken, reqFile, reqBody) {
     return __awaiter(this, void 0, void 0, function* () {
-        const currentToken = req.headers.authorization || "";
         try {
-            const saveUserDetailsServiceResponse = yield (0, saveUserDetailsToDatabase_service_1.saveUserDetailsToDatabase)(req.file, req.body, currentToken);
+            const saveUserDetailsServiceResponse = yield (0, saveUserDetailsToDatabase_service_1.saveUserDetailsToDatabase)(reqFile, reqBody, currentToken);
             if (saveUserDetailsServiceResponse.status != 200) {
                 return {
                     status: saveUserDetailsServiceResponse.status,
@@ -31,11 +30,11 @@ function uploadCandidateInfoService(req) {
                     data: saveUserDetailsServiceResponse.data,
                 };
             }
-            if (!req.file) {
+            if (!reqFile) {
                 return { status: 400, message: "File buffer is missing", data: null };
             }
             const s3Client = yield (0, createS3Client_service_1.createS3Client)();
-            const uploadFileResponse = yield (0, s3_upload_service_1.uploadFileToS3)(req.file.buffer, req.file.mimetype, req.file.originalname, s3Client);
+            const uploadFileResponse = yield (0, s3_upload_service_1.uploadFileToS3)(reqFile.buffer, reqFile.mimetype, reqFile.originalname, s3Client);
             if (uploadFileResponse.status != 200) {
                 return { status: uploadFileResponse.status, message: uploadFileResponse.message };
             }

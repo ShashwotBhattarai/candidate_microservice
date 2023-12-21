@@ -18,7 +18,8 @@ router.post(
 	validateCandidate,
 	checkFileMiddleware,
 	async (req: Request, res: Response) => {
-		const { status, message, data } = await uploadCandidateInfoService(req);
+		const currentToken = req.headers.authorization || "";
+		const { status, message, data } = await uploadCandidateInfoService(currentToken, req.file, req.body);
 
 		res.status(status).json({ message: message, data: data });
 	}

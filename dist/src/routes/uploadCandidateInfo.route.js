@@ -22,7 +22,8 @@ const storage = multer_1.default.memoryStorage();
 const upload = (0, multer_1.default)({ storage: storage });
 const router = express_1.default.Router();
 router.post("/", upload.single("cv"), (0, auth_middleware_1.authMiddleware)(["candidate"]), uploadCandidateInfo_validate_1.validateCandidate, checkFile_middleware_1.checkFileMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { status, message, data } = yield (0, uploadCandidateInfo_service_1.default)(req);
+    const currentToken = req.headers.authorization || "";
+    const { status, message, data } = yield (0, uploadCandidateInfo_service_1.default)(currentToken, req.file, req.body);
     res.status(status).json({ message: message, data: data });
 }));
 exports.default = router;

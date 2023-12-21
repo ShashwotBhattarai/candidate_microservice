@@ -10,11 +10,9 @@ import { createSQSClient } from "./createSQSClient.service";
 import { CVUploadedEmailTemplate } from "../constants/email.templets";
 import { createS3Client } from "./createS3Client.service";
 
-export default async function uploadCandidateInfoService(req: Request) {
-	const currentToken = req.headers.authorization || "";
-
+export default async function uploadCandidateInfoService(currentToken: string, reqFile: any, reqBody: any) {
 	try {
-		const saveUserDetailsServiceResponse = await saveUserDetailsToDatabase(req.file, req.body, currentToken);
+		const saveUserDetailsServiceResponse = await saveUserDetailsToDatabase(reqFile, reqBody, currentToken);
 		if (saveUserDetailsServiceResponse.status != 200) {
 			return {
 				status: saveUserDetailsServiceResponse.status,
@@ -23,14 +21,14 @@ export default async function uploadCandidateInfoService(req: Request) {
 			};
 		}
 
-		if (!req.file) {
+		if (!reqFile) {
 			return { status: 400, message: "File buffer is missing", data: null };
 		}
 		const s3Client = await createS3Client();
 		const uploadFileResponse = await uploadFileToS3(
-			req.file.buffer,
-			req.file.mimetype,
-			req.file.originalname,
+			reqFile.buffer,
+			reqFile.mimetype,
+			reqFile.originalname,
 			s3Client
 		);
 
