@@ -2,6 +2,9 @@ import { CandidateInfo } from "../database/models/cadidateInfo.models";
 import { findCurrentuserId } from "./findCurrentUserId.service";
 
 export async function saveUserDetailsToDatabase(file: any, body: any, acesstoken: string) {
+	// console.log(file);
+	// console.log(body);
+	// console.log(acesstoken);
 	const current_user_id = await findCurrentuserId(acesstoken);
 
 	try {

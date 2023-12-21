@@ -14,6 +14,9 @@ const cadidateInfo_models_1 = require("../database/models/cadidateInfo.models");
 const findCurrentUserId_service_1 = require("./findCurrentUserId.service");
 function saveUserDetailsToDatabase(file, body, acesstoken) {
     return __awaiter(this, void 0, void 0, function* () {
+        // console.log(file);
+        // console.log(body);
+        // console.log(acesstoken);
         const current_user_id = yield (0, findCurrentUserId_service_1.findCurrentuserId)(acesstoken);
         try {
             const response = yield cadidateInfo_models_1.CandidateInfo.findOneAndUpdate({ user_id: current_user_id }, {
