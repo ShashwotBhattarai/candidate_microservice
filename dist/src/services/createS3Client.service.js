@@ -8,34 +8,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.uploadFileToS3 = void 0;
+exports.createS3Client = void 0;
 const client_s3_1 = require("@aws-sdk/client-s3");
-const dotenv_1 = require("dotenv");
-(0, dotenv_1.config)();
-function uploadFileToS3(buffer, type, filename, client) {
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
+function createS3Client() {
     return __awaiter(this, void 0, void 0, function* () {
-        const currentKey = Date.now() + "_" + filename;
-        try {
-            const response = yield client.send(new client_s3_1.PutObjectCommand({
-                Bucket: process.env.S3_BUCKET_NAME,
-                Key: currentKey,
-                Body: buffer,
-                ContentType: type,
-            }));
-            return {
-                status: 200,
-                message: "new file uploaded to s3 bucket",
-                data: currentKey,
-            };
-        }
-        catch (error) {
-            return {
-                status: 500,
-                message: "s3 upload error",
-                data: error,
-            };
-        }
+        const client = new client_s3_1.S3Client({
+            credentials: {
+                accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
+                secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "",
+            },
+            region: process.env.AWS_REGION || "",
+        });
+        return client;
     });
 }
-exports.uploadFileToS3 = uploadFileToS3;
+exports.createS3Client = createS3Client;

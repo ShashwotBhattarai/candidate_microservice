@@ -8,6 +8,7 @@ import { constructEmailPayload } from "./constructEmailPayload.service";
 import { SQS_Service } from "./sqs.service";
 import { createSQSClient } from "./createSQSClient.service";
 import { CVUploadedEmailTemplate } from "../constants/email.templets";
+import { createS3Client } from "./createS3Client.service";
 
 export default async function uploadCandidateInfoService(req: Request) {
 	const currentToken = req.headers.authorization || "";
@@ -25,7 +26,13 @@ export default async function uploadCandidateInfoService(req: Request) {
 		if (!req.file) {
 			return { status: 400, message: "File buffer is missing", data: null };
 		}
-		const uploadFileResponse = await uploadFileToS3(req.file.buffer, req.file.mimetype, req.file.originalname);
+		const s3Client = await createS3Client();
+		const uploadFileResponse = await uploadFileToS3(
+			req.file.buffer,
+			req.file.mimetype,
+			req.file.originalname,
+			s3Client
+		);
 
 		if (uploadFileResponse.status != 200) {
 			return { status: uploadFileResponse.status, message: uploadFileResponse.message };
@@ -42,7 +49,8 @@ export default async function uploadCandidateInfoService(req: Request) {
 		const findSavedS3keyResponse = await findSavedS3key(currentToken);
 		if (findSavedS3keyResponse.status == 200) {
 			const oldKey = findSavedS3keyResponse.data as string;
-			const deleteFileResponse = await deleteFileFromS3(oldKey);
+			const s3Client = await createS3Client();
+			const deleteFileResponse = await deleteFileFromS3(oldKey, s3Client);
 		}
 
 		const updateAwsKeyInDatabaseResponse = await updateAwsKeyInDatabase(currentToken, newKey);

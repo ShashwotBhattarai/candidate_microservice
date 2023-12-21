@@ -19,12 +19,13 @@ function updateAwsKeyInDatabase(acesstoken, newKey) {
             const response = yield cadidateInfo_models_1.CandidateInfo.findOneAndUpdate({ user_id: current_user_id }, {
                 aws_file_key: newKey,
             });
-            return { status: 200, message: "new file key saved to database" };
+            return { status: 200, message: "new file key saved to database", data: response };
         }
         catch (error) {
             return {
                 status: 500,
-                message: error,
+                message: "database error in updateAwsKeyInDatabase",
+                data: error
             };
         }
     });

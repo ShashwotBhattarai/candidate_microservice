@@ -18,6 +18,7 @@ const constructEmailPayload_service_1 = require("./constructEmailPayload.service
 const sqs_service_1 = require("./sqs.service");
 const createSQSClient_service_1 = require("./createSQSClient.service");
 const email_templets_1 = require("../constants/email.templets");
+const createS3Client_service_1 = require("./createS3Client.service");
 function uploadCandidateInfoService(req) {
     return __awaiter(this, void 0, void 0, function* () {
         const currentToken = req.headers.authorization || "";
@@ -33,7 +34,8 @@ function uploadCandidateInfoService(req) {
             if (!req.file) {
                 return { status: 400, message: "File buffer is missing", data: null };
             }
-            const uploadFileResponse = yield (0, s3_upload_service_1.uploadFileToS3)(req.file.buffer, req.file.mimetype, req.file.originalname);
+            const s3Client = yield (0, createS3Client_service_1.createS3Client)();
+            const uploadFileResponse = yield (0, s3_upload_service_1.uploadFileToS3)(req.file.buffer, req.file.mimetype, req.file.originalname, s3Client);
             if (uploadFileResponse.status != 200) {
                 return { status: uploadFileResponse.status, message: uploadFileResponse.message };
             }
@@ -47,7 +49,8 @@ function uploadCandidateInfoService(req) {
             const findSavedS3keyResponse = yield (0, findSavedS3key_service_1.findSavedS3key)(currentToken);
             if (findSavedS3keyResponse.status == 200) {
                 const oldKey = findSavedS3keyResponse.data;
-                const deleteFileResponse = yield (0, s3_delete_service_1.deleteFileFromS3)(oldKey);
+                const s3Client = yield (0, createS3Client_service_1.createS3Client)();
+                const deleteFileResponse = yield (0, s3_delete_service_1.deleteFileFromS3)(oldKey, s3Client);
             }
             const updateAwsKeyInDatabaseResponse = yield (0, updateAwsKeyInDatabase_service_1.updateAwsKeyInDatabase)(currentToken, newKey);
             return {

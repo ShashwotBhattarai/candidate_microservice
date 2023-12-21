@@ -13,21 +13,13 @@ exports.deleteFileFromS3 = void 0;
 const client_s3_1 = require("@aws-sdk/client-s3");
 const dotenv_1 = require("dotenv");
 (0, dotenv_1.config)();
-function deleteFileFromS3(key) {
+function deleteFileFromS3(key, client) {
     return __awaiter(this, void 0, void 0, function* () {
-        const client = new client_s3_1.S3Client({
-            credentials: {
-                accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
-                secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "",
-            },
-            region: process.env.AWS_REGION || "",
-        });
-        const command = new client_s3_1.DeleteObjectCommand({
-            Bucket: process.env.S3_BUCKET_NAME,
-            Key: key,
-        });
         try {
-            const response = yield client.send(command);
+            const response = yield client.send(new client_s3_1.DeleteObjectCommand({
+                Bucket: process.env.S3_BUCKET_NAME,
+                Key: key,
+            }));
             return { status: 200, message: "old file deleted from s3", data: response };
         }
         catch (error) {
