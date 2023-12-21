@@ -11,11 +11,12 @@ export async function updateAwsKeyInDatabase(acesstoken: string, newKey: string)
 			}
 		);
 
-		return { status: 200, message: "new file key saved to database" };
+		return { status: 200, message: "new file key saved to database", data: response };
 	} catch (error) {
 		return {
 			status: 500,
-			message: error,
+			message: "database error in updateAwsKeyInDatabase",
+			data:error
 		};
 	}
 }
