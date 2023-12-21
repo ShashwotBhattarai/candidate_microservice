@@ -2,7 +2,7 @@ import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { config } from "dotenv";
 config();
 
-export async function uploadFileToS3(buffer: Buffer, type: string, filename: string, client: S3Client) {
+export async function uploadFileToS3(buffer: Buffer, type: string, filename: string, client: any) {
 	const currentKey = Date.now() + "_" + filename;
 
 	try {
