@@ -21,8 +21,12 @@ const email_templets_1 = require("../constants/email.templets");
 const createS3Client_service_1 = require("./createS3Client.service");
 function uploadCandidateInfoService(currentToken, reqFile, reqBody) {
     return __awaiter(this, void 0, void 0, function* () {
+        if (!reqFile) {
+            return { status: 400, message: "File buffer is missing", data: null };
+        }
         try {
             const saveUserDetailsServiceResponse = yield (0, saveUserDetailsToDatabase_service_1.saveUserDetailsToDatabase)(reqFile, reqBody, currentToken);
+            console.log(saveUserDetailsServiceResponse);
             if (saveUserDetailsServiceResponse.status != 200) {
                 return {
                     status: saveUserDetailsServiceResponse.status,
@@ -30,10 +34,8 @@ function uploadCandidateInfoService(currentToken, reqFile, reqBody) {
                     data: saveUserDetailsServiceResponse.data,
                 };
             }
-            if (!reqFile) {
-                return { status: 400, message: "File buffer is missing", data: null };
-            }
-            const s3Client = yield (0, createS3Client_service_1.createS3Client)();
+            const s3ClientResponse = yield (0, createS3Client_service_1.createS3Client)();
+            const s3Client = s3ClientResponse.data;
             const uploadFileResponse = yield (0, s3_upload_service_1.uploadFileToS3)(reqFile.buffer, reqFile.mimetype, reqFile.originalname, s3Client);
             if (uploadFileResponse.status != 200) {
                 return { status: uploadFileResponse.status, message: uploadFileResponse.message };

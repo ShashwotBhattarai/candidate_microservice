@@ -1,4 +1,3 @@
-import { Request } from "express";
 import { saveUserDetailsToDatabase } from "./saveUserDetailsToDatabase.service";
 import { uploadFileToS3 } from "./s3-upload.service";
 import { findSavedS3key } from "./findSavedS3key.service";
@@ -11,6 +10,9 @@ import { CVUploadedEmailTemplate } from "../constants/email.templets";
 import { createS3Client } from "./createS3Client.service";
 
 export default async function uploadCandidateInfoService(currentToken: string, reqFile: any, reqBody: any) {
+	if (!reqFile) {
+		return { status: 400, message: "File buffer is missing", data: null };
+	}
 	try {
 		const saveUserDetailsServiceResponse = await saveUserDetailsToDatabase(reqFile, reqBody, currentToken);
 		if (saveUserDetailsServiceResponse.status != 200) {
@@ -21,10 +23,16 @@ export default async function uploadCandidateInfoService(currentToken: string, r
 			};
 		}
 
-		if (!reqFile) {
-			return { status: 400, message: "File buffer is missing", data: null };
+		const s3ClientResponse: any = await createS3Client();
+		if (s3ClientResponse.status != 200) {
+			return {
+				status: s3ClientResponse.status,
+				message: s3ClientResponse.message,
+				data: s3ClientResponse.data,
+			};
 		}
-		const s3Client = await createS3Client();
+
+		const s3Client = s3ClientResponse.data;
 		const uploadFileResponse = await uploadFileToS3(
 			reqFile.buffer,
 			reqFile.mimetype,
@@ -40,8 +48,17 @@ export default async function uploadCandidateInfoService(currentToken: string, r
 		const subject = CVUploadedEmailTemplate.subject;
 		const text = CVUploadedEmailTemplate.text;
 		const constructEmailPayloadResponse = await constructEmailPayload(currentToken, subject, text);
+
+		if (constructEmailPayloadResponse.status != 200) {
+			return {
+				status: constructEmailPayloadResponse.status,
+				message: constructEmailPayloadResponse.message,
+				data: constructEmailPayloadResponse.data,
+			};
+		}
 		const emailPayload = constructEmailPayloadResponse.data;
 		const sqsClient = await createSQSClient();
+		
 		const sqsResponse = await new SQS_Service().sendMessageToQueue(emailPayload, sqsClient);
 
 		const findSavedS3keyResponse = await findSavedS3key(currentToken);
