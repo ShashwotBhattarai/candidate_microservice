@@ -22,14 +22,14 @@ export async function findSavedS3key(acesstoken: string) {
 		} else {
 			return {
 				status: 500,
-				message: "unexpected error",
+				message: "unknown error occured in findSavedS3key",
 				data: null,
 			};
 		}
 	} catch (error) {
 		return {
 			status: 500,
-			message: "database error",
+			message: "eror in findSavedS3key",
 			data: error,
 		};
 	}

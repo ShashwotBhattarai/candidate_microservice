@@ -27,7 +27,7 @@ describe("findSavedKey", () => {
 		expect(finalResult.message).toBe("old file key not found");
 	});
 
-	test("key is not found", async () => {
+	test("user is not found", async () => {
 		const findCurrentuserId = jest.fn().mockImplementation(() => "agvfe6");
 
 		mockingoose(CandidateInfo).toReturn(null, "findOne");
@@ -35,7 +35,7 @@ describe("findSavedKey", () => {
 		const finalResult = await findSavedS3key("7ggfjafhyjfsf");
 
 		expect(finalResult.status).toBe(500);
-		expect(finalResult.message).toBe("unexpected error");
+		expect(finalResult.message).toBe("unknown error occured in findSavedS3key");
 	});
 
 	test("key is not found", async () => {
@@ -47,6 +47,6 @@ describe("findSavedKey", () => {
 
 		expect(finalResult.status).toBe(500);
 		expect(finalResult.data).toBeInstanceOf(Error);
-		expect(finalResult.message).toBe("database error");
+		expect(finalResult.message).toBe("eror in findSavedS3key");
 	});
 });

@@ -26,9 +26,9 @@ export class SQS_Service {
 					MessageDeduplicationId: generateUniqueId(),
 				})
 			);
-			return { status: 200, message: "message sent to queue" };
+			return { status: 200, message: "message sent to queue", data: null };
 		} catch (error) {
-			return { status: 500, message: error };
+			return { status: 500, message: "error in sendMessageToQueue", data: error };
 		}
 	}
 }

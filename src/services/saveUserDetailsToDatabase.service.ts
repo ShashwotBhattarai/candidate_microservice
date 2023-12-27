@@ -5,9 +5,10 @@ export async function saveUserDetailsToDatabase(file: any, body: any, acesstoken
 	// console.log(file);
 	// console.log(body);
 	// console.log(acesstoken);
-	const current_user_id = await findCurrentuserId(acesstoken);
+	
 
 	try {
+		const current_user_id = await findCurrentuserId(acesstoken);
 		const response = await CandidateInfo.findOneAndUpdate(
 			{ user_id: current_user_id },
 			{

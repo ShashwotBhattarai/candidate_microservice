@@ -14,13 +14,13 @@ export async function createS3Client() {
 
 		return {
 			status: 200,
-			message: "S3Client created",
+			message: "S3 Client created",
 			data: client,
 		};
 	} catch (error) {
 		return {
 			status: 500,
-			message: "error in createS3Client",
+			message: "error in createS3Client service",
 			data: error,
 		};
 	}

@@ -32,7 +32,7 @@ export async function constructEmailPayload(currentUserToken: string, subject: s
 	} catch (error) {
 		return {
 			status: 500,
-			message: "database error",
+			message: "error in constructemailpayload",
 			data: error,
 		};
 	}
