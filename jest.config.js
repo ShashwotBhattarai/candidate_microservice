@@ -9,5 +9,5 @@ module.exports = {
 		},
 	},
 	collectCoverage: true,
-	collectCoverageFrom: ["src/**/*.ts"],
+	collectCoverageFrom: ["src/services/*.ts"],
 };

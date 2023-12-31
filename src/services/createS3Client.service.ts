@@ -3,13 +3,13 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export async function createS3Client() {
-	try {
+	if (process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY && process.env.AWS_REGION) {
 		const client = new S3Client({
 			credentials: {
-				accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
-				secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "",
+				accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+				secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 			},
-			region: process.env.AWS_REGION || "",
+			region: process.env.AWS_REGION,
 		});
 
 		return {
@@ -17,11 +17,11 @@ export async function createS3Client() {
 			message: "S3 Client created",
 			data: client,
 		};
-	} catch (error) {
-		return {
+	} else {
+		throw {
 			status: 500,
-			message: "error in createS3Client service",
-			data: error,
+			message: "error in createS3Client",
+			data: null,
 		};
 	}
 }

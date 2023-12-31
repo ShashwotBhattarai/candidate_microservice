@@ -23,22 +23,7 @@ export default async function uploadCandidateInfoService(currentToken: string, r
 			};
 		}
 
-		const s3ClientResponse: any = await createS3Client();
-		if (s3ClientResponse.status != 200) {
-			return {
-				status: s3ClientResponse.status,
-				message: s3ClientResponse.message,
-				data: s3ClientResponse.data,
-			};
-		}
-
-		const s3Client = s3ClientResponse.data;
-		const uploadFileResponse = await uploadFileToS3(
-			reqFile.buffer,
-			reqFile.mimetype,
-			reqFile.originalname,
-			s3Client
-		);
+		const uploadFileResponse = await uploadFileToS3(reqFile.buffer, reqFile.mimetype, reqFile.originalname);
 
 		if (uploadFileResponse.status != 200) {
 			return { status: uploadFileResponse.status, message: uploadFileResponse.message };
@@ -57,16 +42,8 @@ export default async function uploadCandidateInfoService(currentToken: string, r
 			};
 		}
 		const emailPayload = constructEmailPayloadResponse.data;
-		const sqsClient = await createSQSClient();
-		if (sqsClient.status != 200) {
-			return {
-				status: sqsClient.status,
-				message: sqsClient.message,
-				data: sqsClient.data,
-			};
-		}
 
-		const sqsResponse = await new SQS_Service().sendMessageToQueue(emailPayload, sqsClient);
+		const sqsResponse = await new SQS_Service().sendMessageToQueue(emailPayload);
 		if (sqsResponse.status != 200) {
 			return {
 				status: sqsResponse.status,
@@ -86,7 +63,7 @@ export default async function uploadCandidateInfoService(currentToken: string, r
 
 		if (findSavedS3keyResponse.status == 200) {
 			const oldKey = findSavedS3keyResponse.data as string;
-			const deleteFileResponse = await deleteFileFromS3(oldKey, s3Client);
+			const deleteFileResponse = await deleteFileFromS3(oldKey);
 			if (deleteFileResponse.status != 200) {
 				return {
 					status: deleteFileResponse.status,

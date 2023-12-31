@@ -3,13 +3,13 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export async function createSQSClient() {
-	try {
+	if (process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY && process.env.AWS_REGION) {
 		const client = new SQSClient({
 			credentials: {
-				accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
-				secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "",
+				accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+				secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 			},
-			region: process.env.AWS_REGION || "",
+			region: process.env.AWS_REGION,
 		});
 
 		return {
@@ -17,11 +17,11 @@ export async function createSQSClient() {
 			message: "SQSClient created",
 			data: client,
 		};
-	} catch (error) {
-		return {
+	} else {
+		throw {
 			status: 500,
 			message: "error in createSQSClient",
-			data: error,
+			data: null,
 		};
 	}
 }
