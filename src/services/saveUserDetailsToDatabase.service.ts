@@ -4,7 +4,7 @@ import { findCurrentuserId } from "./findCurrentUserId.service";
 export async function saveUserDetailsToDatabase(file: any, body: any, acesstoken: string) {
 	try {
 		const current_user_id = await findCurrentuserId(acesstoken);
-		const response = await CandidateInfo.findOneAndUpdate(
+		await CandidateInfo.findOneAndUpdate(
 			{ user_id: current_user_id },
 			{
 				fullname: body.fullname,

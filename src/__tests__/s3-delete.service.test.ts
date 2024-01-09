@@ -1,7 +1,5 @@
 import { DeleteObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { mockClient } from "aws-sdk-client-mock";
-
-import generateUniqueId = require("generate-unique-id");
 import { deleteFileFromS3 } from "../services/s3-delete.service";
 
 describe("S3 file delete service", () => {
@@ -10,7 +8,6 @@ describe("S3 file delete service", () => {
 	});
 
 	test("file gets deleted from s3", async () => {
-		//mock all dependencies
 		const s3ClientMock = mockClient(S3Client);
 		s3ClientMock.on(DeleteObjectCommand).resolves({
 			$metadata: {
@@ -29,8 +26,7 @@ describe("S3 file delete service", () => {
 	});
 
 	test("s3 error", async () => {
-		//mock all dependencies
-		const s3ClientMock = mockClient(S3Client).rejects(new Error("s3 error"));
+		mockClient(S3Client).rejects(new Error("s3 error"));
 
 		try {
 			await deleteFileFromS3("fasjf546");

@@ -1,10 +1,9 @@
-import express, { Request, Response, Router, response } from "express";
+import express, { Request, Response, Router } from "express";
 import { validateCandidate } from "../validators/uploadCandidateInfo.validate";
 import { checkFileMiddleware } from "../middlewares/checkFile.middleware";
 import { authMiddleware } from "../middlewares/auth.middleware";
 import multer from "multer";
 import uploadCandidateInfoService from "../services/uploadCandidateInfo.service";
-import { json } from "node:stream/consumers";
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });

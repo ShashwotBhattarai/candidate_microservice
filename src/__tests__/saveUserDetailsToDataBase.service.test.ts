@@ -1,15 +1,13 @@
 import { CandidateInfo } from "../database/models/cadidateInfo.models";
-import { constructEmailPayload } from "../services/constructEmailPayload.service";
-import { findCurrentuserId } from "../services/findCurrentUserId.service";
-
 import { saveUserDetailsToDatabase } from "../services/saveUserDetailsToDatabase.service";
-
+import * as findCurrentuserIdModule from "../services/findCurrentUserId.service";
+const findCurrentuserIdModuleSpy = jest.spyOn(findCurrentuserIdModule, "findCurrentuserId");
+findCurrentuserIdModuleSpy.mockResolvedValue("agvfe6");
 const mockingoose = require("mockingoose");
 jest.mock("../services/findCurrentUserId.service");
 
 describe("saveUserDetailsToDataBase", () => {
 	test("saved", async () => {
-		const findCurrentuserId = jest.fn().mockImplementation(() => "agvfe6");
 		const mockFile = {
 			fieldname: "cv",
 			originalname: "SLC.pdf",
@@ -40,20 +38,10 @@ describe("saveUserDetailsToDataBase", () => {
 		);
 
 		const finalResult = await saveUserDetailsToDatabase(mockFile, bodyMock, accessTokenMock);
-		const response = {
-			user_id: "sfhb45",
-			fullname: "fulname mock",
-			email: "mai@email.com",
-			phone_number: "846856544368",
-			local_file_name: "filename",
-			file_size_in_bytes: 625251,
-			aws_file_key: "fashg366",
-		};
 		expect(finalResult.status).toBe(200);
 	});
 
 	test("database error", async () => {
-		const findCurrentuserId = jest.fn().mockImplementation(() => "agvfe6");
 		const mockFile = {
 			fieldname: "cv",
 			originalname: "SLC.pdf",

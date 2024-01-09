@@ -9,7 +9,7 @@ export async function uploadFileToS3(buffer: Buffer, type: string, filename: str
 	try {
 		const createS3ClientResponse = await createS3Client();
 		const client = createS3ClientResponse.data as S3Client;
-		const response = await client.send(
+		await client.send(
 			new PutObjectCommand({
 				Bucket: process.env.S3_BUCKET_NAME,
 				Key: currentKey,

@@ -9,9 +9,7 @@ import uploadCandidateInfoService from "../services/uploadCandidateInfo.service"
 import * as constructEmailPayloadModule from "../services/constructEmailPayload.service";
 import * as createSqsClientModule from "../services/createSQSClient.service";
 import { S3Client } from "@aws-sdk/client-s3";
-import { SQS, SQSClient } from "@aws-sdk/client-sqs";
-
-const mockingoose = require("mockingoose");
+import { SQSClient } from "@aws-sdk/client-sqs";
 
 describe("uploadCandidateInfo Service", () => {
 	test("error if file is missing", async () => {

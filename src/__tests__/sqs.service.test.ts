@@ -42,8 +42,7 @@ describe("Sqs service", () => {
 	});
 
 	test("sqs error occures", async () => {
-		//mock all dependencies
-		const sqsClientMock = mockClient(SQSClient).rejects(new Error("SQS Error"));
+		mockClient(SQSClient).rejects(new Error("SQS Error"));
 
 		const emailPayload = {
 			to: "babudallay@gmail.com",

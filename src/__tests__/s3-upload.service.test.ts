@@ -1,7 +1,12 @@
+jest.mock("generate-unique-id", () => {
+	return {
+		__esModule: true, // This is required for modules with no default export
+		default: jest.fn().mockReturnValue("mocked-unique-id"),
+	};
+});
+
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { mockClient } from "aws-sdk-client-mock";
-
-import generateUniqueId = require("generate-unique-id");
 import { uploadFileToS3 } from "../services/s3-upload.service";
 
 describe("S3 file upload service", () => {
@@ -10,10 +15,7 @@ describe("S3 file upload service", () => {
 	});
 
 	test("file gets uploaded to s3", async () => {
-		//mock all dependencies
 		const s3ClientMock = mockClient(S3Client);
-		const generateUniqueId = jest.fn().mockReturnValue("mocked-unique-id");
-
 		s3ClientMock.on(PutObjectCommand).resolves({
 			$metadata: {
 				httpStatusCode: 200,
@@ -36,8 +38,7 @@ describe("S3 file upload service", () => {
 	});
 
 	test("s3 error", async () => {
-		//mock all dependencies
-		const s3ClientMock = mockClient(S3Client).rejects(new Error("s3 error"));
+		mockClient(S3Client).rejects(new Error("s3 error"));
 		const hexString =
 			"255044462d312e370d0a25b5b5b5b50d0a312030206f626a0d0a3c3c2f547970652f436174616c6f672f5061676573203220";
 		const mockBuffer = Buffer.from(hexString, "hex");
