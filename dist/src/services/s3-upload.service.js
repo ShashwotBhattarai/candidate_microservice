@@ -12,11 +12,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.uploadFileToS3 = void 0;
 const client_s3_1 = require("@aws-sdk/client-s3");
 const dotenv_1 = require("dotenv");
+const createS3Client_service_1 = require("./createS3Client.service");
 (0, dotenv_1.config)();
-function uploadFileToS3(buffer, type, filename, client) {
+function uploadFileToS3(buffer, type, filename) {
     return __awaiter(this, void 0, void 0, function* () {
         const currentKey = Date.now() + "_" + filename;
         try {
+            const createS3ClientResponse = yield (0, createS3Client_service_1.createS3Client)();
+            const client = createS3ClientResponse.data;
             const response = yield client.send(new client_s3_1.PutObjectCommand({
                 Bucket: process.env.S3_BUCKET_NAME,
                 Key: currentKey,

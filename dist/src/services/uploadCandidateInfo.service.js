@@ -16,9 +16,7 @@ const s3_delete_service_1 = require("./s3-delete.service");
 const updateAwsKeyInDatabase_service_1 = require("./updateAwsKeyInDatabase.service");
 const constructEmailPayload_service_1 = require("./constructEmailPayload.service");
 const sqs_service_1 = require("./sqs.service");
-const createSQSClient_service_1 = require("./createSQSClient.service");
 const email_templets_1 = require("../constants/email.templets");
-const createS3Client_service_1 = require("./createS3Client.service");
 function uploadCandidateInfoService(currentToken, reqFile, reqBody) {
     return __awaiter(this, void 0, void 0, function* () {
         if (!reqFile) {
@@ -26,7 +24,6 @@ function uploadCandidateInfoService(currentToken, reqFile, reqBody) {
         }
         try {
             const saveUserDetailsServiceResponse = yield (0, saveUserDetailsToDatabase_service_1.saveUserDetailsToDatabase)(reqFile, reqBody, currentToken);
-            console.log(saveUserDetailsServiceResponse);
             if (saveUserDetailsServiceResponse.status != 200) {
                 return {
                     status: saveUserDetailsServiceResponse.status,
@@ -34,9 +31,7 @@ function uploadCandidateInfoService(currentToken, reqFile, reqBody) {
                     data: saveUserDetailsServiceResponse.data,
                 };
             }
-            const s3ClientResponse = yield (0, createS3Client_service_1.createS3Client)();
-            const s3Client = s3ClientResponse.data;
-            const uploadFileResponse = yield (0, s3_upload_service_1.uploadFileToS3)(reqFile.buffer, reqFile.mimetype, reqFile.originalname, s3Client);
+            const uploadFileResponse = yield (0, s3_upload_service_1.uploadFileToS3)(reqFile.buffer, reqFile.mimetype, reqFile.originalname);
             if (uploadFileResponse.status != 200) {
                 return { status: uploadFileResponse.status, message: uploadFileResponse.message };
             }
@@ -44,16 +39,49 @@ function uploadCandidateInfoService(currentToken, reqFile, reqBody) {
             const subject = email_templets_1.CVUploadedEmailTemplate.subject;
             const text = email_templets_1.CVUploadedEmailTemplate.text;
             const constructEmailPayloadResponse = yield (0, constructEmailPayload_service_1.constructEmailPayload)(currentToken, subject, text);
+            if (constructEmailPayloadResponse.status != 200) {
+                return {
+                    status: constructEmailPayloadResponse.status,
+                    message: constructEmailPayloadResponse.message,
+                    data: constructEmailPayloadResponse.data,
+                };
+            }
             const emailPayload = constructEmailPayloadResponse.data;
-            const sqsClient = yield (0, createSQSClient_service_1.createSQSClient)();
-            const sqsResponse = yield new sqs_service_1.SQS_Service().sendMessageToQueue(emailPayload, sqsClient);
+            const sqsResponse = yield new sqs_service_1.SQS_Service().sendMessageToQueue(emailPayload);
+            if (sqsResponse.status != 200) {
+                return {
+                    status: sqsResponse.status,
+                    message: sqsResponse.message,
+                    data: sqsResponse.data,
+                };
+            }
             const findSavedS3keyResponse = yield (0, findSavedS3key_service_1.findSavedS3key)(currentToken);
+            if (findSavedS3keyResponse.status == 500) {
+                return {
+                    status: findSavedS3keyResponse.status,
+                    message: findSavedS3keyResponse.message,
+                    data: findSavedS3keyResponse.data,
+                };
+            }
             if (findSavedS3keyResponse.status == 200) {
                 const oldKey = findSavedS3keyResponse.data;
-                const s3Client = yield (0, createS3Client_service_1.createS3Client)();
-                const deleteFileResponse = yield (0, s3_delete_service_1.deleteFileFromS3)(oldKey, s3Client);
+                const deleteFileResponse = yield (0, s3_delete_service_1.deleteFileFromS3)(oldKey);
+                if (deleteFileResponse.status != 200) {
+                    return {
+                        status: deleteFileResponse.status,
+                        message: deleteFileResponse.message,
+                        data: deleteFileResponse.data,
+                    };
+                }
             }
             const updateAwsKeyInDatabaseResponse = yield (0, updateAwsKeyInDatabase_service_1.updateAwsKeyInDatabase)(currentToken, newKey);
+            if (updateAwsKeyInDatabaseResponse.status != 200) {
+                return {
+                    status: updateAwsKeyInDatabaseResponse.status,
+                    message: updateAwsKeyInDatabaseResponse.message,
+                    data: updateAwsKeyInDatabaseResponse.data,
+                };
+            }
             return {
                 status: 200,
                 message: "candidate details upload successfull",

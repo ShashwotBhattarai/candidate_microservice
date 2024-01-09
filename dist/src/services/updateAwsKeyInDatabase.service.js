@@ -14,8 +14,8 @@ const cadidateInfo_models_1 = require("../database/models/cadidateInfo.models");
 const findCurrentUserId_service_1 = require("./findCurrentUserId.service");
 function updateAwsKeyInDatabase(acesstoken, newKey) {
     return __awaiter(this, void 0, void 0, function* () {
-        const current_user_id = yield (0, findCurrentUserId_service_1.findCurrentuserId)(acesstoken);
         try {
+            const current_user_id = yield (0, findCurrentUserId_service_1.findCurrentuserId)(acesstoken);
             const response = yield cadidateInfo_models_1.CandidateInfo.findOneAndUpdate({ user_id: current_user_id }, {
                 aws_file_key: newKey,
             });
@@ -24,7 +24,7 @@ function updateAwsKeyInDatabase(acesstoken, newKey) {
         catch (error) {
             return {
                 status: 500,
-                message: "database error in updateAwsKeyInDatabase",
+                message: "error in updateAwsKeyInDatabase",
                 data: error
             };
         }

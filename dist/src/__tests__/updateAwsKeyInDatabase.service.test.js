@@ -49,6 +49,6 @@ describe("Update aws key in database", () => {
         const finalResult = yield (0, updateAwsKeyInDatabase_service_1.updateAwsKeyInDatabase)(accessTokenMock, newKeyMock);
         expect(finalResult === null || finalResult === void 0 ? void 0 : finalResult.status).toBe(500);
         expect(finalResult.data).toBeInstanceOf(Error);
-        expect(finalResult.message).toBe("database error in updateAwsKeyInDatabase");
+        expect(finalResult.message).toBe("error in updateAwsKeyInDatabase");
     }));
 });

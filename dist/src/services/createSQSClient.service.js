@@ -18,14 +18,27 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 function createSQSClient() {
     return __awaiter(this, void 0, void 0, function* () {
-        const client = new client_sqs_1.SQSClient({
-            credentials: {
-                accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
-                secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "",
-            },
-            region: process.env.AWS_REGION || "",
-        });
-        return client;
+        if (process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY && process.env.AWS_REGION) {
+            const client = new client_sqs_1.SQSClient({
+                credentials: {
+                    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+                    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+                },
+                region: process.env.AWS_REGION,
+            });
+            return {
+                status: 200,
+                message: "SQSClient created",
+                data: client,
+            };
+        }
+        else {
+            throw {
+                status: 500,
+                message: "error in createSQSClient",
+                data: null,
+            };
+        }
     });
 }
 exports.createSQSClient = createSQSClient;

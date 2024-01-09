@@ -18,25 +18,25 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 function createS3Client() {
     return __awaiter(this, void 0, void 0, function* () {
-        try {
+        if (process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY && process.env.AWS_REGION) {
             const client = new client_s3_1.S3Client({
                 credentials: {
-                    accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
-                    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "",
+                    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+                    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
                 },
-                region: process.env.AWS_REGION || "",
+                region: process.env.AWS_REGION,
             });
             return {
-                status: 500,
-                message: "error in createS3Client",
+                status: 200,
+                message: "S3 Client created",
                 data: client,
             };
         }
-        catch (error) {
-            return {
+        else {
+            throw {
                 status: 500,
                 message: "error in createS3Client",
-                data: error,
+                data: null,
             };
         }
     });

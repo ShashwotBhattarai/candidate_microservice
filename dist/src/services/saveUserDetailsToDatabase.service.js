@@ -17,8 +17,8 @@ function saveUserDetailsToDatabase(file, body, acesstoken) {
         // console.log(file);
         // console.log(body);
         // console.log(acesstoken);
-        const current_user_id = yield (0, findCurrentUserId_service_1.findCurrentuserId)(acesstoken);
         try {
+            const current_user_id = yield (0, findCurrentUserId_service_1.findCurrentuserId)(acesstoken);
             const response = yield cadidateInfo_models_1.CandidateInfo.findOneAndUpdate({ user_id: current_user_id }, {
                 fullname: body.fullname,
                 email: body.email,
