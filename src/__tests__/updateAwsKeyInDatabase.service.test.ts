@@ -34,9 +34,7 @@ describe("Update aws key in database", () => {
 			file_size_in_bytes: 625251,
 			aws_file_key: "fashg366",
 		};
-		expect(finalResult?.status).toBe(200);
-		expect(finalResult.data).toBeInstanceOf(CandidateInfo);
-		expect(finalResult.message).toBe("new file key saved to database");
+		expect(finalResult.status).toBe(200);
 	});
 
 	test("database error", async () => {
@@ -49,9 +47,10 @@ describe("Update aws key in database", () => {
 			"findOneAndUpdate"
 		);
 
-		const finalResult = await updateAwsKeyInDatabase(accessTokenMock, newKeyMock);
-		expect(finalResult?.status).toBe(500);
-		expect(finalResult.data).toBeInstanceOf(Error);
-		expect(finalResult.message).toBe("error in updateAwsKeyInDatabase");
+		try {
+			await updateAwsKeyInDatabase(accessTokenMock, newKeyMock);
+		} catch (error) {
+			expect(error).toEqual(new Error("error in updateAwsKeyInDatabase"));
+		}
 	});
 });

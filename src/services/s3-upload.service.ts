@@ -23,10 +23,6 @@ export async function uploadFileToS3(buffer: Buffer, type: string, filename: str
 			data: currentKey,
 		};
 	} catch (error) {
-		return {
-			status: 500,
-			message: "s3 upload error",
-			data: error,
-		};
+		throw new Error("error in uploadFileToS3");
 	}
 }

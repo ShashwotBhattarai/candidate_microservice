@@ -12,7 +12,7 @@ export class SQS_Service {
 			const client = createSQSClientResponse.data as SQSClient;
 			const sqsQueueUrl = process.env.SQS_QUEUE_URL;
 
-			const response = await client.send(
+			await client.send(
 				new SendMessageCommand({
 					QueueUrl: sqsQueueUrl,
 					MessageAttributes: {
@@ -30,9 +30,10 @@ export class SQS_Service {
 					MessageDeduplicationId: generateUniqueId(),
 				})
 			);
-			return { status: 200, message: "message sent to queue", data: null };
+
+			return { status: 200 };
 		} catch (error) {
-			return { status: 500, message: "error in sendMessageToQueue", data: error };
+			throw new Error(`error in sendMessageToQueue`);
 		}
 	}
 }

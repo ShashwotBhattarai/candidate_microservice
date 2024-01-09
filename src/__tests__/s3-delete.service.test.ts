@@ -26,16 +26,16 @@ describe("S3 file delete service", () => {
 		const result = await deleteFileFromS3("fasjf546");
 
 		expect(result.status).toBe(200);
-		expect(result.message).toBe("old file deleted from s3");
 	});
 
 	test("s3 error", async () => {
 		//mock all dependencies
 		const s3ClientMock = mockClient(S3Client).rejects(new Error("s3 error"));
 
-		const result = await deleteFileFromS3("fasjf546");
-
-		expect(result.status).toBe(500);
-		expect(result.message).toBe("s3 delete error");
+		try {
+			await deleteFileFromS3("fasjf546");
+		} catch (error) {
+			expect(error).toEqual(new Error("error in deleteFileFromS3"));
+		}
 	});
 });

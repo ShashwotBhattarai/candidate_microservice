@@ -49,8 +49,7 @@ describe("saveUserDetailsToDataBase", () => {
 			file_size_in_bytes: 625251,
 			aws_file_key: "fashg366",
 		};
-		expect(finalResult?.status).toBe(200);
-		expect(finalResult.data).toBeInstanceOf(CandidateInfo);
+		expect(finalResult.status).toBe(200);
 	});
 
 	test("database error", async () => {
@@ -76,9 +75,10 @@ describe("saveUserDetailsToDataBase", () => {
 			"findOneAndUpdate"
 		);
 
-		const finalResult = await saveUserDetailsToDatabase(mockFile, bodyMock, accessTokenMock);
-		expect(finalResult?.status).toBe(500);
-		expect(finalResult.data).toBeInstanceOf(Error);
-		expect(finalResult.message).toBe("error in database in saveUserDetailsToDatabase");
+		try {
+			await saveUserDetailsToDatabase(mockFile, bodyMock, accessTokenMock);
+		} catch (error) {
+			expect(error).toEqual(new Error("error in saveUserDetailsToDatabase"));
+		}
 	});
 });

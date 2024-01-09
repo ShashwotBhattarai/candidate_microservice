@@ -13,12 +13,8 @@ export async function deleteFileFromS3(key: string) {
 				Key: key,
 			})
 		);
-		return { status: 200, message: "old file deleted from s3", data: response };
+		return { status: 200 };
 	} catch (error) {
-		return {
-			status: 500,
-			message: "s3 delete error",
-			data: error,
-		};
+		throw new Error("error in deleteFileFromS3");
 	}
 }

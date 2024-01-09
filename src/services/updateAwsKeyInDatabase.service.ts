@@ -2,7 +2,6 @@ import { CandidateInfo } from "../database/models/cadidateInfo.models";
 import { findCurrentuserId } from "./findCurrentUserId.service";
 
 export async function updateAwsKeyInDatabase(acesstoken: string, newKey: string) {
-	
 	try {
 		const current_user_id = await findCurrentuserId(acesstoken);
 		const response = await CandidateInfo.findOneAndUpdate(
@@ -12,12 +11,8 @@ export async function updateAwsKeyInDatabase(acesstoken: string, newKey: string)
 			}
 		);
 
-		return { status: 200, message: "new file key saved to database", data: response };
+		return { status: 200 };
 	} catch (error) {
-		return {
-			status: 500,
-			message: "error in updateAwsKeyInDatabase",
-			data:error
-		};
+		throw new Error("error in updateAwsKeyInDatabase");
 	}
 }

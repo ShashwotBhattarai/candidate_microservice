@@ -2,11 +2,6 @@ import { CandidateInfo } from "../database/models/cadidateInfo.models";
 import { findCurrentuserId } from "./findCurrentUserId.service";
 
 export async function saveUserDetailsToDatabase(file: any, body: any, acesstoken: string) {
-	// console.log(file);
-	// console.log(body);
-	// console.log(acesstoken);
-	
-
 	try {
 		const current_user_id = await findCurrentuserId(acesstoken);
 		const response = await CandidateInfo.findOneAndUpdate(
@@ -21,12 +16,8 @@ export async function saveUserDetailsToDatabase(file: any, body: any, acesstoken
 			{ upsert: true, new: true }
 		);
 
-		return { status: 200, message: "User info Saved to database", data: response };
+		return { status: 200 };
 	} catch (error) {
-		return {
-			status: 500,
-			message: "error in database in saveUserDetailsToDatabase",
-			data: error,
-		};
+		throw new Error("error in saveUserDetailsToDatabase");
 	}
 }

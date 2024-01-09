@@ -42,9 +42,10 @@ describe("S3 file upload service", () => {
 			"255044462d312e370d0a25b5b5b5b50d0a312030206f626a0d0a3c3c2f547970652f436174616c6f672f5061676573203220";
 		const mockBuffer = Buffer.from(hexString, "hex");
 
-		const result = await uploadFileToS3(mockBuffer, "application/pdf", "sfsf");
-
-		expect(result.status).toBe(500);
-		expect(result.message).toBe("s3 upload error");
+		try {
+			await uploadFileToS3(mockBuffer, "application/pdf", "sfsf");
+		} catch (error) {
+			expect(error).toEqual(new Error("error in uploadFileToS3"));
+		}
 	});
 });

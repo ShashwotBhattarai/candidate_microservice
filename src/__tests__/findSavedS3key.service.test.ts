@@ -32,10 +32,11 @@ describe("findSavedKey", () => {
 
 		mockingoose(CandidateInfo).toReturn(null, "findOne");
 
-		const finalResult = await findSavedS3key("7ggfjafhyjfsf");
-
-		expect(finalResult.status).toBe(500);
-		expect(finalResult.message).toBe("unknown error occured in findSavedS3key");
+		try {
+			const finalResult = await findSavedS3key("7ggfjafhyjfsf");
+		} catch (error) {
+			expect(error).toEqual(new Error("error in findSavedS3key"));
+		}
 	});
 
 	test("key is not found", async () => {
@@ -43,10 +44,10 @@ describe("findSavedKey", () => {
 
 		mockingoose(CandidateInfo).toReturn(new Error("db error"), "findOne");
 
-		const finalResult = await findSavedS3key("7ggfjafhyjfsf");
-
-		expect(finalResult.status).toBe(500);
-		expect(finalResult.data).toBeInstanceOf(Error);
-		expect(finalResult.message).toBe("eror in findSavedS3key");
+		try {
+			const finalResult = await findSavedS3key("7ggfjafhyjfsf");
+		} catch (error) {
+			expect(error).toEqual(new Error("error in findSavedS3key"));
+		}
 	});
 });

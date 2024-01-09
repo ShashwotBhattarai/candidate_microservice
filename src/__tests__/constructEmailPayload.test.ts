@@ -1,13 +1,16 @@
+jest.mock("generate-unique-id", () => {
+	return {
+		__esModule: true, // This is required for modules with no default export
+		default: jest.fn().mockReturnValue("mocked-unique-id"),
+	};
+});
 import { constructEmailPayload } from "../services/constructEmailPayload.service";
 import { CandidateInfo } from "../database/models/cadidateInfo.models";
-import { findCurrentuserId } from "../services/findCurrentUserId.service";
-import { EmailPayload } from "../interfaces/emailPayload.interface";
+
 const mockingoose = require("mockingoose");
 jest.mock("../services/findCurrentUserId.service");
 describe("registerNewUser", () => {
 	test("email payload is returned", async () => {
-		const findCurrentuserId = jest.fn().mockImplementation(() => "agvfe6");
-
 		mockingoose(CandidateInfo).toReturn({ email: "abcd@gmail.com", fullname: "shashwot" }, "findOne");
 
 		const finalResult = await constructEmailPayload("23fsf", "subject", "text");
@@ -16,29 +19,27 @@ describe("registerNewUser", () => {
 			subject: "Hi shashwot subject",
 			text: "text",
 		};
-		expect(finalResult?.status).toBe(200);
-		expect(finalResult.data).toEqual(response);
-		expect(finalResult.message).toBe("email payload created")
+
+		expect(finalResult).toEqual(response);
 	});
 
-	test("database error", async () => {
-		// const findCurrentuserId = jest.fn().mockImplementation(() => "agvfe6");
-
+	test("database error 1", async () => {
 		mockingoose(CandidateInfo).toReturn(new Error("Database error"), "findOne");
 
-		const finalResult = await constructEmailPayload("23fsf", "subject", "text");
-
-		expect(finalResult?.status).toBe(500);
+		try {
+			await constructEmailPayload("23fsf", "subject", "text");
+		} catch (error) {
+			expect(error).toEqual(new Error("error in constructemailpayload"));
+		}
 	});
 
-	test("database error", async () => {
-		// const findCurrentuserId = jest.fn().mockImplementation(() => "agvfe6");
-
+	test("database error 2", async () => {
 		mockingoose(CandidateInfo).toReturn(null, "findOne");
 
-		const finalResult = await constructEmailPayload("23fsf", "subject", "text");
-
-		expect(finalResult?.status).toBe(500);
-		expect(finalResult.message).toBe("unknown error occured");
+		try {
+			await constructEmailPayload("23fsf", "subject", "text");
+		} catch (error) {
+			expect(error).toEqual(new Error("error in constructemailpayload"));
+		}
 	});
 });
