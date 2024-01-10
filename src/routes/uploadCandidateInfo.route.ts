@@ -5,8 +5,12 @@ import { authMiddleware } from "../middlewares/auth.middleware";
 import multer from "multer";
 import uploadCandidateInfoService from "../services/uploadCandidateInfo.service";
 
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+const upload = multer({
+	storage: multer.memoryStorage(),
+	limits: {
+		fileSize: 100000,
+	},
+});
 
 const router: Router = express.Router();
 
@@ -17,7 +21,7 @@ router.post(
 	validateCandidate,
 	checkFileMiddleware,
 	async (req: Request, res: Response) => {
-		const currentToken = req.headers.authorization || "";
+		const currentToken = req.headers.authorization ?? "";
 		const { status, message, data } = await uploadCandidateInfoService(currentToken, req.file, req.body);
 
 		res.status(status).json({ message: message, data: data });

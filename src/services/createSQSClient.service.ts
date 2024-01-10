@@ -18,10 +18,6 @@ export async function createSQSClient() {
 			data: client,
 		};
 	} else {
-		throw {
-			status: 500,
-			message: "error in createSQSClient",
-			data: null,
-		};
+		throw new Error("error creating SQS client");
 	}
 }

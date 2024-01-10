@@ -25,10 +25,6 @@ describe("createSQSClient", () => {
 		delete process.env.AWS_SECRET_ACCESS_KEY;
 		delete process.env.AWS_REGION;
 
-		await expect(createSQSClient()).rejects.toEqual({
-			status: 500,
-			message: "error in createSQSClient",
-			data: null,
-		});
+		await expect(createSQSClient()).rejects.toEqual(new Error("error creating SQS client"));
 	});
 });

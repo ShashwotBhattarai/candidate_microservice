@@ -6,7 +6,7 @@ jest.mock("generate-unique-id", () => {
 });
 import { SendMessageCommand, SQSClient } from "@aws-sdk/client-sqs";
 import { mockClient } from "aws-sdk-client-mock";
-import { SQS_Service } from "../services/sqs.service";
+import { SQSService } from "../services/sqs.service";
 
 describe("Sqs service", () => {
 	beforeEach(() => {
@@ -36,7 +36,7 @@ describe("Sqs service", () => {
 			subject: "new user created",
 			text: "your user has been created",
 		};
-		const result = await new SQS_Service().sendMessageToQueue(emailPayload);
+		const result = await new SQSService().sendMessageToQueue(emailPayload);
 
 		expect(result.status).toBe(200);
 	});
@@ -51,7 +51,7 @@ describe("Sqs service", () => {
 		};
 
 		try {
-			await new SQS_Service().sendMessageToQueue(emailPayload);
+			await new SQSService().sendMessageToQueue(emailPayload);
 		} catch (error) {
 			expect(error).toEqual(new Error(`error in sendMessageToQueue`));
 		}

@@ -4,7 +4,7 @@ import { findSavedS3key } from "./findSavedS3key.service";
 import { deleteFileFromS3 } from "./s3-delete.service";
 import { updateAwsKeyInDatabase } from "./updateAwsKeyInDatabase.service";
 import { constructEmailPayload } from "./constructEmailPayload.service";
-import { SQS_Service } from "./sqs.service";
+import { SQSService } from "./sqs.service";
 import { CVUploadedEmailTemplate } from "../constants/email.templets";
 
 export default async function uploadCandidateInfoService(currentToken: string, reqFile: any, reqBody: any) {
@@ -16,13 +16,13 @@ export default async function uploadCandidateInfoService(currentToken: string, r
 
 		const uploadFileResponse = await uploadFileToS3(reqFile.buffer, reqFile.mimetype, reqFile.originalname);
 
-		const newKey = uploadFileResponse.data as string;
+		const newKey = uploadFileResponse.data;
 
 		const subject = CVUploadedEmailTemplate.subject;
 		const text = CVUploadedEmailTemplate.text;
 		const emailPayload = await constructEmailPayload(currentToken, subject, text);
 
-		await new SQS_Service().sendMessageToQueue(emailPayload);
+		await new SQSService().sendMessageToQueue(emailPayload);
 
 		const findSavedS3keyResponse = await findSavedS3key(currentToken);
 

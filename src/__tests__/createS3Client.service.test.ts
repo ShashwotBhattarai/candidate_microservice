@@ -25,10 +25,6 @@ describe("createS3", () => {
 		delete process.env.AWS_SECRET_ACCESS_KEY;
 		delete process.env.AWS_REGION;
 
-		await expect(createS3Client()).rejects.toEqual({
-			status: 500,
-			message: "error in createS3Client",
-			data: null,
-		});
+		await expect(createS3Client()).rejects.toEqual(new Error("error creating S3 client"));
 	});
 });

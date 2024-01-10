@@ -1,4 +1,4 @@
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { config } from "dotenv";
 import { createS3Client } from "./createS3Client.service";
 config();
@@ -8,7 +8,7 @@ export async function uploadFileToS3(buffer: Buffer, type: string, filename: str
 
 	try {
 		const createS3ClientResponse = await createS3Client();
-		const client = createS3ClientResponse.data as S3Client;
+		const client = createS3ClientResponse.data;
 		await client.send(
 			new PutObjectCommand({
 				Bucket: process.env.S3_BUCKET_NAME,
