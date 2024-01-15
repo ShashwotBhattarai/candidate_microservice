@@ -6,7 +6,11 @@ import uploadCandidateInfoRoute from "./src/routes/uploadCandidateInfo.route";
 import cors from "cors";
 
 const app = express();
-app.use(cors());
+app.disable("x-powered-by");
+const corsOptions = {
+	origin: "http://localhost:3000/",
+};
+app.use(cors(corsOptions));
 const port = 4000;
 
 app.use(bodyParser.json());

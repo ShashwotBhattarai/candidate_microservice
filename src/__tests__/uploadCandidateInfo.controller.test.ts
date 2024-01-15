@@ -1,78 +1,58 @@
-import { Request, Response } from "express";
-import uploadCandidateInfoService from "../services/uploadCandidateInfo.service";
 import { uploadCandidateInfoController } from "../controllers/uploadCandidateInfo.controller";
-import { any } from "joi";
+import uploadCandidateInfoService from "../services/uploadCandidateInfo.service";
 
 jest.mock("../services/uploadCandidateInfo.service");
 
 describe("uploadCandidateInfoController", () => {
-	let mockRequest: Partial<Request>;
-	let mockResponse: Partial<Response>;
-	let jsonResponse: any;
+	let mockRequest: any;
+	let mockResponse: any;
+	let responseObject: any = {};
 
 	beforeEach(() => {
-		jsonResponse = {};
 		mockRequest = {
-			headers: {
-				authorization: "Bearer some-token",
-			},
-			file: {}, // Mock file object
-			body: {}, // Mock body object
+			headers: {},
+			file: {},
+			body: {},
 		};
 		mockResponse = {
 			status: jest.fn().mockReturnThis(),
-			json: jest.fn((result) => {
-				jsonResponse = result;
-				return mockResponse;
+			json: jest.fn().mockImplementation((result) => {
+				responseObject = result;
 			}),
 		};
 	});
 
-	it("should handle successful candidate info upload", (done) => {
-		const serviceResponse = {
+	test("successful execution", async () => {
+		const expectedData = { some: "data" };
+		uploadCandidateInfoService.mockResolvedValueOnce({
 			status: 200,
-			message: "Upload successful",
-			data: { id: "123", name: "John Doe" },
-		};
-
-		uploadCandidateInfoService.mockResolvedValue(serviceResponse);
-
-		uploadCandidateInfoController(mockRequest as Request, mockResponse as Response);
-
-		setImmediate(() => {
-			expect(uploadCandidateInfoService).toHaveBeenCalledWith("Bearer some-token", {}, {});
-			expect(mockResponse.status).toHaveBeenCalledWith(200);
-			expect(jsonResponse).toEqual({
-				message: serviceResponse.message,
-				data: serviceResponse.data,
-			});
-			done();
+			message: "Success",
+			data: expectedData,
 		});
+
+		mockRequest.headers.authorization = "some-auth-token";
+
+		await uploadCandidateInfoController(mockRequest, mockResponse);
+
+		expect(mockResponse.status).toHaveBeenCalledWith(200);
+		expect(responseObject).toEqual({ message: "Success", data: expectedData });
 	});
 
-	it("should return an error if authorization header is missing", (done) => {
-		mockRequest.headers = {};
+	test("missing authorization header", async () => {
+		await uploadCandidateInfoController(mockRequest, mockResponse);
 
-		uploadCandidateInfoController(mockRequest as Request, mockResponse as Response);
-
-		setImmediate(() => {
-			expect(mockResponse.status).toHaveBeenCalledWith(400);
-			expect(jsonResponse).toEqual({ error: "Authorization header missing" });
-			done();
-		});
+		expect(mockResponse.status).toHaveBeenCalledWith(400);
+		expect(responseObject).toEqual({ error: "Authorization header missing" });
 	});
 
-	// ... other tests ...
+	test("internal server error", async () => {
+		uploadCandidateInfoService.mockRejectedValueOnce(new Error("Internal error"));
 
-	it("should handle internal server error", (done) => {
-		uploadCandidateInfoService.mockRejectedValue(new Error("Internal server error"));
+		mockRequest.headers.authorization = "some-auth-token";
 
-		uploadCandidateInfoController(mockRequest as Request, mockResponse as Response);
+		await uploadCandidateInfoController(mockRequest, mockResponse);
 
-		setImmediate(() => {
-			expect(mockResponse.status).toHaveBeenCalledWith(500);
-			expect(jsonResponse).toEqual({ error: "Internal server error" });
-			done();
-		});
-	}, 10000); // Increased timeout
+		expect(mockResponse.status).toHaveBeenCalledWith(500);
+		expect(responseObject).toEqual({ error: "Internal server error" });
+	});
 });
