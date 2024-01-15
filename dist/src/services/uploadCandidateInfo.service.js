@@ -23,65 +23,19 @@ function uploadCandidateInfoService(currentToken, reqFile, reqBody) {
             return { status: 400, message: "File buffer is missing", data: null };
         }
         try {
-            const saveUserDetailsServiceResponse = yield (0, saveUserDetailsToDatabase_service_1.saveUserDetailsToDatabase)(reqFile, reqBody, currentToken);
-            if (saveUserDetailsServiceResponse.status != 200) {
-                return {
-                    status: saveUserDetailsServiceResponse.status,
-                    message: saveUserDetailsServiceResponse.message,
-                    data: saveUserDetailsServiceResponse.data,
-                };
-            }
+            yield (0, saveUserDetailsToDatabase_service_1.saveUserDetailsToDatabase)(reqFile, reqBody, currentToken);
             const uploadFileResponse = yield (0, s3_upload_service_1.uploadFileToS3)(reqFile.buffer, reqFile.mimetype, reqFile.originalname);
-            if (uploadFileResponse.status != 200) {
-                return { status: uploadFileResponse.status, message: uploadFileResponse.message };
-            }
             const newKey = uploadFileResponse.data;
             const subject = email_templets_1.CVUploadedEmailTemplate.subject;
             const text = email_templets_1.CVUploadedEmailTemplate.text;
-            const constructEmailPayloadResponse = yield (0, constructEmailPayload_service_1.constructEmailPayload)(currentToken, subject, text);
-            if (constructEmailPayloadResponse.status != 200) {
-                return {
-                    status: constructEmailPayloadResponse.status,
-                    message: constructEmailPayloadResponse.message,
-                    data: constructEmailPayloadResponse.data,
-                };
-            }
-            const emailPayload = constructEmailPayloadResponse.data;
-            const sqsResponse = yield new sqs_service_1.SQS_Service().sendMessageToQueue(emailPayload);
-            if (sqsResponse.status != 200) {
-                return {
-                    status: sqsResponse.status,
-                    message: sqsResponse.message,
-                    data: sqsResponse.data,
-                };
-            }
+            const emailPayload = yield (0, constructEmailPayload_service_1.constructEmailPayload)(currentToken, subject, text);
+            yield new sqs_service_1.SQSService().sendMessageToQueue(emailPayload);
             const findSavedS3keyResponse = yield (0, findSavedS3key_service_1.findSavedS3key)(currentToken);
-            if (findSavedS3keyResponse.status == 500) {
-                return {
-                    status: findSavedS3keyResponse.status,
-                    message: findSavedS3keyResponse.message,
-                    data: findSavedS3keyResponse.data,
-                };
-            }
             if (findSavedS3keyResponse.status == 200) {
                 const oldKey = findSavedS3keyResponse.data;
-                const deleteFileResponse = yield (0, s3_delete_service_1.deleteFileFromS3)(oldKey);
-                if (deleteFileResponse.status != 200) {
-                    return {
-                        status: deleteFileResponse.status,
-                        message: deleteFileResponse.message,
-                        data: deleteFileResponse.data,
-                    };
-                }
+                yield (0, s3_delete_service_1.deleteFileFromS3)(oldKey);
             }
-            const updateAwsKeyInDatabaseResponse = yield (0, updateAwsKeyInDatabase_service_1.updateAwsKeyInDatabase)(currentToken, newKey);
-            if (updateAwsKeyInDatabaseResponse.status != 200) {
-                return {
-                    status: updateAwsKeyInDatabaseResponse.status,
-                    message: updateAwsKeyInDatabaseResponse.message,
-                    data: updateAwsKeyInDatabaseResponse.data,
-                };
-            }
+            yield (0, updateAwsKeyInDatabase_service_1.updateAwsKeyInDatabase)(currentToken, newKey);
             return {
                 status: 200,
                 message: "candidate details upload successfull",

@@ -20,7 +20,7 @@ function uploadFileToS3(buffer, type, filename) {
         try {
             const createS3ClientResponse = yield (0, createS3Client_service_1.createS3Client)();
             const client = createS3ClientResponse.data;
-            const response = yield client.send(new client_s3_1.PutObjectCommand({
+            yield client.send(new client_s3_1.PutObjectCommand({
                 Bucket: process.env.S3_BUCKET_NAME,
                 Key: currentKey,
                 Body: buffer,
@@ -33,11 +33,7 @@ function uploadFileToS3(buffer, type, filename) {
             };
         }
         catch (error) {
-            return {
-                status: 500,
-                message: "s3 upload error",
-                data: error,
-            };
+            throw new Error("error in uploadFileToS3");
         }
     });
 }

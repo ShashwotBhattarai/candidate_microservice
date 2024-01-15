@@ -19,18 +19,14 @@ function deleteFileFromS3(key) {
         try {
             const createS3ClientResponse = yield (0, createS3Client_service_1.createS3Client)();
             const client = createS3ClientResponse.data;
-            const response = yield client.send(new client_s3_1.DeleteObjectCommand({
+            yield client.send(new client_s3_1.DeleteObjectCommand({
                 Bucket: process.env.S3_BUCKET_NAME,
                 Key: key,
             }));
-            return { status: 200, message: "old file deleted from s3", data: response };
+            return { status: 200 };
         }
         catch (error) {
-            return {
-                status: 500,
-                message: "s3 delete error",
-                data: error,
-            };
+            throw new Error("error in deleteFileFromS3");
         }
     });
 }

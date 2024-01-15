@@ -33,11 +33,7 @@ function createS3Client() {
             };
         }
         else {
-            throw {
-                status: 500,
-                message: "error in createS3Client",
-                data: null,
-            };
+            throw new Error("error creating S3 client");
         }
     });
 }

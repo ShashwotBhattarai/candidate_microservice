@@ -32,19 +32,11 @@ function findSavedS3key(acesstoken) {
                 };
             }
             else {
-                return {
-                    status: 500,
-                    message: "unknown error occured in findSavedS3key",
-                    data: null,
-                };
+                throw new Error("error in findSavedS3key");
             }
         }
         catch (error) {
-            return {
-                status: 500,
-                message: "eror in findSavedS3key",
-                data: error,
-            };
+            throw new Error("error in findSavedS3key");
         }
     });
 }

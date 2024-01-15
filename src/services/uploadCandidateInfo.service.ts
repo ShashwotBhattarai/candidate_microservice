@@ -39,10 +39,6 @@ export default async function uploadCandidateInfoService(currentToken: string, r
 			data: null,
 		};
 	} catch (error) {
-		return {
-			status: 500,
-			message: "upload candidate service error",
-			data: error,
-		};
+		throw new Error("error in uploadCandidateInfoService ");
 	}
 }

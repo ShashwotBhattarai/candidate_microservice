@@ -8,7 +8,7 @@ export function authMiddleware(allowedRoles: Array<string>) {
 		}
 
 		const token = req.headers.authorization.slice(7);
-		if (!token) {
+		if (token == "") {
 			return res.status(401).json({ message: "Access token is missing" });
 		}
 

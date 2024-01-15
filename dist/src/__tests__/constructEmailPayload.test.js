@@ -9,13 +9,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+jest.mock("generate-unique-id", () => {
+    return {
+        __esModule: true, // This is required for modules with no default export
+        default: jest.fn().mockReturnValue("mocked-unique-id"),
+    };
+});
 const constructEmailPayload_service_1 = require("../services/constructEmailPayload.service");
 const cadidateInfo_models_1 = require("../database/models/cadidateInfo.models");
 const mockingoose = require("mockingoose");
 jest.mock("../services/findCurrentUserId.service");
 describe("registerNewUser", () => {
     test("email payload is returned", () => __awaiter(void 0, void 0, void 0, function* () {
-        const findCurrentuserId = jest.fn().mockImplementation(() => "agvfe6");
         mockingoose(cadidateInfo_models_1.CandidateInfo).toReturn({ email: "abcd@gmail.com", fullname: "shashwot" }, "findOne");
         const finalResult = yield (0, constructEmailPayload_service_1.constructEmailPayload)("23fsf", "subject", "text");
         const response = {
@@ -23,21 +28,24 @@ describe("registerNewUser", () => {
             subject: "Hi shashwot subject",
             text: "text",
         };
-        expect(finalResult === null || finalResult === void 0 ? void 0 : finalResult.status).toBe(200);
-        expect(finalResult.data).toEqual(response);
-        expect(finalResult.message).toBe("email payload created");
+        expect(finalResult).toEqual(response);
     }));
-    test("database error", () => __awaiter(void 0, void 0, void 0, function* () {
-        // const findCurrentuserId = jest.fn().mockImplementation(() => "agvfe6");
+    test("database error 1", () => __awaiter(void 0, void 0, void 0, function* () {
         mockingoose(cadidateInfo_models_1.CandidateInfo).toReturn(new Error("Database error"), "findOne");
-        const finalResult = yield (0, constructEmailPayload_service_1.constructEmailPayload)("23fsf", "subject", "text");
-        expect(finalResult === null || finalResult === void 0 ? void 0 : finalResult.status).toBe(500);
+        try {
+            yield (0, constructEmailPayload_service_1.constructEmailPayload)("23fsf", "subject", "text");
+        }
+        catch (error) {
+            expect(error).toEqual(new Error("error in constructemailpayload"));
+        }
     }));
-    test("database error", () => __awaiter(void 0, void 0, void 0, function* () {
-        // const findCurrentuserId = jest.fn().mockImplementation(() => "agvfe6");
+    test("database error 2", () => __awaiter(void 0, void 0, void 0, function* () {
         mockingoose(cadidateInfo_models_1.CandidateInfo).toReturn(null, "findOne");
-        const finalResult = yield (0, constructEmailPayload_service_1.constructEmailPayload)("23fsf", "subject", "text");
-        expect(finalResult === null || finalResult === void 0 ? void 0 : finalResult.status).toBe(500);
-        expect(finalResult.message).toBe("unknown error occured");
+        try {
+            yield (0, constructEmailPayload_service_1.constructEmailPayload)("23fsf", "subject", "text");
+        }
+        catch (error) {
+            expect(error).toEqual(new Error("error in constructemailpayload"));
+        }
     }));
 });

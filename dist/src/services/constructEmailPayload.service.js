@@ -27,22 +27,14 @@ function constructEmailPayload(currentUserToken, subject, text) {
                     subject: namedSubject,
                     text: text,
                 };
-                return { status: 200, message: "email payload created", data: emailPayload };
+                return emailPayload;
             }
             else {
-                return {
-                    status: 500,
-                    message: "unknown error occured",
-                    data: response,
-                };
+                throw new Error(`error in constructemailpayload`);
             }
         }
         catch (error) {
-            return {
-                status: 500,
-                message: "error in constructemailpayload",
-                data: error,
-            };
+            throw new Error(`error in constructemailpayload`);
         }
     });
 }

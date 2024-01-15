@@ -42,7 +42,7 @@ function connectToDatabase() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             yield mongoose_1.default.connect(process.env.DATABASEURI);
-            console.log('Connected to the database');
+            console.log("Connected to the database");
         }
         catch (error) {
             console.log(error);

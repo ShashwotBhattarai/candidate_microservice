@@ -33,10 +33,6 @@ describe("createSQSClient", () => {
         delete process.env.AWS_ACCESS_KEY_ID;
         delete process.env.AWS_SECRET_ACCESS_KEY;
         delete process.env.AWS_REGION;
-        yield expect((0, createSQSClient_service_1.createSQSClient)()).rejects.toEqual({
-            status: 500,
-            message: "error in createSQSClient",
-            data: null,
-        });
+        yield expect((0, createSQSClient_service_1.createSQSClient)()).rejects.toEqual(new Error("error creating SQS client"));
     }));
 });

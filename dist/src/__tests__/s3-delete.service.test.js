@@ -17,7 +17,6 @@ describe("S3 file delete service", () => {
         jest.clearAllMocks();
     });
     test("file gets deleted from s3", () => __awaiter(void 0, void 0, void 0, function* () {
-        //mock all dependencies
         const s3ClientMock = (0, aws_sdk_client_mock_1.mockClient)(client_s3_1.S3Client);
         s3ClientMock.on(client_s3_1.DeleteObjectCommand).resolves({
             $metadata: {
@@ -31,13 +30,14 @@ describe("S3 file delete service", () => {
         });
         const result = yield (0, s3_delete_service_1.deleteFileFromS3)("fasjf546");
         expect(result.status).toBe(200);
-        expect(result.message).toBe("old file deleted from s3");
     }));
     test("s3 error", () => __awaiter(void 0, void 0, void 0, function* () {
-        //mock all dependencies
-        const s3ClientMock = (0, aws_sdk_client_mock_1.mockClient)(client_s3_1.S3Client).rejects(new Error("s3 error"));
-        const result = yield (0, s3_delete_service_1.deleteFileFromS3)("fasjf546");
-        expect(result.status).toBe(500);
-        expect(result.message).toBe("s3 delete error");
+        (0, aws_sdk_client_mock_1.mockClient)(client_s3_1.S3Client).rejects(new Error("s3 error"));
+        try {
+            yield (0, s3_delete_service_1.deleteFileFromS3)("fasjf546");
+        }
+        catch (error) {
+            expect(error).toEqual(new Error("error in deleteFileFromS3"));
+        }
     }));
 });
