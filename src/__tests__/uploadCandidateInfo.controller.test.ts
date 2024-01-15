@@ -1,7 +1,5 @@
 import { uploadCandidateInfoController } from "../controllers/uploadCandidateInfo.controller";
-import uploadCandidateInfoService from "../services/uploadCandidateInfo.service";
-
-jest.mock("../services/uploadCandidateInfo.service");
+import * as uploadCandidateInfoServiceModule from "../services/uploadCandidateInfo.service";
 
 describe("uploadCandidateInfoController", () => {
 	let mockRequest: any;
@@ -23,11 +21,13 @@ describe("uploadCandidateInfoController", () => {
 	});
 
 	test("successful execution", async () => {
-		const expectedData = { some: "data" };
-		uploadCandidateInfoService.mockResolvedValueOnce({
+		const uploadCandidateInfoServiceModuleSpy = jest.spyOn(
+			uploadCandidateInfoServiceModule,
+			"uploadCandidateInfoService"
+		);
+		uploadCandidateInfoServiceModuleSpy.mockResolvedValueOnce({
 			status: 200,
 			message: "Success",
-			data: expectedData,
 		});
 
 		mockRequest.headers.authorization = "some-auth-token";
@@ -35,7 +35,7 @@ describe("uploadCandidateInfoController", () => {
 		await uploadCandidateInfoController(mockRequest, mockResponse);
 
 		expect(mockResponse.status).toHaveBeenCalledWith(200);
-		expect(responseObject).toEqual({ message: "Success", data: expectedData });
+		expect(responseObject).toEqual({ message: "Success" });
 	});
 
 	test("missing authorization header", async () => {
@@ -46,7 +46,11 @@ describe("uploadCandidateInfoController", () => {
 	});
 
 	test("internal server error", async () => {
-		uploadCandidateInfoService.mockRejectedValueOnce(new Error("Internal error"));
+		const uploadCandidateInfoServiceModuleSpy = jest.spyOn(
+			uploadCandidateInfoServiceModule,
+			"uploadCandidateInfoService"
+		);
+		uploadCandidateInfoServiceModuleSpy.mockRejectedValueOnce(new Error("Internal error"));
 
 		mockRequest.headers.authorization = "some-auth-token";
 

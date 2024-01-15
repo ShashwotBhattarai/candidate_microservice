@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { checkFileMiddleware } from "../middlewares/checkFile.middleware"; // Adjust the import path
+import { checkFileMiddleware } from "../middlewares/checkFile.middleware";
 
 describe("checkFileMiddleware", () => {
 	let mockRequest: Partial<Request>;
@@ -37,9 +37,9 @@ describe("checkFileMiddleware", () => {
 
 	it("should return an error if file size exceeds the limit", () => {
 		mockRequest.file = {
-			buffer: Buffer.alloc(256 * 1024 + 1), // Size slightly over 256kb
-			size: 256 * 1024 + 1, // Corrected the size
-			// Mock other necessary properties of Express.Multer.File
+			buffer: Buffer.alloc(256 * 1024 + 1),
+			size: 256 * 1024 + 1,
+
 			fieldname: "file",
 			originalname: "test.pdf",
 			encoding: "7bit",
@@ -57,9 +57,8 @@ describe("checkFileMiddleware", () => {
 
 	it("should call next() for valid file", () => {
 		mockRequest.file = {
-			buffer: Buffer.alloc(100000), // Size within the limit
-			size: 100000, // Corrected the size
-			// Mock other necessary properties of Express.Multer.File
+			buffer: Buffer.alloc(100000),
+			size: 100000,
 			fieldname: "file",
 			originalname: "test.pdf",
 			encoding: "7bit",

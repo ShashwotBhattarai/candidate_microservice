@@ -7,7 +7,7 @@ import { constructEmailPayload } from "./constructEmailPayload.service";
 import { SQSService } from "./sqs.service";
 import { CVUploadedEmailTemplate } from "../constants/email.templets";
 
-export default async function uploadCandidateInfoService(currentToken: string, reqFile: any, reqBody: any) {
+export async function uploadCandidateInfoService(currentToken: string, reqFile: any, reqBody: any) {
 	if (!reqFile) {
 		return { status: 400, message: "File buffer is missing", data: null };
 	}
@@ -36,7 +36,6 @@ export default async function uploadCandidateInfoService(currentToken: string, r
 		return {
 			status: 200,
 			message: "candidate details upload successfull",
-			data: null,
 		};
 	} catch (error) {
 		throw new Error("error in uploadCandidateInfoService ");

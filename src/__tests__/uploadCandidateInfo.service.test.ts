@@ -5,7 +5,7 @@ import * as updateAwsKeyInDatabaseModule from "../services/updateAwsKeyInDatabas
 import { SQSService } from "../services/sqs.service";
 import * as createS3clientModule from "../services/createS3Client.service";
 import * as uploadFileToS3Module from "../services/s3-upload.service";
-import uploadCandidateInfoService from "../services/uploadCandidateInfo.service";
+import { uploadCandidateInfoService } from "../services/uploadCandidateInfo.service";
 import * as constructEmailPayloadModule from "../services/constructEmailPayload.service";
 import * as createSqsClientModule from "../services/createSQSClient.service";
 import { S3Client } from "@aws-sdk/client-s3";

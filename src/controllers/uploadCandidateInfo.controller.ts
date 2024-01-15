@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import uploadCandidateInfoService from "../services/uploadCandidateInfo.service";
+import { uploadCandidateInfoService } from "../services/uploadCandidateInfo.service";
 export const uploadCandidateInfoController = (req: Request, res: Response) => {
 	(async () => {
 		try {
