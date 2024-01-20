@@ -1,4 +1,6 @@
 import { createLogger, format, transports } from "winston";
+import * as dotenv from "dotenv";
+dotenv.config();
 
 const env = process.env.ENV;
 
