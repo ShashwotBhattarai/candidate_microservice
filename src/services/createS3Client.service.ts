@@ -1,5 +1,6 @@
 import { S3Client } from "@aws-sdk/client-s3";
 import dotenv from "dotenv";
+import logger from "../configs/logger.config";
 dotenv.config();
 
 export async function createS3Client() {
@@ -11,13 +12,14 @@ export async function createS3Client() {
 			},
 			region: process.env.AWS_REGION,
 		});
-
+		logger.info("S3 Client created");
 		return {
 			status: 200,
 			message: "S3 Client created",
 			data: client,
 		};
 	} else {
+		logger.error("Unknown error in creating S3 client");
 		throw new Error("error creating S3 client");
 	}
 }

@@ -1,6 +1,7 @@
-import { CandidateInfo } from "../database/models/cadidateInfo.models";
+import { CandidateInfo } from "../models/cadidateInfo.models";
 import { findCurrentuserId } from "./findCurrentUserId.service";
 import { EmailPayload } from "../interfaces/emailPayload.interface";
+import logger from "../configs/logger.config";
 
 export async function constructEmailPayload(currentUserToken: string, subject: string, text: string) {
 	const user_id = await findCurrentuserId(currentUserToken);
@@ -21,11 +22,13 @@ export async function constructEmailPayload(currentUserToken: string, subject: s
 				subject: namedSubject,
 				text: text,
 			};
+			logger.info("Email payload created successfully");
 			return emailPayload;
 		} else {
 			throw new Error(`error in constructemailpayload`);
 		}
 	} catch (error) {
+		logger.error("Unknown error in constructemailpayload", error);
 		throw new Error(`error in constructemailpayload`);
 	}
 }

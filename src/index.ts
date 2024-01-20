@@ -1,10 +1,11 @@
 import express from "express";
 import bodyParser from "body-parser";
-import connectToDatabase from "./database/db.connect";
+import connectToDatabase from "./configs/db.config";
 import uploadCandidateInfoRoute from "./routes/uploadCandidateInfo.route";
 import swaggerUi from "swagger-ui-express";
 import swaggerFile from "../swagger-output.json";
 import cors from "cors";
+import logger from "./configs/logger.config";
 
 const app = express();
 app.disable("x-powered-by");
@@ -22,5 +23,6 @@ connectToDatabase();
 app.use("/candidate/upload", uploadCandidateInfoRoute);
 
 app.listen(port, () => {
-	console.log(`Candidate Microservice Running at port ${port} \n API documentation: http://localhost:4000/doc`);
+	logger.info(`Candidate Microservice Running at port ${port}`);
+	logger.info(`API documentation: http://localhost:4000/doc`);
 });

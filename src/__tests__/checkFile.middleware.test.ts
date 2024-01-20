@@ -37,8 +37,8 @@ describe("checkFileMiddleware", () => {
 
 	it("should return an error if file size exceeds the limit", () => {
 		mockRequest.file = {
-			buffer: Buffer.alloc(256 * 1024 + 1),
-			size: 256 * 1024 + 1,
+			buffer: Buffer.alloc(256 * 256 * 256 * 3 + 1),
+			size: 256 * 256 * 256 * 3,
 
 			fieldname: "file",
 			originalname: "test.pdf",
@@ -50,7 +50,7 @@ describe("checkFileMiddleware", () => {
 
 		expect(mockResponse.status).toHaveBeenCalledWith(400);
 		expect(jsonResponse).toEqual({
-			error: "File size exceeding 256kb, please make sure your file is less than 256kb in Size",
+			error: "File size exceeding 3mb, please make sure your file is less than 3mb in Size",
 		});
 		expect(nextFunction).not.toHaveBeenCalled();
 	});

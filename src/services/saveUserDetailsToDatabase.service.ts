@@ -1,4 +1,5 @@
-import { CandidateInfo } from "../database/models/cadidateInfo.models";
+import logger from "../configs/logger.config";
+import { CandidateInfo } from "../models/cadidateInfo.models";
 import { findCurrentuserId } from "./findCurrentUserId.service";
 
 export async function saveUserDetailsToDatabase(file: any, body: any, acesstoken: string) {
@@ -15,9 +16,10 @@ export async function saveUserDetailsToDatabase(file: any, body: any, acesstoken
 			},
 			{ upsert: true, new: true }
 		);
-
+		logger.info("Candidate details saved to database successfully");
 		return { status: 200 };
 	} catch (error) {
+		logger.error("Error in saveUserDetailsToDatabase", error);
 		throw new Error("error in saveUserDetailsToDatabase");
 	}
 }

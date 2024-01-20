@@ -1,5 +1,6 @@
 import { SQSClient } from "@aws-sdk/client-sqs";
 import dotenv from "dotenv";
+import logger from "../configs/logger.config";
 dotenv.config();
 
 export async function createSQSClient() {
@@ -11,13 +12,14 @@ export async function createSQSClient() {
 			},
 			region: process.env.AWS_REGION,
 		});
-
+		logger.info("SQS Client created");
 		return {
 			status: 200,
 			message: "SQSClient created",
 			data: client,
 		};
 	} else {
+		logger.error("Unknown error in creating SQS client");
 		throw new Error("error creating SQS client");
 	}
 }

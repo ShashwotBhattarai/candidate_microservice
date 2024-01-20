@@ -5,7 +5,7 @@ jest.mock("generate-unique-id", () => {
 	};
 });
 import { constructEmailPayload } from "../services/constructEmailPayload.service";
-import { CandidateInfo } from "../database/models/cadidateInfo.models";
+import { CandidateInfo } from "../models/cadidateInfo.models";
 
 const mockingoose = require("mockingoose");
 jest.mock("../services/findCurrentUserId.service");

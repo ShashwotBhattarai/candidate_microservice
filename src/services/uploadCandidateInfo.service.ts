@@ -6,9 +6,11 @@ import { updateAwsKeyInDatabase } from "./updateAwsKeyInDatabase.service";
 import { constructEmailPayload } from "./constructEmailPayload.service";
 import { SQSService } from "./sqs.service";
 import { CVUploadedEmailTemplate } from "../constants/email.templets";
+import logger from "../configs/logger.config";
 
 export async function uploadCandidateInfoService(currentToken: string, reqFile: any, reqBody: any) {
 	if (!reqFile) {
+		logger.info("File buffer is missing");
 		return { status: 400, message: "File buffer is missing", data: null };
 	}
 	try {
@@ -32,12 +34,13 @@ export async function uploadCandidateInfoService(currentToken: string, reqFile: 
 		}
 
 		await updateAwsKeyInDatabase(currentToken, newKey);
-
+		logger.info("Candidate details upload successfull");
 		return {
 			status: 200,
 			message: "candidate details upload successfull",
 		};
 	} catch (error) {
+		logger.error("Unknown error in uploadCandidateInfoService", error);
 		throw new Error("error in uploadCandidateInfoService ");
 	}
 }

@@ -1,14 +1,15 @@
 import mongoose from "mongoose";
 import * as dotenv from "dotenv";
+import logger from "./logger.config";
 
 dotenv.config();
 
 async function connectToDatabase(): Promise<void> {
 	try {
 		await mongoose.connect(process.env.DATABASEURI as string);
-		console.log("Connected to the database");
+		logger.info("Connected to the database");
 	} catch (error) {
-		console.log(error);
+		logger.error(`Error connecting to the database.`, error);
 	}
 }
 
