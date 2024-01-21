@@ -10,7 +10,7 @@ import logger from "./configs/logger.config";
 const app = express();
 app.disable("x-powered-by");
 const corsOptions = {
-	origin: "http://localhost:3000/",
+	origin: "http://localhost:3000",
 };
 app.use(cors(corsOptions));
 const port = 4000;
