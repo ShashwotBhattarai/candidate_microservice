@@ -6,6 +6,7 @@ import swaggerUi from "swagger-ui-express";
 import swaggerFile from "../swagger-output.json";
 import cors from "cors";
 import logger from "./configs/logger.config";
+import rootRoute from "./routes/root.route";
 
 const app = express();
 app.disable("x-powered-by");
@@ -20,7 +21,7 @@ app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 connectToDatabase();
 
-app.use("/candidate/upload", uploadCandidateInfoRoute);
+app.use("/", rootRoute);
 
 app.listen(port, () => {
 	logger.info(`Candidate Microservice Running at port ${port}`);

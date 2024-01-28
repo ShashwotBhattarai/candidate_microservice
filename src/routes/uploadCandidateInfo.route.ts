@@ -23,4 +23,6 @@ router.post(
 	uploadCandidateInfoController
 );
 
+
+
 export default router;
