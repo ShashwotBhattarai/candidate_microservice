@@ -1,7 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
 import connectToDatabase from "./configs/db.config";
-import uploadCandidateInfoRoute from "./routes/uploadCandidateInfo.route";
 import swaggerUi from "swagger-ui-express";
 import swaggerFile from "../swagger-output.json";
 import cors from "cors";
