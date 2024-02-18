@@ -14,6 +14,8 @@ const candidateInfoSchema = new Schema({
   local_file_name: { type: String },
   file_size_in_bytes: { type: Number },
   aws_file_key: { type: String },
-});
+},
+{ timestamps: true }
+);
 
 export const CandidateInfo = model("CandidateInfo", candidateInfoSchema);
