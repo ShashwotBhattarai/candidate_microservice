@@ -1,4 +1,4 @@
-import { CandidateInfo } from "../models/cadidateInfo.models";
+import { CandidateInfo } from "../models/cadidateInfo.model";
 import * as findCurrentuserIdModule from "../services/findCurrentUserId.service";
 const findCurrentuserIdModuleSpy = jest.spyOn(findCurrentuserIdModule, "findCurrentuserId");
 findCurrentuserIdModuleSpy.mockResolvedValue("agvfe6");

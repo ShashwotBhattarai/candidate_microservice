@@ -1,5 +1,5 @@
 import logger from "../configs/logger.config";
-import { CandidateInfo } from "../models/cadidateInfo.models";
+import { CandidateInfo } from "../models/cadidateInfo.model";
 import { findCurrentuserId } from "./findCurrentUserId.service";
 
 export async function saveUserDetailsToDatabase(file: any, body: any, acesstoken: string) {

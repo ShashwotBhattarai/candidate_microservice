@@ -1,0 +1,4 @@
+Dockerfile
+.scannerwork
+node_modules
+.env

@@ -1,4 +1,4 @@
-import { CandidateInfo } from "../models/cadidateInfo.models";
+import { CandidateInfo } from "../models/cadidateInfo.model";
 import { findCurrentuserId } from "./findCurrentUserId.service";
 import { EmailPayload } from "../interfaces/emailPayload.interface";
 import logger from "../configs/logger.config";
