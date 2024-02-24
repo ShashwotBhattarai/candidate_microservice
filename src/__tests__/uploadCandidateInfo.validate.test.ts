@@ -5,6 +5,7 @@ describe("validateCandidate", () => {
 	let mockRequest: Partial<Request>;
 	let mockResponse: Partial<Response>;
 	let mockNext: NextFunction;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	let jsonResponse: any;
 
 	beforeEach(() => {

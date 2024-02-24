@@ -3,6 +3,7 @@ import * as findCurrentuserIdModule from "../services/findCurrentUserId.service"
 const findCurrentuserIdModuleSpy = jest.spyOn(findCurrentuserIdModule, "findCurrentuserId");
 findCurrentuserIdModuleSpy.mockResolvedValue("agvfe6");
 import { findSavedS3key } from "../services/findSavedS3key.service";
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const mockingoose = require("mockingoose");
 
 describe("findSavedKey", () => {

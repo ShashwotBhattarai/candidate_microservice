@@ -5,7 +5,7 @@ describe("checkFileMiddleware", () => {
 	let mockRequest: Partial<Request>;
 	let mockResponse: Partial<Response>;
 	let nextFunction: NextFunction;
-	let jsonResponse: any;
+	let jsonResponse: unknown;
 
 	beforeEach(() => {
 		jsonResponse = {};

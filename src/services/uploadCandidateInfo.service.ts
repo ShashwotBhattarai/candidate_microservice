@@ -8,6 +8,7 @@ import { SQSService } from "./sqs.service";
 import { CVUploadedEmailTemplate } from "../constants/email.templets";
 import logger from "../configs/logger.config";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function uploadCandidateInfoService(currentToken: string, reqFile: any, reqBody: any) {
 	if (!reqFile) {
 		logger.info("File buffer is missing");

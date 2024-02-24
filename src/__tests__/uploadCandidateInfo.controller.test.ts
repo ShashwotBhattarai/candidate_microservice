@@ -2,9 +2,11 @@ import { uploadCandidateInfoController } from "../controllers/uploadCandidateInf
 import * as uploadCandidateInfoServiceModule from "../services/uploadCandidateInfo.service";
 
 describe("uploadCandidateInfoController", () => {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	let mockRequest: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	let mockResponse: any;
-	let responseObject: any = {};
+	let responseObject: unknown = {};
 
 	beforeEach(() => {
 		mockRequest = {

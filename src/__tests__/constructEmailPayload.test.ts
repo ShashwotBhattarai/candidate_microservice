@@ -7,6 +7,7 @@ jest.mock("generate-unique-id", () => {
 import { constructEmailPayload } from "../services/constructEmailPayload.service";
 import { CandidateInfo } from "../models/cadidateInfo.model";
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const mockingoose = require("mockingoose");
 jest.mock("../services/findCurrentUserId.service");
 describe("registerNewUser", () => {

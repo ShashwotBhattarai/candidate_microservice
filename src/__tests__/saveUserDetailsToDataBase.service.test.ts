@@ -3,6 +3,7 @@ import { saveUserDetailsToDatabase } from "../services/saveUserDetailsToDatabase
 import * as findCurrentuserIdModule from "../services/findCurrentUserId.service";
 const findCurrentuserIdModuleSpy = jest.spyOn(findCurrentuserIdModule, "findCurrentuserId");
 findCurrentuserIdModuleSpy.mockResolvedValue("agvfe6");
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const mockingoose = require("mockingoose");
 jest.mock("../services/findCurrentUserId.service");
 

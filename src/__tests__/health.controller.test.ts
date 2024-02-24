@@ -2,9 +2,10 @@ import { Request, Response } from "express";
 import { healthController } from "../controllers/health.controller";
 
 describe("health controller", () => {
-	let mockRequest: any;
+	let mockRequest: unknown;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	let mockResponse: any;
-	let jsonResponse: any;
+	let jsonResponse: unknown;
 
 	beforeEach(() => {
 		mockRequest = {};

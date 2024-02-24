@@ -2,6 +2,7 @@ import logger from "../configs/logger.config";
 import { CandidateInfo } from "../models/cadidateInfo.model";
 import { findCurrentuserId } from "./findCurrentUserId.service";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function saveUserDetailsToDatabase(file: any, body: any, acesstoken: string) {
 	try {
 		const current_user_id = await findCurrentuserId(acesstoken);
