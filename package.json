@@ -10,7 +10,8 @@
     "lint:fix": "eslint . --fix",
     "swagger": "node ./swagger.js",
     "build": "tsc",
-    "prepare": "husky"
+    "prepare": "husky",
+    "prettier": "npx prettier . --write"
   },
   "author": "shashwot bhattarai",
   "license": "ISC",
