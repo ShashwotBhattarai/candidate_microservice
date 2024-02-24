@@ -6,23 +6,21 @@ import multer from "multer";
 import { uploadCandidateInfoController } from "../controllers/uploadCandidateInfo.controller";
 
 const upload = multer({
-	storage: multer.memoryStorage(),
-	limits: {
-		fileSize: 8000000,
-	},
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 8000000,
+  },
 });
 
 const router: Router = express.Router();
 
 router.post(
-	"/",
-	upload.single("cv"),
-	authMiddleware(["candidate"]),
-	validateCandidate,
-	checkFileMiddleware,
-	uploadCandidateInfoController
+  "/",
+  upload.single("cv"),
+  authMiddleware(["candidate"]),
+  validateCandidate,
+  checkFileMiddleware,
+  uploadCandidateInfoController,
 );
-
-
 
 export default router;

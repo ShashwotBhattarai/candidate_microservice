@@ -4,11 +4,11 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const doc = {
-	info: {
-		title: "My API",
-		description: "Description",
-	},
-	host: `localhost:${process.env.PORT}`,
+  info: {
+    title: "My API",
+    description: "Description",
+  },
+  host: `localhost:${process.env.PORT}`,
 };
 
 const outputFile = "./swagger-output.json";

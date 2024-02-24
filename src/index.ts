@@ -10,10 +10,10 @@ import rootRoute from "./routes/root.route";
 const app = express();
 app.disable("x-powered-by");
 const corsOptions = {
-	origin: "http://localhost:3000",
+  origin: "http://localhost:3000",
 };
 app.use(cors(corsOptions));
-const port = process.env.PORT
+const port = process.env.PORT;
 
 app.use(bodyParser.json());
 app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerFile));
@@ -23,6 +23,6 @@ connectToDatabase();
 app.use("/", rootRoute);
 
 app.listen(port, () => {
-	logger.info(`Candidate Microservice Running at port ${port}`);
-	logger.info(`API documentation: http://localhost:${port}/doc`);
+  logger.info(`Candidate Microservice Running at port ${port}`);
+  logger.info(`API documentation: http://localhost:${port}/doc`);
 });
