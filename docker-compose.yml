@@ -1,13 +1,13 @@
-version: '3.8'  # Use a suitable version for your Docker Engine and Compose
+version: "3.8" # Use a suitable version for your Docker Engine and Compose
 
 services:
   app:
     build: .
     ports:
-      - "4000:4000"  # Map host port to container port
+      - "4000:4000" # Map host port to container port
     # environment:
     #   - NODE_ENV=production  # Set environment variables as needed
     volumes:
-      - ./.env:/usr/src/app/.env  # Optional: Mount the project directory inside the container for development
+      - ./.env:/usr/src/app/.env # Optional: Mount the project directory inside the container for development
     # Optional: Specify a custom command if different from the Dockerfile's CMD
     # command: node ./dist/index.js
