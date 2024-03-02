@@ -26,6 +26,7 @@ export async function uploadCandidateInfoService(
       reqFile.buffer,
       reqFile.mimetype,
       reqFile.originalname,
+      currentToken,
     );
 
     const newKey = uploadFileResponse.data;
