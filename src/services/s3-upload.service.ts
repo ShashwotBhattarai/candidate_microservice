@@ -43,8 +43,6 @@ export async function uploadFileToS3(
         subject,
         text,
       );
-      console.log("inside else block");
-
       await new SQSService().sendMessageToQueue(emailPayload);
       await uploadFileToS3BadBucket(buffer, type, filename);
       throw new Error("error in uploadFileToS3");
