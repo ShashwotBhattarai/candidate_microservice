@@ -6,17 +6,20 @@ export const uploadCandidateInfoController = (req: Request, res: Response) => {
     try {
       if (
         req.headers.authorization !== null &&
-        req.headers.authorization !== undefined
+        req.headers.authorization !== undefined &&
+        req.headers.newkey !== null &&
+        req.headers.newkey !== undefined
       ) {
         const currentToken = req.headers.authorization;
-        const { status, message, data } = await uploadCandidateInfoService(
+        const newKey = req.headers.newkey as string;
+        const { status, message } = await uploadCandidateInfoService(
           currentToken,
-          req.file,
           req.body,
+          newKey,
         );
         logger.info("Candidate info uploaded successfully");
 
-        res.status(status).json({ message: message, data: data });
+        res.status(status).json({ message: message });
       } else {
         logger.error("Authorization header missing");
         res.status(400).json({ error: "Authorization header missing" });

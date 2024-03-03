@@ -12,15 +12,6 @@ jest.mock("../services/findCurrentUserId.service");
 
 describe("saveUserDetailsToDataBase", () => {
   test("saved", async () => {
-    const mockFile = {
-      fieldname: "cv",
-      originalname: "SLC.pdf",
-      encoding: "7bit",
-      mimetype: "application/pdf",
-      buffer: "buffermock",
-      size: 473672,
-    };
-
     const bodyMock = {
       fullname: "my name bahubali surya",
       email: "acstockthankot@gmail.com",
@@ -42,7 +33,6 @@ describe("saveUserDetailsToDataBase", () => {
     );
 
     const finalResult = await saveUserDetailsToDatabase(
-      mockFile,
       bodyMock,
       accessTokenMock,
     );
@@ -50,15 +40,6 @@ describe("saveUserDetailsToDataBase", () => {
   });
 
   test("database error", async () => {
-    const mockFile = {
-      fieldname: "cv",
-      originalname: "SLC.pdf",
-      encoding: "7bit",
-      mimetype: "application/pdf",
-      buffer: "buffermock",
-      size: 473672,
-    };
-
     const bodyMock = {
       fullname: "my name bahubali surya",
       email: "acstockthankot@gmail.com",
@@ -72,7 +53,7 @@ describe("saveUserDetailsToDataBase", () => {
     );
 
     try {
-      await saveUserDetailsToDatabase(mockFile, bodyMock, accessTokenMock);
+      await saveUserDetailsToDatabase(bodyMock, accessTokenMock);
     } catch (error) {
       expect(error).toEqual(new Error("error in saveUserDetailsToDatabase"));
     }

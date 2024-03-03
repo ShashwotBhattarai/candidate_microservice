@@ -4,8 +4,6 @@ import { findCurrentuserId } from "./findCurrentUserId.service";
 
 export async function saveUserDetailsToDatabase(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  file: any,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   body: any,
   acesstoken: string,
 ) {
@@ -17,8 +15,6 @@ export async function saveUserDetailsToDatabase(
         fullname: body.fullname,
         email: body.email,
         phone_number: body.phone_number,
-        local_file_name: file?.filename,
-        file_size_in_bytes: file?.size,
       },
       { upsert: true, new: true },
     );
