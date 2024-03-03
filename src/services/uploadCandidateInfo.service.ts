@@ -1,5 +1,4 @@
 import { saveUserDetailsToDatabase } from "./saveUserDetailsToDatabase.service";
-import { uploadFileToS3 } from "./s3-upload.service";
 import { findSavedS3key } from "./findSavedS3key.service";
 import { deleteFileFromS3 } from "./s3-delete.service";
 import { updateAwsKeyInDatabase } from "./updateAwsKeyInDatabase.service";
@@ -11,25 +10,11 @@ import logger from "../configs/logger.config";
 export async function uploadCandidateInfoService(
   currentToken: string,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  reqFile: any,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   reqBody: any,
+  newKey: string,
 ) {
-  if (!reqFile) {
-    logger.info("File buffer is missing");
-    return { status: 400, message: "File buffer is missing", data: null };
-  }
   try {
-    await saveUserDetailsToDatabase(reqFile, reqBody, currentToken);
-
-    const uploadFileResponse = await uploadFileToS3(
-      reqFile.buffer,
-      reqFile.mimetype,
-      reqFile.originalname,
-      currentToken,
-    );
-
-    const newKey = uploadFileResponse.data;
+    await saveUserDetailsToDatabase(reqBody, currentToken);
 
     const subject = CVUploadedEmailTemplate.subject;
     const text = CVUploadedEmailTemplate.text;

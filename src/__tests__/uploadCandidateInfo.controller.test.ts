@@ -33,6 +33,7 @@ describe("uploadCandidateInfoController", () => {
     });
 
     mockRequest.headers.authorization = "some-auth-token";
+    mockRequest.headers.newkey = "newkey";
 
     await uploadCandidateInfoController(mockRequest, mockResponse);
 
@@ -42,6 +43,17 @@ describe("uploadCandidateInfoController", () => {
 
   test("missing authorization header", async () => {
     await uploadCandidateInfoController(mockRequest, mockResponse);
+    mockRequest.headers.authorization = undefined;
+    mockRequest.headers.newkey = "newkey";
+
+    expect(mockResponse.status).toHaveBeenCalledWith(400);
+    expect(responseObject).toEqual({ error: "Authorization header missing" });
+  });
+
+  test("missing newkey header", async () => {
+    await uploadCandidateInfoController(mockRequest, mockResponse);
+    mockRequest.headers.authorization = "some-auth-token";
+    mockRequest.headers.newkey = undefined;
 
     expect(mockResponse.status).toHaveBeenCalledWith(400);
     expect(responseObject).toEqual({ error: "Authorization header missing" });
@@ -57,6 +69,7 @@ describe("uploadCandidateInfoController", () => {
     );
 
     mockRequest.headers.authorization = "some-auth-token";
+    mockRequest.headers.newkey = "newkey";
 
     await uploadCandidateInfoController(mockRequest, mockResponse);
 
