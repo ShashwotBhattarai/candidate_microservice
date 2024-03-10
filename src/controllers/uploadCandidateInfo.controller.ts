@@ -4,14 +4,17 @@ import logger from "../configs/logger.config";
 export const uploadCandidateInfoController = (req: Request, res: Response) => {
   (async () => {
     try {
+      console.log(req.headers.newkey);
       if (
         req.headers.authorization !== null &&
-        req.headers.authorization !== undefined &&
-        req.headers.newkey !== null &&
-        req.headers.newkey !== undefined
+        req.headers.authorization !== undefined
       ) {
         const currentToken = req.headers.authorization;
-        const newKey = req.headers.newkey as string;
+        const newKey = req.headers.newkey
+          ? (req.headers.newkey as string)
+          : null;
+
+        console.log(newKey);
         const { status, message } = await uploadCandidateInfoService(
           currentToken,
           req.body,

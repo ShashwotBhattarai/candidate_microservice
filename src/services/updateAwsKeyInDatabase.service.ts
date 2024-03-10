@@ -1,5 +1,5 @@
 import logger from "../configs/logger.config";
-import { CandidateInfo } from "../models/cadidateInfo.model";
+import { CandidateInfo } from "../models/candidateInfo.model";
 import { findCurrentuserId } from "./findCurrentUserId.service";
 
 export async function updateAwsKeyInDatabase(

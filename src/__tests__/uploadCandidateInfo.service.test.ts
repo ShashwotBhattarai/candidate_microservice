@@ -123,20 +123,45 @@ describe("uploadCandidateInfo Service", () => {
     expect(finalResult.status).toBe(200);
     expect(finalResult.message).toBe("candidate details upload successfull");
   });
-});
 
-test("testing catch block", async () => {
-  const findsavedkeyModuleSpy = jest.spyOn(
-    findSavedS3keyModule,
-    "findSavedS3key",
-  );
-  findsavedkeyModuleSpy.mockRejectedValueOnce(new Error("error"));
+  test("everything works fine when newKey is null (no S3 key update needed)", async () => {
+    // Reset the mock to ensure clean state
+    updateAwsKeyInDatabaseModuleSpy.mockClear();
 
-  try {
-    await uploadCandidateInfoService(accessTokenMock, bodyMock, newKeyMock);
+    const finalResult = await uploadCandidateInfoService(
+      accessTokenMock,
+      bodyMock,
+      null, // Pass `null` as `newKey` to simulate this scenario
+    );
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-    expect(error.message).toBe("error in uploadCandidateInfoService ");
-  }
+    expect(finalResult.status).toBe(200);
+    expect(finalResult.message).toBe("candidate details upload successfull");
+
+    // Verify that the necessary functions were called
+    expect(saveUserDetailsToDatabaseSpy).toHaveBeenCalledWith(
+      bodyMock,
+      accessTokenMock,
+    );
+    expect(constructEmailPayloadModuleSpy).toHaveBeenCalled();
+    expect(sendMessageToQueueSpy).toHaveBeenCalled();
+
+    // Verify that the S3 key related functions were not called
+    expect(updateAwsKeyInDatabaseModuleSpy).not.toHaveBeenCalled();
+  });
+
+  test("testing catch block", async () => {
+    const findsavedkeyModuleSpy = jest.spyOn(
+      findSavedS3keyModule,
+      "findSavedS3key",
+    );
+    findsavedkeyModuleSpy.mockRejectedValueOnce(new Error("error"));
+
+    try {
+      await uploadCandidateInfoService(accessTokenMock, bodyMock, newKeyMock);
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      expect(error.message).toBe("error in uploadCandidateInfoService ");
+    }
+  });
 });

@@ -5,7 +5,7 @@ import logger from "../configs/logger.config";
 const validateCandidateSchema = Joi.object({
   fullname: Joi.string().min(3).max(30).required(),
   email: Joi.string().email().required(),
-  phone_number: Joi.string().min(10).max(14),
+  phone_number: Joi.string().min(10).max(14).optional().allow(null),
 });
 
 export const validateCandidate = (
@@ -13,7 +13,10 @@ export const validateCandidate = (
   res: Response,
   next: NextFunction,
 ) => {
-  const { error } = validateCandidateSchema.validate(req.body);
+  const { error } = validateCandidateSchema.validate(req.body, {
+    presence: "optional",
+  });
+
   if (error) {
     logger.info(
       "Input validation error in validate candidate middleware",
@@ -21,5 +24,6 @@ export const validateCandidate = (
     );
     return res.status(400).json({ error: error.details[0].message });
   }
+
   next();
 };

@@ -69,7 +69,7 @@ describe("uploadCandidateInfoController", () => {
     );
 
     mockRequest.headers.authorization = "some-auth-token";
-    mockRequest.headers.newkey = "newkey";
+    mockRequest.headers.newkey = undefined;
 
     await uploadCandidateInfoController(mockRequest, mockResponse);
 

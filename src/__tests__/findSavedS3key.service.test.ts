@@ -1,4 +1,4 @@
-import { CandidateInfo } from "../models/cadidateInfo.model";
+import { CandidateInfo } from "../models/candidateInfo.model";
 import * as findCurrentuserIdModule from "../services/findCurrentUserId.service";
 const findCurrentuserIdModuleSpy = jest.spyOn(
   findCurrentuserIdModule,
