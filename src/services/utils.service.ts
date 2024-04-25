@@ -1,9 +1,9 @@
 import { jwtDecode } from "jwt-decode";
+import { JWTPayload } from "../models/jwtPayload.type";
 
 export class UtilsService {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public findCurrentuserId(accesstoken: string): string {
-    const decodedPayload = jwtDecode(accesstoken) as { user_id: string };
+    const decodedPayload: JWTPayload = jwtDecode(accesstoken);
     const decodedUserId = decodedPayload?.user_id;
     return decodedUserId;
   }

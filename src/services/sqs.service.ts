@@ -1,6 +1,6 @@
 import { SendMessageCommand } from "@aws-sdk/client-sqs";
 import generateUniqueId from "generate-unique-id";
-import { EmailPayload } from "../types/emailPayload.type";
+import { EmailPayload } from "../models/emailPayload.type";
 import logger from "../configs/logger.config";
 import sqsClient from "../configs/sqsClient.config";
 import { envVars } from "../configs/envVars.config";

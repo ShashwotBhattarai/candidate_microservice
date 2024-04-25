@@ -27,13 +27,11 @@ export class S3Controller {
         const key = req.headers.s3filekey as string;
         const { status, message, data } =
           await new S3Service().getS3BadBucketUploadUrl(key);
-        logger.info("Candidate info uploaded to badbucket successfully");
+        logger.info("upload url for badbucket fetched successfully");
 
         res.status(status).json({ message: message, url: data });
       } catch {
-        logger.error(
-          "Unknown error in upload getS3BadBucketUploadUrl Controller ",
-        );
+        logger.error("Unknown error in getS3BadBucketUploadUrl Controller ");
         res.status(500).json({ error: "Internal server error" });
       }
     })();

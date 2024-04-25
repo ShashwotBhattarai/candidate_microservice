@@ -1,7 +1,7 @@
 import { CandidateInfo } from "../entities/candidateInfo.entity";
 import logger from "../configs/logger.config";
 import { S3Service } from "./s3.service";
-import { ServiceResponse } from "../types/serviceResponse.type";
+import { ServiceResponse } from "../models/serviceResponse.type";
 
 import { EmailerService } from "./Emailer.service";
 import { CvUploadStatus } from "../constants/cvUploadStatus.enum";
@@ -65,9 +65,6 @@ export class CandidateService {
     try {
       const current_user_id = new UtilsService().findCurrentuserId(accessToken);
 
-      if (current_user_id === null || undefined) {
-        throw "error currentuser not found";
-      }
       const existingCandidate = await CandidateInfo.findOne({
         user_id: current_user_id,
       });
@@ -99,9 +96,7 @@ export class CandidateService {
   }
 
   public async findSavedS3key(acessToken: string): Promise<ServiceResponse> {
-    const current_user_id = await new UtilsService().findCurrentuserId(
-      acessToken,
-    );
+    const current_user_id = new UtilsService().findCurrentuserId(acessToken);
 
     try {
       const response = await CandidateInfo.findOne({
@@ -143,19 +138,16 @@ export class CandidateService {
   ): Promise<ServiceResponse> {
     try {
       const candidateService = new CandidateService();
-      const current_user_id = await new UtilsService().findCurrentuserId(
-        accessToken,
-      );
-
-      const findSavedS3keyResponse =
-        await candidateService.findSavedS3key(accessToken);
-
-      if (findSavedS3keyResponse.status == 200) {
-        const oldKey = findSavedS3keyResponse.data as string;
-        await new S3Service().deleteFileFromS3(oldKey);
-      }
+      const current_user_id = new UtilsService().findCurrentuserId(accessToken);
 
       if (bucket === "default") {
+        const findSavedS3keyResponse =
+          await candidateService.findSavedS3key(accessToken);
+
+        if (findSavedS3keyResponse.status == 200) {
+          const oldKey = findSavedS3keyResponse.data as string;
+          await new S3Service().deleteFileFromS3(oldKey);
+        }
         await CandidateInfo.updateOne(
           { user_id: current_user_id },
           {

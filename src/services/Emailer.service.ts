@@ -1,4 +1,4 @@
-import { EmailPayload } from "../types/emailPayload.type";
+import { EmailPayload } from "../models/emailPayload.type";
 import logger from "../configs/logger.config";
 import {
   CVUploadBadBucketEmailTemplate,
@@ -15,9 +15,7 @@ export class EmailerService {
     subject: string,
     text: string,
   ): Promise<EmailPayload> {
-    const user_id = await new UtilsService().findCurrentuserId(
-      currentUserToken,
-    );
+    const user_id = new UtilsService().findCurrentuserId(currentUserToken);
 
     let namedSubject;
 

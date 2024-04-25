@@ -6,7 +6,7 @@ import {
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import s3Client from "../configs/s3Client.config";
 import logger from "../configs/logger.config";
-import { ServiceResponse } from "../types/serviceResponse.type";
+import { ServiceResponse } from "../models/serviceResponse.type";
 import { envVars } from "../configs/envVars.config";
 
 export class S3Service {
