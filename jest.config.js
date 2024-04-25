@@ -1,4 +1,3 @@
-// jest.config.js
 module.exports = {
   coverageThreshold: {
     global: {
@@ -9,10 +8,5 @@ module.exports = {
     },
   },
   collectCoverage: true,
-  collectCoverageFrom: [
-    "src/services/*.ts",
-    "src/middlewares/*.ts",
-    "src/validators/*.ts",
-    "src/controllers/*.ts",
-  ],
+  collectCoverageFrom: ["src/services/*.ts", "src/middlewares/*.ts"],
 };

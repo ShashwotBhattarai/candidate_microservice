@@ -12,7 +12,10 @@ const candidateInfoSchema = new Schema(
     fullname: { type: String, required: true },
     email: { type: String, required: true },
     phone_number: { type: String, required: true },
-    aws_file_key: { type: String },
+    s3_default_bucket_file_key: { type: String, required: true },
+    s3_bad_bucket_file_key: { type: String, required: true },
+    createdBy: { type: String },
+    updatedBy: { type: String },
   },
   { timestamps: true },
 );

@@ -2,5 +2,5 @@ projectKey=candidate_microservice
 serverUrl=http://localhost:9000
 serverVersion=10.3.0.82913
 dashboardUrl=http://localhost:9000/dashboard?id=candidate_microservice
-ceTaskId=AY4p68hpYXGAvfy6vX4_
-ceTaskUrl=http://localhost:9000/api/ce/task?id=AY4p68hpYXGAvfy6vX4_
+ceTaskId=AY8W9zK3eZrWelpPLaS4
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AY8W9zK3eZrWelpPLaS4

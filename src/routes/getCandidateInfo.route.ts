@@ -1,13 +1,11 @@
 import express, { Router } from "express";
 import { authMiddleware } from "../middlewares/auth.middleware";
-import { getOneCandidateController } from "../controllers/getOneCandidateInfo.controller";
+import { CandidateController } from "../controllers/candidate.controller";
 
 const router: Router = express.Router();
 
-router.get(
-  "/:user_id",
-  authMiddleware(["candidate"]),
-  getOneCandidateController,
-);
+const getOneCandidate = new CandidateController().getOneCandidate;
+
+router.get("/:user_id", authMiddleware(["candidate"]), getOneCandidate);
 
 export default router;

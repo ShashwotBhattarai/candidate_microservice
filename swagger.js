@@ -5,8 +5,8 @@ dotenv.config();
 
 const doc = {
   info: {
-    title: "My API",
-    description: "Description",
+    title: "Candidate Microservice",
+    description: "Candidate Microservice",
   },
   host: `localhost:${process.env.PORT}`,
 };
