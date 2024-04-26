@@ -13,7 +13,7 @@ describe("Sqs service", () => {
     jest.clearAllMocks();
   });
 
-  test("sqs message gets sent to queue", async () => {
+  it("sqs message gets sent to queue", async () => {
     //mock all dependencies
     const sqsClientMock = mockClient(SQSClient);
 
@@ -41,7 +41,7 @@ describe("Sqs service", () => {
     expect(result.status).toBe(200);
   });
 
-  test("sqs error occures", async () => {
+  it("sqs error occures", async () => {
     mockClient(SQSClient).rejects(new Error("SQS Error"));
 
     const emailPayload = {
