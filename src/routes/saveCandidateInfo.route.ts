@@ -1,8 +1,8 @@
 import express, { Router } from "express";
 import { CandidateInfoValidationMiddleware } from "../middlewares/candidateInfoValidation.middleware";
-import { authMiddleware } from "../middlewares/auth.middleware";
+import { AuthGuardMiddleware } from "../middlewares/authGuard.middleware";
 import { CandidateController } from "../controllers/candidate.controller";
-import ValidateHeaderDataMiddleware from "../middlewares/validateHeaderData.middleware";
+import { ValidateHeaderDataMiddleware } from "../middlewares/validateHeaderData.middleware";
 
 const validateCandidateInfo = new CandidateInfoValidationMiddleware()
   .validateCandidateInfo;
@@ -16,16 +16,18 @@ const validateKey = validateHeaderDataMiddleware.validateHeaderForKey;
 const validateBucketType =
   validateHeaderDataMiddleware.validateHeaderForBucketType;
 
+const protectRoute = new AuthGuardMiddleware().protectRoute;
+
 const router: Router = express.Router();
 router.post(
   "/",
-  authMiddleware(["candidate"]),
+  protectRoute(["candidate"]),
   validateCandidateInfo,
   saveCandidateInfo,
 );
 router.post(
   "/updateS3FileKey",
-  authMiddleware(["candidate"]),
+  protectRoute(["candidate"]),
   validateKey,
   validateBucketType,
   updateS3FileKey,

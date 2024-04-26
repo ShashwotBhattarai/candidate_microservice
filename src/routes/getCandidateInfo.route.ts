@@ -1,11 +1,12 @@
 import express, { Router } from "express";
-import { authMiddleware } from "../middlewares/auth.middleware";
+import { AuthGuardMiddleware } from "../middlewares/authGuard.middleware";
 import { CandidateController } from "../controllers/candidate.controller";
 
 const router: Router = express.Router();
 
 const getOneCandidate = new CandidateController().getOneCandidate;
+const protectRoute = new AuthGuardMiddleware().protectRoute;
 
-router.get("/:user_id", authMiddleware(["candidate"]), getOneCandidate);
+router.get("/:user_id", protectRoute(["candidate"]), getOneCandidate);
 
 export default router;

@@ -15,14 +15,13 @@ export class EmailerService {
     subject: string,
     text: string,
   ): Promise<EmailPayload> {
-    const user_id = new UtilsService().findCurrentuserId(currentUserToken);
-
-    let namedSubject;
-
     try {
+      const user_id = new UtilsService().findCurrentuserId(currentUserToken);
+
+      let namedSubject;
       const response = await CandidateInfo.findOne({ user_id: user_id });
 
-      if (response instanceof CandidateInfo) {
+      if (response) {
         const email = response.email;
         const fullname = response.fullname;
 
@@ -44,16 +43,19 @@ export class EmailerService {
     }
   }
 
-  public async sendEmail(currentToken: string, status: string) {
+  public async sendEmail(currentToken: string, status: string): Promise<void> {
     let subject: string = "";
     let text: string = "";
 
-    if (status === CvUploadStatus.CvUploadSuccessful) {
-      subject = CVUploadSuccessFullEmailTemplate.subject;
-      text = CVUploadSuccessFullEmailTemplate.text;
-    } else if (status === CvUploadStatus.CvUploadedToBadBucket) {
-      subject = CVUploadBadBucketEmailTemplate.subject;
-      text = CVUploadBadBucketEmailTemplate.text;
+    switch (status) {
+      case CvUploadStatus.CvUploadSuccessful:
+        subject = CVUploadSuccessFullEmailTemplate.subject;
+        text = CVUploadSuccessFullEmailTemplate.text;
+        break;
+      case CvUploadStatus.CvUploadedToBadBucket:
+        subject = CVUploadBadBucketEmailTemplate.subject;
+        text = CVUploadBadBucketEmailTemplate.text;
+        break;
     }
 
     const emailPayload = await this.constructEmailPayload(

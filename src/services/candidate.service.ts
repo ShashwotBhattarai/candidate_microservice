@@ -3,7 +3,7 @@ import logger from "../configs/logger.config";
 import { S3Service } from "./s3.service";
 import { ServiceResponse } from "../models/serviceResponse.type";
 
-import { EmailerService } from "./Emailer.service";
+import { EmailerService } from "./emailer.service";
 import { CvUploadStatus } from "../constants/cvUploadStatus.enum";
 import { UtilsService } from "./utils.service";
 export class CandidateService {
@@ -96,35 +96,31 @@ export class CandidateService {
   }
 
   public async findSavedS3key(acessToken: string): Promise<ServiceResponse> {
-    const current_user_id = new UtilsService().findCurrentuserId(acessToken);
-
     try {
+      const current_user_id = new UtilsService().findCurrentuserId(acessToken);
+
       const response = await CandidateInfo.findOne({
         user_id: current_user_id,
       });
 
-      if (
-        response instanceof CandidateInfo &&
-        response.s3_default_bucket_file_key == null
-      ) {
+      const s3_default_bucket_file_key = response?.s3_default_bucket_file_key;
+
+      if (response && s3_default_bucket_file_key == null) {
         logger.info("Old file key not found");
         return {
           status: 204,
           message: "old file key not found",
           data: null,
         };
-      } else if (
-        response instanceof CandidateInfo &&
-        response.s3_default_bucket_file_key !== null
-      ) {
+      } else if (response && s3_default_bucket_file_key !== null) {
         logger.info("Old file key found");
         return {
           status: 200,
           message: "old file key found",
-          data: response.s3_default_bucket_file_key,
+          data: response?.s3_default_bucket_file_key,
         };
       } else {
-        throw new Error("error in findSavedS3key");
+        throw new Error("unkown error in querring candidateInfo");
       }
     } catch (error) {
       logger.error("Unknown error in findSavedS3key", error);

@@ -1,12 +1,17 @@
 import { Request, Response, NextFunction } from "express";
 import logger from "../configs/logger.config";
 
-export default class ValidateHeaderDataMiddleware {
+export class ValidateHeaderDataMiddleware {
   public validateHeaderForKey = (
     req: Request,
     res: Response,
     next: NextFunction,
   ): void => {
+    if (!req.headers.s3filekey) {
+      logger.info("s3filekey header missing");
+      res.status(401).send({ message: "s3filekey header missing" });
+    }
+
     const key = req.headers.s3filekey;
 
     if (typeof key !== "string") {
@@ -15,6 +20,7 @@ export default class ValidateHeaderDataMiddleware {
         message: "Invalid credentials",
       });
     } else {
+      logger.info("header validation for s3FileKey passed");
       next();
     }
   };
@@ -24,6 +30,11 @@ export default class ValidateHeaderDataMiddleware {
     res: Response,
     next: NextFunction,
   ): void => {
+    if (!req.headers.bucket) {
+      logger.info("bucket header missing");
+      res.status(401).send({ message: "bucket header missing" });
+    }
+
     const bucket = req.headers.bucket;
 
     if (typeof bucket !== "string") {
