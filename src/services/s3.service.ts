@@ -22,10 +22,10 @@ export class S3Service {
           expiresIn: 60,
         },
       );
-      logger.info("Upload Url created");
-      return { status: 200, message: "upload url created", data: imageUrl };
+      logger.info("s3 Upload Url created");
+      return { status: 200, message: "s3 upload url created", url: imageUrl };
     } catch (err) {
-      logger.error("Unknown error in creating upload url from s3", err);
+      logger.error("Unknown error in creating s3 upload url", err);
       throw new Error("error in generateS3UploadURL");
     }
   }
@@ -42,15 +42,15 @@ export class S3Service {
           expiresIn: 60,
         },
       );
-      logger.info("Bad bucket upload Url created");
+      logger.info("s3 Bad bucket upload Url created");
       return {
         status: 200,
-        message: "Bad bucket upload url created",
+        message: "s3 Bad bucket upload url created",
         data: imageUrl,
       };
     } catch (err) {
       logger.error(
-        "Unknown error in creating Bad bucket upload url from s3",
+        "Unknown error in creating s3 Bad bucket upload url from s3",
         err,
       );
       throw new Error("error in generateS3BadBucketUploadURL");
@@ -68,11 +68,15 @@ export class S3Service {
           expiresIn: 60,
         },
       );
-      logger.info("Url downloaded");
-      return { status: 200, message: "url downloaded", data: imageUrl };
+      logger.info("s3 signedDownload Url fetched");
+      return {
+        status: 200,
+        message: "s3 signedDownload Url fetched",
+        url: imageUrl,
+      };
     } catch (err) {
-      logger.error("Unknown error in downloading file from s3", err);
-      throw new Error("error in downloadFileFromS3");
+      logger.error("Unknown error in getS3DownloadUrl", err);
+      throw new Error("error in getS3DownloadUrl");
     }
   }
   public async deleteFileFromS3(key: string): Promise<ServiceResponse> {

@@ -4,19 +4,19 @@ import { AuthGuardMiddleware } from "../middlewares/authGuard.middleware";
 import { CandidateController } from "../controllers/candidate.controller";
 import { ValidateHeaderDataMiddleware } from "../middlewares/validateHeaderData.middleware";
 
+const protectRoute = new AuthGuardMiddleware().protectRoute;
+
 const validateCandidateInfo = new CandidateInfoValidationMiddleware()
   .validateCandidateInfo;
-
-const cadidateController = new CandidateController();
-const saveCandidateInfo = cadidateController.saveCandidateInfo;
-const updateS3FileKey = cadidateController.updateS3FileKey;
 
 const validateHeaderDataMiddleware = new ValidateHeaderDataMiddleware();
 const validateKey = validateHeaderDataMiddleware.validateHeaderForKey;
 const validateBucketType =
   validateHeaderDataMiddleware.validateHeaderForBucketType;
 
-const protectRoute = new AuthGuardMiddleware().protectRoute;
+const cadidateController = new CandidateController();
+const saveCandidateInfo = cadidateController.saveCandidateInfo;
+const updateS3FileKey = cadidateController.updateS3FileKey;
 
 const router: Router = express.Router();
 router.post(

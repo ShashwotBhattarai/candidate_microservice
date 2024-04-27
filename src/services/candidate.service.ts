@@ -2,12 +2,13 @@ import { CandidateInfo } from "../entities/candidateInfo.entity";
 import logger from "../configs/logger.config";
 import { S3Service } from "./s3.service";
 import { ServiceResponse } from "../models/serviceResponse.type";
-
 import { EmailerService } from "./emailer.service";
 import { CvUploadStatus } from "../constants/cvUploadStatus.enum";
 import { UtilsService } from "./utils.service";
+import { CandidateInfoType } from "../models/candidateInfo.type";
+
 export class CandidateService {
-  public async getOneCandidate(user_id: string): Promise<ServiceResponse> {
+  public async getOneCandidateInfo(user_id: string): Promise<ServiceResponse> {
     try {
       const candidate = await CandidateInfo.findOne({
         user_id: user_id,
@@ -20,51 +21,43 @@ export class CandidateService {
           key,
         );
 
-        logger.info("Candidate found");
-        logger.info("File downloaded");
+        logger.info("Candidate and cv both found");
 
         return {
           status: 200,
           data: candidate,
           message: "Candidate and CV found",
-          url: downloadFileResponse.data,
+          url: downloadFileResponse.url,
         };
       } else if (candidate && !key) {
-        logger.info("Candidate found");
-        logger.error("unable to download file");
-
+        logger.info("Candidate found but cv not found");
         return {
           status: 200,
           data: candidate,
           message: "candidate found but CV not found",
         };
       } else {
-        logger.info(
-          "Either Candidate with that user_id not found or key not found",
-        );
+        logger.info("Candidate not found");
         return {
           status: 404,
-          message:
-            "Either Candidate with that user_id not found or key not found",
+          message: "Candidate not found",
         };
       }
     } catch (error) {
-      logger.error("Unknown error in getOneCandidateController", error);
+      logger.error("Unknown error in getOneCandidateInfo Service", error);
       return {
         status: 500,
-        message: "Unknown error in getOneCandidateController",
+        message: "Unknown error in getOneCandidateInfo Service",
       };
     }
   }
 
   public async saveUserDetailsToDatabase(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    body: any,
+    body: CandidateInfoType,
     accessToken: string,
   ): Promise<ServiceResponse> {
     try {
       const current_user_id = new UtilsService().findCurrentuserId(accessToken);
-
       const existingCandidate = await CandidateInfo.findOne({
         user_id: current_user_id,
       });
@@ -98,13 +91,13 @@ export class CandidateService {
   public async findSavedS3key(acessToken: string): Promise<ServiceResponse> {
     try {
       const current_user_id = new UtilsService().findCurrentuserId(acessToken);
-
       const response = await CandidateInfo.findOne({
         user_id: current_user_id,
       });
 
       const s3_default_bucket_file_key = response?.s3_default_bucket_file_key;
 
+      // eslint-disable-next-line eqeqeq
       if (response && s3_default_bucket_file_key == null) {
         logger.info("Old file key not found");
         return {
@@ -140,7 +133,7 @@ export class CandidateService {
         const findSavedS3keyResponse =
           await candidateService.findSavedS3key(accessToken);
 
-        if (findSavedS3keyResponse.status == 200) {
+        if (findSavedS3keyResponse.status === 200) {
           const oldKey = findSavedS3keyResponse.data as string;
           await new S3Service().deleteFileFromS3(oldKey);
         }
@@ -158,7 +151,10 @@ export class CandidateService {
         );
 
         logger.info("s3_default_bucket key updated in database successfully");
-        return { status: 200, message: "Aws key updated successfully" };
+        return {
+          status: 200,
+          message: "s3_default_bucket key updated successfully",
+        };
       } else {
         await CandidateInfo.findOneAndUpdate(
           { user_id: current_user_id },
@@ -172,11 +168,14 @@ export class CandidateService {
           CvUploadStatus.CvUploadedToBadBucket,
         );
         logger.info("s3_bad_bucket key updated in database successfully");
-        return { status: 200, message: "Aws key updated successfully" };
+        return {
+          status: 200,
+          message: "s3_bad_bucket key updated successfully",
+        };
       }
     } catch (error) {
-      logger.error("Unknown Error in updateAwsKeyInDatabase", error);
-      throw new Error("error in updateAwsKeyInDatabase");
+      logger.error("Unknown Error in updateS3FileKeyInDatabase", error);
+      throw new Error("error in updateS3FileKeyInDatabase");
     }
   }
 }

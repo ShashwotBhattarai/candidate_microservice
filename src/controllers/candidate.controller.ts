@@ -4,7 +4,7 @@ import { CandidateService } from "../services/candidate.service";
 
 export class CandidateController {
   public saveCandidateInfo(req: Request, res: Response): void {
-    (async () => {
+    (async (): Promise<void> => {
       try {
         const currentToken = req.headers.authorization as string;
 
@@ -15,33 +15,35 @@ export class CandidateController {
 
         logger.info("Candidate info saved successfully");
 
-        res.status(response.status).json({ message: response.message });
+        res.status(response.status).send({ message: response.message });
       } catch {
         logger.error("Unknown error in save candidate info controller");
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).send({ error: "Internal server error" });
       }
     })();
   }
 
-  public getOneCandidate(req: Request, res: Response): void {
-    (async () => {
+  public getOneCandidateInfo(req: Request, res: Response): void {
+    (async (): Promise<void> => {
       try {
         const user_id = req.params.user_id;
-        const response = await new CandidateService().getOneCandidate(user_id);
-        res.status(response.status).json({
+        const response = await new CandidateService().getOneCandidateInfo(
+          user_id,
+        ); //same name?
+        res.status(response.status).send({
           message: response.message,
           data: response.data,
           url: response.url,
         });
       } catch (error) {
         logger.error("Unknown error in getOneCandidateController", error);
-        res.status(500).send({ error: "internal server error" });
+        res.status(500).send({ error: "Internal server error" });
       }
     })();
   }
 
   public updateS3FileKey(req: Request, res: Response): void {
-    (async () => {
+    (async (): Promise<void> => {
       try {
         const key = req.headers.s3filekey as string;
         let accessToken = req.headers.authorization as string;
@@ -54,7 +56,7 @@ export class CandidateController {
           key,
           bucket,
         );
-        res.status(response.status).json({
+        res.status(response.status).send({
           message: response.message,
         });
       } catch (error) {

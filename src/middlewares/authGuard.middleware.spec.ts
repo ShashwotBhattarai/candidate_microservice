@@ -28,7 +28,7 @@ describe("AuthGuardMiddleware", () => {
 
     app.get(
       "/protected-route",
-      authGuardMiddleware.protectRoute(["admin"]),
+      authGuardMiddleware.protectRoute(["admin"]), // allowed role will be admin
       (req, res) => {
         res.status(200).json({ message: "Access granted to protected route" });
       },
@@ -49,8 +49,8 @@ describe("AuthGuardMiddleware", () => {
     expect(response.body.message).toBe("Access token is missing");
   });
 
-  it("should respond with 403 and Access denied message if user role is not allowed", async () => {
-    (jwt.verify as jest.Mock).mockReturnValueOnce({ role: "user" });
+  it("should respond with 403 and Access denied message if decoded role is not allowed", async () => {
+    (jwt.verify as jest.Mock).mockReturnValueOnce({ role: "user" }); // allowed role is admin but decoded role is user
 
     const token = "mockedToken";
     const response = await request(app)
@@ -79,7 +79,7 @@ describe("AuthGuardMiddleware", () => {
     }
   });
 
-  it("should allow access if user role is allowed and respond with 200 Access granted to protected route message", async () => {
+  it("should respond with 200 Access granted, if decoded role is allowed in both route and db", async () => {
     (jwt.verify as jest.Mock).mockReturnValueOnce({ role: "admin" });
     (AuthCredentials.findOne as jest.Mock).mockResolvedValueOnce({
       role: "admin",
@@ -105,7 +105,7 @@ describe("AuthGuardMiddleware", () => {
     expect(response.body.message).toBe("Access denied");
   });
 
-  it("should decline access if role in db and token doesnt match", async () => {
+  it("should decline access if role in db and decoded role doesnt match", async () => {
     (jwt.verify as jest.Mock).mockReturnValueOnce({ role: "admin" });
     (AuthCredentials.findOne as jest.Mock).mockResolvedValueOnce({
       role: "user",

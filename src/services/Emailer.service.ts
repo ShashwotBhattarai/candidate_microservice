@@ -8,6 +8,7 @@ import { SQSService } from "./sqs.service";
 import { CandidateInfo } from "../entities/candidateInfo.entity";
 import { CvUploadStatus } from "../constants/cvUploadStatus.enum";
 import { UtilsService } from "./utils.service";
+import { ServiceResponse } from "../models/serviceResponse.type";
 
 export class EmailerService {
   public async constructEmailPayload(
@@ -35,15 +36,18 @@ export class EmailerService {
         logger.info("Email payload created successfully");
         return emailPayload;
       } else {
-        throw new Error(`error in constructemailpayload`);
+        throw new Error(`error in constructEmailPayload`);
       }
     } catch (error) {
-      logger.error("Unknown error in constructemailpayload", error);
-      throw new Error(`error in constructemailpayload`);
+      logger.error("Unknown error in constructEmailPayload", error);
+      throw new Error(`error in constructEmailPayload`);
     }
   }
 
-  public async sendEmail(currentToken: string, status: string): Promise<void> {
+  public async sendEmail(
+    currentToken: string,
+    status: string,
+  ): Promise<ServiceResponse> {
     let subject: string = "";
     let text: string = "";
 
@@ -57,12 +61,20 @@ export class EmailerService {
         text = CVUploadBadBucketEmailTemplate.text;
         break;
     }
-
-    const emailPayload = await this.constructEmailPayload(
-      currentToken,
-      subject,
-      text,
-    );
-    await new SQSService().sendMessageToQueue(emailPayload);
+    try {
+      const emailPayload = await this.constructEmailPayload(
+        currentToken,
+        subject,
+        text,
+      );
+      const response = await new SQSService().sendMessageToQueue(emailPayload);
+      logger.info("message sent to queue", response);
+      return {
+        status: 200,
+        message: "message sent to queue",
+      };
+    } catch (error) {
+      throw new Error("Error in sendEmail");
+    }
   }
 }

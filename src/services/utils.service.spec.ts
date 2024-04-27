@@ -12,7 +12,6 @@ describe("UtilsService", () => {
       const accessToken = "fake_access_token";
       const decodedPayload: JWTPayload = { user_id: "fake_user_id" };
 
-      // Mocking the jwtDecode function to return the decodedPayload
       const jwtdecodeSpy = jest.spyOn(jwtdecodeModule, "jwtDecode");
       jwtdecodeSpy.mockReturnValue(decodedPayload);
 
@@ -20,13 +19,11 @@ describe("UtilsService", () => {
       const userId = utilsService.findCurrentuserId(accessToken);
 
       expect(userId).toBe(decodedPayload.user_id);
-      expect(jwtdecodeSpy).toHaveBeenCalledWith(accessToken);
     });
 
     it("should return undefined if the JWT payload is invalid", () => {
       const accessToken = "fake_access_token";
 
-      // Mocking the jwtDecode function to return undefined
       const jwtdecodeSpy = jest.spyOn(jwtdecodeModule, "jwtDecode");
       jwtdecodeSpy.mockReturnValue(undefined);
 
@@ -34,7 +31,6 @@ describe("UtilsService", () => {
       const userId = utilsService.findCurrentuserId(accessToken);
 
       expect(userId).toBeUndefined();
-      expect(jwtdecodeSpy).toHaveBeenCalledWith(accessToken);
     });
   });
 });

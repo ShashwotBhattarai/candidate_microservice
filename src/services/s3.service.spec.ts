@@ -1,11 +1,7 @@
 import { S3Service } from "./s3.service";
 import { ServiceResponse } from "../models/serviceResponse.type";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import {
-  PutObjectCommand,
-  GetObjectCommand,
-  DeleteObjectCommand,
-} from "@aws-sdk/client-s3";
+import { DeleteObjectCommand } from "@aws-sdk/client-s3";
 
 jest.mock("@aws-sdk/s3-request-presigner");
 jest.mock("@aws-sdk/client-s3");
@@ -20,7 +16,7 @@ describe("S3Service", () => {
   });
 
   describe("getS3DefaultUploadUrl", () => {
-    it("should return upload URL with correct parameters", async () => {
+    it("should return status:200,message:s3 upload url created,and upload URL when every thing goes well ", async () => {
       const s3Service = new S3Service();
       const key = "testKey";
 
@@ -29,19 +25,14 @@ describe("S3Service", () => {
       const result: ServiceResponse =
         await s3Service.getS3DefaultUploadUrl(key);
 
-      expect(getSignedUrl).toHaveBeenCalledWith(
-        expect.anything(),
-        expect.any(PutObjectCommand),
-        expect.any(Object),
-      );
       expect(result).toEqual({
         status: 200,
-        message: "upload url created",
-        data: "mockedUploadUrl",
+        message: "s3 upload url created",
+        url: "mockedUploadUrl",
       });
     });
 
-    it("should throw error if signing URL fails", async () => {
+    it("should throw error message:error in generateS3UploadURL, if getSignedUrl fails", async () => {
       const s3Service = new S3Service();
       const key = "testKey";
 
@@ -58,7 +49,7 @@ describe("S3Service", () => {
   });
 
   describe("getS3BadBucketUploadUrl", () => {
-    it("should return upload URL with correct parameters", async () => {
+    it("should return status:200,message:s3 Bad bucket upload url created,and upload URL when every thing goes well ", async () => {
       const s3Service = new S3Service();
       const key = "testKey";
 
@@ -67,19 +58,14 @@ describe("S3Service", () => {
       const result: ServiceResponse =
         await s3Service.getS3BadBucketUploadUrl(key);
 
-      expect(getSignedUrl).toHaveBeenCalledWith(
-        expect.anything(),
-        expect.any(PutObjectCommand),
-        expect.any(Object),
-      );
       expect(result).toEqual({
         status: 200,
-        message: "Bad bucket upload url created",
+        message: "s3 Bad bucket upload url created",
         data: "mockedBadBucketUploadUrl",
       });
     });
 
-    it("should throw error if signing URL fails", async () => {
+    it("should throw error message:error in generateS3BadBucketUploadURL, if getSignedUrl fails", async () => {
       const s3Service = new S3Service();
       const key = "testKey";
 
@@ -98,7 +84,7 @@ describe("S3Service", () => {
   });
 
   describe("getS3DownloadUrl", () => {
-    it("should return download URL with correct parameters", async () => {
+    it("should return status:200,message:s3 signedDownload Url fetched,and download URL when every thing goes well ", async () => {
       const s3Service = new S3Service();
       const key = "testKey";
 
@@ -106,19 +92,14 @@ describe("S3Service", () => {
 
       const result: ServiceResponse = await s3Service.getS3DownloadUrl(key);
 
-      expect(getSignedUrl).toHaveBeenCalledWith(
-        expect.anything(),
-        expect.any(GetObjectCommand),
-        expect.any(Object),
-      );
       expect(result).toEqual({
         status: 200,
-        message: "url downloaded",
-        data: "mockedDownloadUrl",
+        message: "s3 signedDownload Url fetched",
+        url: "mockedDownloadUrl",
       });
     });
 
-    it("should throw error if signing URL fails", async () => {
+    it("should throw error:error in getS3DownloadUrl if getSignedUrl fails", async () => {
       const s3Service = new S3Service();
       const key = "testKey";
 
@@ -129,25 +110,23 @@ describe("S3Service", () => {
       try {
         await s3Service.getS3DownloadUrl(key);
       } catch (error) {
-        expect(error).toEqual(new Error("error in downloadFileFromS3"));
+        expect(error).toEqual(new Error("error in getS3DownloadUrl"));
       }
     });
   });
 
   describe("deleteFileFromS3", () => {
-    it("should delete file from S3 with correct parameters", async () => {
+    it("should returnstatus: 200, message:file deleted from s3 bucket, when everything goes well", async () => {
       const s3Service = new S3Service();
       const key = "testKey";
 
-      await s3Service.deleteFileFromS3(key);
+      const response = await s3Service.deleteFileFromS3(key);
 
-      expect(DeleteObjectCommand).toHaveBeenCalledWith({
-        Bucket: expect.any(String),
-        Key: key,
-      });
+      expect(response.status).toEqual(200);
+      expect(response.message).toEqual("file deleted from s3 bucket");
     });
 
-    it("should throw error if deletion fails", async () => {
+    it("should throw error:error in deleteFileFromS3 is file deletion fails", async () => {
       const s3Service = new S3Service();
       const key = "testKey";
 

@@ -7,18 +7,19 @@ import { AuthCredentials } from "../entities/authCredentials.entity";
 export class AuthGuardMiddleware {
   public protectRoute(allowedRoles: Array<string>): RequestHandler {
     return (req: Request, res: Response, next: NextFunction) => {
-      (async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (async (): Promise<any> => {
         if (!req.headers.authorization) {
           logger.info("Authorization header missing");
           return res
             .status(401)
-            .json({ message: "Authorization header missing" });
+            .send({ message: "Authorization header missing" });
         }
 
         const token = req.headers.authorization.slice(7);
-        if (token == "") {
+        if (token === "") {
           logger.info("Access token is missing");
-          return res.status(401).json({ message: "Access token is missing" });
+          return res.status(401).send({ message: "Access token is missing" });
         }
 
         try {
@@ -42,11 +43,11 @@ export class AuthGuardMiddleware {
             next();
           } else {
             logger.info("Access denied");
-            return res.status(403).json({ message: "Access denied" });
+            return res.status(403).send({ message: "Access denied" });
           }
         } catch (error) {
           logger.error("Unknown Error in Auth middleware", error);
-          return res.status(401).json({ message: error });
+          return res.status(401).send({ message: error });
         }
       })();
     };

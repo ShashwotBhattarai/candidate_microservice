@@ -27,7 +27,7 @@ describe("CandidateInfoValidationMiddleware", () => {
     expect(response.text).toBe("Passed validation");
   });
 
-  it("fails validation for invalid email", async () => {
+  it("fails validation and returns status 400 for invalid email", async () => {
     const response = await supertest(app).post("/test").send({
       fullname: "testUser John",
       email: "babudallay",
@@ -37,7 +37,7 @@ describe("CandidateInfoValidationMiddleware", () => {
     expect(response.statusCode).toBe(400);
   });
 
-  it("fails validation for invalid phone number", async () => {
+  it("fails validation and returns status 400 for invalid phone number", async () => {
     const response = await supertest(app).post("/test").send({
       fullname: "testUser John",
       email: "babudallay",
@@ -47,7 +47,7 @@ describe("CandidateInfoValidationMiddleware", () => {
     expect(response.statusCode).toBe(400);
   });
 
-  it("fails validation for invalid fullname", async () => {
+  it("fails validation and returns status 400 for invalid fullname", async () => {
     const response = await supertest(app).post("/test").send({
       fullname: "testUser John 1",
       email: "babudallay",

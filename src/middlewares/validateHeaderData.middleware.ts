@@ -36,6 +36,7 @@ export class ValidateHeaderDataMiddleware {
     }
 
     const bucket = req.headers.bucket;
+    ///TODO:need to add a test to verify the bucket is only "default||bad"
 
     if (typeof bucket !== "string") {
       logger.error("invalid header for bucket: " + req.headers.bucket);

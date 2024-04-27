@@ -25,7 +25,7 @@ describe("ValidateHeaderDataFor s3filekey", () => {
     expect(response.text).toBe("Passed validation");
   });
 
-  it("when no header is passed", async () => {
+  it("fails validation and returns status:401 and message:s3filekey header missing, when no s3filekey header is passed", async () => {
     const response = await supertest(app).post("/test");
 
     expect(response.statusCode).toBe(401);
@@ -33,7 +33,7 @@ describe("ValidateHeaderDataFor s3filekey", () => {
   });
 });
 
-describe("ValidateHeaderDataFor buckettype", () => {
+describe("ValidateHeaderDataFor bucket type", () => {
   const app = express();
   app.use(express.json());
   app.post(
@@ -53,7 +53,7 @@ describe("ValidateHeaderDataFor buckettype", () => {
     expect(response.text).toBe("Passed validation");
   });
 
-  it("when no header is passed", async () => {
+  it("fails validation and returns status:401 and message:bucket header missing,when no bucket header is passed", async () => {
     const response = await supertest(app).post("/test");
 
     expect(response.statusCode).toBe(401);

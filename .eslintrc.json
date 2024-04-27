@@ -11,5 +11,14 @@
     "sourceType": "module"
   },
   "plugins": ["@typescript-eslint"],
-  "rules": {}
+  "rules": {
+    "eqeqeq": "error",
+    "curly": "error",
+    "no-unused-vars": "warn",
+    "semi": ["error", "always"],
+    "no-console": "error",
+    "prefer-const": "error",
+    "@typescript-eslint/explicit-function-return-type": "warn",
+    "@typescript-eslint/no-explicit-any": "error"
+  }
 }

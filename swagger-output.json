@@ -9,7 +9,7 @@
   "basePath": "/",
   "schemes": ["http"],
   "paths": {
-    "/health/": {
+    "/candidate/health/": {
       "get": {
         "description": "",
         "responses": {
@@ -19,108 +19,52 @@
         }
       }
     },
-    "/saveCandidateInfo/": {
+    "/candidate/saveCandidateInfo/": {
       "post": {
         "description": "",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          }
-        ],
         "responses": {
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
+          "default": {
+            "description": ""
           }
         }
       }
     },
-    "/saveCandidateInfo/updateS3FileKey": {
+    "/candidate/saveCandidateInfo/updateS3FileKey": {
       "post": {
         "description": "",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          }
-        ],
         "responses": {
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
+          "default": {
+            "description": ""
           }
         }
       }
     },
-    "/getCandidateInfo/{user_id}": {
+    "/candidate/getCandidateInfo/{user_id}": {
       "get": {
         "description": "",
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          }
-        ],
         "responses": {
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
+          "default": {
+            "description": ""
           }
         }
       }
     },
-    "/defaultUploadUrl/": {
+    "/candidate/defaultUploadUrl/": {
       "get": {
         "description": "",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          }
-        ],
         "responses": {
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
+          "default": {
+            "description": ""
           }
         }
       }
     },
-    "/badbucketUploadURL/": {
+    "/candidate/badbucketUploadURL/": {
       "get": {
         "description": "",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          }
-        ],
         "responses": {
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
+          "default": {
+            "description": ""
           }
         }
       }
