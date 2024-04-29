@@ -11,13 +11,16 @@ import { UtilsService } from "./utils.service";
 import { ServiceResponse } from "../models/serviceResponse.type";
 
 export class EmailerService {
+  private utilsService = new UtilsService();
+  private sqsService = new SQSService();
+
   public async constructEmailPayload(
     currentUserToken: string,
     subject: string,
     text: string,
   ): Promise<EmailPayload> {
     try {
-      const user_id = new UtilsService().findCurrentuserId(currentUserToken);
+      const user_id = this.utilsService.findCurrentuserId(currentUserToken);
 
       let namedSubject;
       const response = await CandidateInfo.findOne({ user_id: user_id });
@@ -67,7 +70,7 @@ export class EmailerService {
         subject,
         text,
       );
-      const response = await new SQSService().sendMessageToQueue(emailPayload);
+      const response = await this.sqsService.sendMessageToQueue(emailPayload);
       logger.info("message sent to queue", response);
       return {
         status: 200,

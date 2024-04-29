@@ -9,7 +9,7 @@ export class ValidateHeaderDataMiddleware {
   ): void => {
     if (!req.headers.s3filekey) {
       logger.info("s3filekey header missing");
-      res.status(401).send({ message: "s3filekey header missing" });
+      res.status(401).send({ message: "Invalid credentials" });
     }
 
     const key = req.headers.s3filekey;
@@ -32,14 +32,19 @@ export class ValidateHeaderDataMiddleware {
   ): void => {
     if (!req.headers.bucket) {
       logger.info("bucket header missing");
-      res.status(401).send({ message: "bucket header missing" });
+      res.status(401).send({ message: "Invalid credentials" });
     }
 
     const bucket = req.headers.bucket;
-    ///TODO:need to add a test to verify the bucket is only "default||bad"
+    const bucketTypes = ["default", "bad"];
 
     if (typeof bucket !== "string") {
-      logger.error("invalid header for bucket: " + req.headers.bucket);
+      logger.error("bucket header not string: " + req.headers.bucket);
+      res.status(401).send({
+        message: "Invalid credentials",
+      });
+    } else if (!bucketTypes.includes(bucket)) {
+      logger.error("bucket header not allowed: " + req.headers.bucket);
       res.status(401).send({
         message: "Invalid credentials",
       });

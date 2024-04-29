@@ -25,11 +25,11 @@ describe("ValidateHeaderDataFor s3filekey", () => {
     expect(response.text).toBe("Passed validation");
   });
 
-  it("fails validation and returns status:401 and message:s3filekey header missing, when no s3filekey header is passed", async () => {
+  it("fails validation and returns status:401 and message:Invalid credentials, when no s3filekey header is passed", async () => {
     const response = await supertest(app).post("/test");
 
     expect(response.statusCode).toBe(401);
-    expect(response.body.message).toBe("s3filekey header missing");
+    expect(response.body.message).toBe("Invalid credentials");
   });
 });
 
@@ -44,7 +44,7 @@ describe("ValidateHeaderDataFor bucket type", () => {
     },
   );
 
-  it("passes validation if bucket is present in header", async () => {
+  it("passes validation if valid bucket is present in header", async () => {
     const response = await supertest(app)
       .post("/test")
       .set("bucket", "default");
@@ -53,10 +53,24 @@ describe("ValidateHeaderDataFor bucket type", () => {
     expect(response.text).toBe("Passed validation");
   });
 
-  it("fails validation and returns status:401 and message:bucket header missing,when no bucket header is passed", async () => {
+  it("passes validation if valid bucket is present in header", async () => {
+    const response = await supertest(app).post("/test").set("bucket", "bad");
+
+    expect(response.statusCode).toBe(200);
+    expect(response.text).toBe("Passed validation");
+  });
+
+  it("fails validation and returns status:401 and message:Invalid credentials,when no bucket header is passed", async () => {
     const response = await supertest(app).post("/test");
 
     expect(response.statusCode).toBe(401);
-    expect(response.body.message).toBe("bucket header missing");
+    expect(response.body.message).toBe("Invalid credentials");
+  });
+
+  it("fails validation and returns status:401 and message:Invalid credentials,when no valid header is passed", async () => {
+    const response = await supertest(app).post("/test").set("bucket", "xyz");
+
+    expect(response.statusCode).toBe(401);
+    expect(response.body.message).toBe("Invalid credentials");
   });
 });

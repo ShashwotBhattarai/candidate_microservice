@@ -8,6 +8,9 @@ import { UtilsService } from "./utils.service";
 import { CandidateInfoType } from "../models/candidateInfo.type";
 
 export class CandidateService {
+  private s3Service = new S3Service();
+  private utilsService = new UtilsService();
+
   public async getOneCandidateInfo(user_id: string): Promise<ServiceResponse> {
     try {
       const candidate = await CandidateInfo.findOne({
@@ -17,9 +20,7 @@ export class CandidateService {
       const key = candidate?.s3_default_bucket_file_key;
 
       if (candidate && key) {
-        const downloadFileResponse = await new S3Service().getS3DownloadUrl(
-          key,
-        );
+        const downloadFileResponse = await this.s3Service.getS3DownloadUrl(key);
 
         logger.info("Candidate and cv both found");
 
@@ -57,7 +58,7 @@ export class CandidateService {
     accessToken: string,
   ): Promise<ServiceResponse> {
     try {
-      const current_user_id = new UtilsService().findCurrentuserId(accessToken);
+      const current_user_id = this.utilsService.findCurrentuserId(accessToken);
       const existingCandidate = await CandidateInfo.findOne({
         user_id: current_user_id,
       });
@@ -90,7 +91,7 @@ export class CandidateService {
 
   public async findSavedS3key(acessToken: string): Promise<ServiceResponse> {
     try {
-      const current_user_id = new UtilsService().findCurrentuserId(acessToken);
+      const current_user_id = this.utilsService.findCurrentuserId(acessToken);
       const response = await CandidateInfo.findOne({
         user_id: current_user_id,
       });
@@ -127,7 +128,7 @@ export class CandidateService {
   ): Promise<ServiceResponse> {
     try {
       const candidateService = new CandidateService();
-      const current_user_id = new UtilsService().findCurrentuserId(accessToken);
+      const current_user_id = this.utilsService.findCurrentuserId(accessToken);
 
       if (bucket === "default") {
         const findSavedS3keyResponse =
