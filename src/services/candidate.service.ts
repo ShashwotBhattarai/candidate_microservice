@@ -10,6 +10,7 @@ import { CandidateInfoType } from "../models/candidateInfo.type";
 export class CandidateService {
   private s3Service = new S3Service();
   private utilsService = new UtilsService();
+  private emailerService = new EmailerService();
 
   public async getOneCandidateInfo(user_id: string): Promise<ServiceResponse> {
     try {
@@ -136,7 +137,7 @@ export class CandidateService {
 
         if (findSavedS3keyResponse.status === 200) {
           const oldKey = findSavedS3keyResponse.data as string;
-          await new S3Service().deleteFileFromS3(oldKey);
+          await this.s3Service.deleteFileFromS3(oldKey);
         }
         await CandidateInfo.updateOne(
           { user_id: current_user_id },
@@ -146,7 +147,7 @@ export class CandidateService {
           },
         );
 
-        await new EmailerService().sendEmail(
+        await this.emailerService.sendEmail(
           accessToken,
           CvUploadStatus.CV_UPLOAD_SUCCESSFUL,
         );
@@ -164,7 +165,7 @@ export class CandidateService {
             updatedBy: current_user_id,
           },
         );
-        await new EmailerService().sendEmail(
+        await this.emailerService.sendEmail(
           accessToken,
           CvUploadStatus.CV_UPLOADED_TO_BAD_BUCKET,
         );
