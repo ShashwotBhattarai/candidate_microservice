@@ -7,6 +7,7 @@ const doc = {
   info: {
     title: "Candidate Microservice",
     description: "Candidate Microservice",
+    version: "0.0.1",
   },
   host: `localhost:${process.env.PORT}`,
 };
