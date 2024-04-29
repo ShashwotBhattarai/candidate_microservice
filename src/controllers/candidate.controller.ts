@@ -3,12 +3,14 @@ import logger from "../configs/logger.config";
 import { CandidateService } from "../services/candidate.service";
 
 export class CandidateController {
+  private candidateService = new CandidateService();
+
   public saveCandidateInfo(req: Request, res: Response): void {
     (async (): Promise<void> => {
       try {
         const currentToken = req.headers.authorization as string;
 
-        const response = await new CandidateService().saveUserDetailsToDatabase(
+        const response = await this.candidateService.saveUserDetailsToDatabase(
           req.body,
           currentToken,
         );
@@ -27,9 +29,8 @@ export class CandidateController {
     (async (): Promise<void> => {
       try {
         const user_id = req.params.user_id;
-        const response = await new CandidateService().getOneCandidateInfo(
-          user_id,
-        ); //same name?
+        const response =
+          await this.candidateService.getOneCandidateInfo(user_id); //same name?
         res.status(response.status).send({
           message: response.message,
           data: response.data,
@@ -51,7 +52,7 @@ export class CandidateController {
 
         const bucket = req.headers.bucket as string;
 
-        const response = await new CandidateService().updateS3FileKeyInDatabase(
+        const response = await this.candidateService.updateS3FileKeyInDatabase(
           accessToken,
           key,
           bucket,

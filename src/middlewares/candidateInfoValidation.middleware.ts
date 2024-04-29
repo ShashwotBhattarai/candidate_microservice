@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import logger from "../configs/logger.config";
-import { validateCandidateSchema } from "../constants/candidateValidation.schema";
+import { validateCandidateSchema } from "../validators/candidateValidation.schema";
 
 export class CandidateInfoValidationMiddleware {
   public validateCandidateInfo(

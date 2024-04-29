@@ -3,7 +3,9 @@ import { AuthGuardMiddleware } from "../middlewares/authGuard.middleware";
 import { S3Controller } from "../controllers/s3.controller";
 import { ValidateHeaderDataMiddleware } from "../middlewares/validateHeaderData.middleware";
 
-const getS3BadBucketUploadUrl = new S3Controller().getS3BadBucketUploadUrl;
+const s3Controller = new S3Controller();
+const getS3BadBucketUploadUrl =
+  s3Controller.getS3BadBucketUploadUrl.bind(s3Controller);
 const validateKey = new ValidateHeaderDataMiddleware().validateHeaderForKey;
 const protectRoute = new AuthGuardMiddleware().protectRoute;
 

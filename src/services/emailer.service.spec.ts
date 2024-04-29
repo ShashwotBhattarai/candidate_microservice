@@ -65,7 +65,7 @@ describe("EmailerService", () => {
   describe("sendEmail", () => {
     it("should responde with status:200 when message is sent to queue", async () => {
       const currentToken = "token";
-      const status = CvUploadStatus.CvUploadSuccessful;
+      const status = CvUploadStatus.CV_UPLOAD_SUCCESSFUL;
       const emailPayload: EmailPayload = {
         to: "test@example.com",
         subject: "Test Subject",
@@ -95,7 +95,7 @@ describe("EmailerService", () => {
 
     it("should call con", async () => {
       const currentToken = "token";
-      const status = CvUploadStatus.CvUploadedToBadBucket;
+      const status = CvUploadStatus.CV_UPLOADED_TO_BAD_BUCKET;
       const emailPayload: EmailPayload = {
         to: "test@example.com",
         subject: "Test Subject",

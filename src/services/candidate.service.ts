@@ -147,7 +147,7 @@ export class CandidateService {
 
         await new EmailerService().sendEmail(
           accessToken,
-          CvUploadStatus.CvUploadSuccessful,
+          CvUploadStatus.CV_UPLOAD_SUCCESSFUL,
         );
 
         logger.info("s3_default_bucket key updated in database successfully");
@@ -165,7 +165,7 @@ export class CandidateService {
         );
         await new EmailerService().sendEmail(
           accessToken,
-          CvUploadStatus.CvUploadedToBadBucket,
+          CvUploadStatus.CV_UPLOADED_TO_BAD_BUCKET,
         );
         logger.info("s3_bad_bucket key updated in database successfully");
         return {

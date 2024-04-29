@@ -15,8 +15,10 @@ const validateBucketType =
   validateHeaderDataMiddleware.validateHeaderForBucketType;
 
 const cadidateController = new CandidateController();
-const saveCandidateInfo = cadidateController.saveCandidateInfo;
-const updateS3FileKey = cadidateController.updateS3FileKey;
+const saveCandidateInfo =
+  cadidateController.saveCandidateInfo.bind(cadidateController);
+const updateS3FileKey =
+  cadidateController.updateS3FileKey.bind(cadidateController);
 
 const router: Router = express.Router();
 router.post(

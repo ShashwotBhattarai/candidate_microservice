@@ -52,11 +52,11 @@ export class EmailerService {
     let text: string = "";
 
     switch (status) {
-      case CvUploadStatus.CvUploadSuccessful:
+      case CvUploadStatus.CV_UPLOAD_SUCCESSFUL:
         subject = CVUploadSuccessFullEmailTemplate.subject;
         text = CVUploadSuccessFullEmailTemplate.text;
         break;
-      case CvUploadStatus.CvUploadedToBadBucket:
+      case CvUploadStatus.CV_UPLOADED_TO_BAD_BUCKET:
         subject = CVUploadBadBucketEmailTemplate.subject;
         text = CVUploadBadBucketEmailTemplate.text;
         break;

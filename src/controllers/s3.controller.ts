@@ -3,12 +3,13 @@ import { Request, Response } from "express";
 import { S3Service } from "../services/s3.service";
 
 export class S3Controller {
+  private s3Service = new S3Service();
   public getS3DefaultUploadUrl(req: Request, res: Response): void {
     (async (): Promise<void> => {
       try {
         const key = req.headers.s3filekey as string;
         const { status, message, url } =
-          await new S3Service().getS3DefaultUploadUrl(key);
+          await this.s3Service.getS3DefaultUploadUrl(key);
         logger.info("upload url default bucket fetched");
 
         res.status(status).send({ message: message, url: url });
@@ -24,7 +25,7 @@ export class S3Controller {
       try {
         const key = req.headers.s3filekey as string;
         const { status, message, data } =
-          await new S3Service().getS3BadBucketUploadUrl(key);
+          await this.s3Service.getS3BadBucketUploadUrl(key);
         logger.info("upload url for badbucket fetched successfully");
 
         res.status(status).send({ message: message, url: data });

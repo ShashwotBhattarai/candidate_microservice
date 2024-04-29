@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { fullNameRegex } from "./regex";
+import { fullNameRegex } from "../constants/regex";
 
 export const validateCandidateSchema = Joi.object({
   fullname: Joi.string()
