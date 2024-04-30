@@ -1,0 +1,4 @@
+npx prettier . --check
+npm run lint
+npm run test
+
