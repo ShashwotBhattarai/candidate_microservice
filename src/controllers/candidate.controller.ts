@@ -19,7 +19,7 @@ export class CandidateController {
 
         res.status(response.status).send({ message: response.message });
       } catch {
-        logger.error("Unknown error in save candidate info controller");
+        logger.error("Unknown error in saveCandidateInfo");
         res.status(500).send({ error: "Internal server error" });
       }
     })();
@@ -30,14 +30,14 @@ export class CandidateController {
       try {
         const user_id = req.params.user_id;
         const response =
-          await this.candidateService.getOneCandidateInfo(user_id); //same name?
+          await this.candidateService.getOneCandidateInfo(user_id);
         res.status(response.status).send({
           message: response.message,
           data: response.data,
           url: response.url,
         });
       } catch (error) {
-        logger.error("Unknown error in getOneCandidateController", error);
+        logger.error("Unknown error in getOneCandidateInfo", error);
         res.status(500).send({ error: "Internal server error" });
       }
     })();
@@ -61,7 +61,7 @@ export class CandidateController {
           message: response.message,
         });
       } catch (error) {
-        logger.error("Unknown error in updateS3FileKey controller", error);
+        logger.error("Unknown error in updateS3FileKey", error);
         res.status(500).send({ error: "Internal server error" });
       }
     })();

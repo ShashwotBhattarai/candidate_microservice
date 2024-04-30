@@ -14,7 +14,7 @@ export class S3Controller {
 
         res.status(status).send({ message: message, url: url });
       } catch {
-        logger.error("Unknown error in getS3DefaultUploadUrl controller");
+        logger.error("Unknown error in getS3DefaultUploadUrl");
         res.status(500).send({ error: "Internal server error" });
       }
     })();
@@ -30,7 +30,7 @@ export class S3Controller {
 
         res.status(status).send({ message: message, url: data });
       } catch {
-        logger.error("Unknown error in getS3BadBucketUploadUrl controller");
+        logger.error("Unknown error in getS3BadBucketUploadUrl");
         res.status(500).send({ error: "Internal server error" });
       }
     })();

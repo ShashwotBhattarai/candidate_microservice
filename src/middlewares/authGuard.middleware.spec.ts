@@ -28,7 +28,7 @@ describe("AuthGuardMiddleware", () => {
 
     app.get(
       "/protected-route",
-      authGuardMiddleware.protectRoute(["admin"]), // allowed role will be admin
+      authGuardMiddleware.protectRoute(["admin"]),
       (req, res) => {
         res.status(200).json({ message: "Access granted to protected route" });
       },
@@ -50,7 +50,7 @@ describe("AuthGuardMiddleware", () => {
   });
 
   it("should respond with 403 and Access denied message if decoded role is not allowed", async () => {
-    (jwt.verify as jest.Mock).mockReturnValueOnce({ role: "user" }); // allowed role is admin but decoded role is user
+    (jwt.verify as jest.Mock).mockReturnValueOnce({ role: "user" });
 
     const token = "mockedToken";
     const response = await request(app)
