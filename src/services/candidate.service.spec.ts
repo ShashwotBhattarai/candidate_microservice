@@ -137,6 +137,38 @@ describe("CandidateService", () => {
         { upsert: true, new: true },
       );
     });
+    it("should save candidate details with updatedBy field when a candidate does exist", async () => {
+      const mockBody = {
+        fullname: "John Doe",
+        email: "john@example.com",
+        phone_number: "1234567890",
+      };
+      const mockAccessToken = "mockAccessToken";
+      const mockCurrentUserId = "123";
+
+      jest
+        .spyOn(UtilsService.prototype, "findCurrentuserId")
+        .mockReturnValueOnce(mockCurrentUserId);
+
+      jest
+        .spyOn(CandidateInfo, "findOne")
+        .mockResolvedValueOnce({ user_id: "123dsf" });
+
+      const findOneAndUpdateSpy = jest
+        .spyOn(CandidateInfo, "findOneAndUpdate")
+        .mockResolvedValueOnce({});
+
+      await candidateService.saveUserDetailsToDatabase(
+        mockBody,
+        mockAccessToken,
+      );
+
+      expect(findOneAndUpdateSpy).toHaveBeenCalledWith(
+        { user_id: mockCurrentUserId },
+        expect.objectContaining({ updatedBy: mockCurrentUserId }),
+        { upsert: true, new: true },
+      );
+    });
     it("should log an error:unkown error in querring candidateInfo, if querying CandidateInfo fails", async () => {
       const mockAccessToken = "mockAccessToken";
       const mockCurrentUserId = "123";
@@ -233,7 +265,7 @@ describe("CandidateService", () => {
   });
 
   describe("updateS3FileKeyInDatabase", () => {
-    it("should return status:200 and message:s3_default_bucket key updated successfully, when user passes default bucket", async () => {
+    it("should return status:200 and message:s3_default_bucket key updated successfully, when user passes default bucket and oldkey also exist", async () => {
       const mockAccessToken = "mockAccessToken";
       const mockNewKey = "new_file_key";
       const mockCurrentUserId = "123";
@@ -258,6 +290,49 @@ describe("CandidateService", () => {
           status: 200,
           message: "file deleted from s3",
         });
+
+      //this type was introduced to get rid of typescript error, turns our mockResolvedValueOnce in case of updateOne returns specific data type
+      type MockUpdateResult = UpdateWriteOpResult & {
+        n?: number;
+        nModified?: number;
+        ok?: number;
+      };
+
+      jest.spyOn(CandidateInfo, "updateOne").mockResolvedValueOnce({
+        n: 1,
+        nModified: 1,
+        ok: 1,
+      } as MockUpdateResult);
+      jest.spyOn(EmailerService.prototype, "sendEmail").mockResolvedValueOnce;
+
+      const result = await candidateService.updateS3FileKeyInDatabase(
+        mockAccessToken,
+        mockNewKey,
+        "default",
+      );
+
+      expect(result.status).toBe(200);
+      expect(result.message).toBe("s3_default_bucket key updated successfully");
+    });
+
+    it("should return status:200 and message:s3_default_bucket key updated successfully, when user passes default bucket and oldkey doesnt exist", async () => {
+      const mockAccessToken = "mockAccessToken";
+      const mockNewKey = "new_file_key";
+      const mockCurrentUserId = "123";
+      const mockFindSavedS3keyResponse = {
+        status: 500,
+        message: "oldkey not found",
+      };
+
+      jest.mock("./candidate.service");
+
+      jest
+        .spyOn(UtilsService.prototype, "findCurrentuserId")
+        .mockReturnValueOnce(mockCurrentUserId);
+
+      jest
+        .spyOn(CandidateService.prototype, "findSavedS3key")
+        .mockResolvedValueOnce(mockFindSavedS3keyResponse);
 
       //this type was introduced to get rid of typescript error, turns our mockResolvedValueOnce in case of updateOne returns specific data type
       type MockUpdateResult = UpdateWriteOpResult & {
