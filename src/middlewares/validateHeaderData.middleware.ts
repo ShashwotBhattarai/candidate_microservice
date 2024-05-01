@@ -9,7 +9,7 @@ export class ValidateHeaderDataMiddleware {
   ): void => {
     if (!req.headers.s3filekey) {
       logger.info("s3filekey header missing");
-      res.status(401).send({ message: "Invalid credentials" });
+      res.status(401).send({ message: "Invalid Headers" });
     }
 
     const key = req.headers.s3filekey;
@@ -17,7 +17,7 @@ export class ValidateHeaderDataMiddleware {
     if (typeof key !== "string") {
       logger.error("invalid header for s3FileKey: " + req.headers.s3filekey);
       res.status(401).send({
-        message: "Invalid credentials",
+        message: "Invalid Headers",
       });
     } else {
       logger.info("header validation for s3FileKey passed");
@@ -32,7 +32,7 @@ export class ValidateHeaderDataMiddleware {
   ): void => {
     if (!req.headers.bucket) {
       logger.info("bucket header missing");
-      res.status(401).send({ message: "Invalid credentials" });
+      res.status(401).send({ message: "Invalid Headers" });
     }
 
     const bucket = req.headers.bucket;
@@ -41,12 +41,12 @@ export class ValidateHeaderDataMiddleware {
     if (typeof bucket !== "string") {
       logger.error("bucket header not string: " + req.headers.bucket);
       res.status(401).send({
-        message: "Invalid credentials",
+        message: "Invalid Headers",
       });
     } else if (!bucketTypes.includes(bucket)) {
       logger.error("bucket header not allowed: " + req.headers.bucket);
       res.status(401).send({
-        message: "Invalid credentials",
+        message: "Invalid Headers",
       });
     } else {
       logger.info("header validation for bucket type passed");

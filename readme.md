@@ -71,14 +71,14 @@ This microservice is designed to handle functionalities used by candidates, such
 
       GetOne Candidate Info API:
 
-         curl --location 'http://localhost:{{PORT}}/candidate/getCandidateInfo/{{user_id}}' \
+         curl --location 'http://localhost:{{PORT}}/candidate/candidateInfo/getCandidateInfo/{{user_id}}' \
           --header 'Authorization: Bearer {{<Token>}}'
 
 
 
       Get default bucket upload url API:
 
-         curl --location 'http://localhost:{{PORT}}/candidate/defaultUploadUrl' \
+         curl --location 'http://localhost:{{PORT}}/candidate/s3/getDefaultUploadUrl' \
          --header 's3filekey: {{<S3filekey>}}' \
          --header 'Authorization: Bearer {{<Token>}}'
 
@@ -86,7 +86,7 @@ This microservice is designed to handle functionalities used by candidates, such
 
       Get bad bucket upload url API:
 
-         curl --location 'http://localhost:{{PORT}}/candidate/badbucketUploadURL' \
+         curl --location 'http://localhost:{{PORT}}/candidate/s3/getBadbucketUploadURL' \
          --header 's3filekey: {{<S3filekey>}}' \
          --header 'Authorization: Bearer {{<Token>}}'
 
@@ -94,7 +94,7 @@ This microservice is designed to handle functionalities used by candidates, such
 
       Save Candidate info API:
 
-         curl --location 'http://localhost:{{PORT}}/candidate/saveCandidateInfo/' \
+         curl --location 'http://localhost:{{PORT}}/candidate/candidateInfo/saveCandidateInfo' \
          --header 'Content-Type: application/json' \
          --header 'Authorization: Bearer {{<Token>}}' \
          --data-raw '{
@@ -109,7 +109,7 @@ This microservice is designed to handle functionalities used by candidates, such
 
          curl --location
          --request POST
-         'http://localhost:{{PORT}}/candidate/saveCandidateInfo/updateS3FileKey' \
+         'http://localhost:{{PORT}}/candidate/candidateInfo/updateS3FileKey' \
          --header 's3filekey: {{<S3filekey>}}' \
          --header 'bucket: {{<bucketname(default/bad)>}}' \
          --header 'Authorization: Bearer {{<Token>}}'
