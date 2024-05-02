@@ -70,11 +70,12 @@ export class CandidateService {
         fullname: body.fullname,
         email: body.email,
         phone_number: body.phone_number,
-        updatedBy: current_user_id,
       };
 
       if (!existingCandidate) {
         updateQuery.createdBy = current_user_id;
+      } else {
+        updateQuery.updatedBy = current_user_id;
       }
 
       await CandidateInfo.findOneAndUpdate(

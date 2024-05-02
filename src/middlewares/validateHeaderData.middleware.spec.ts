@@ -29,7 +29,7 @@ describe("ValidateHeaderDataFor s3filekey", () => {
     const response = await supertest(app).post("/test");
 
     expect(response.statusCode).toBe(401);
-    expect(response.body.message).toBe("Invalid credentials");
+    expect(response.body.message).toBe("Invalid Headers");
   });
 });
 
@@ -64,13 +64,13 @@ describe("ValidateHeaderDataFor bucket type", () => {
     const response = await supertest(app).post("/test");
 
     expect(response.statusCode).toBe(401);
-    expect(response.body.message).toBe("Invalid credentials");
+    expect(response.body.message).toBe("Invalid Headers");
   });
 
   it("fails validation and returns status:401 and message:Invalid credentials,when no valid header is passed", async () => {
     const response = await supertest(app).post("/test").set("bucket", "xyz");
 
     expect(response.statusCode).toBe(401);
-    expect(response.body.message).toBe("Invalid credentials");
+    expect(response.body.message).toBe("Invalid Headers");
   });
 });
