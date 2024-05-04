@@ -12,7 +12,7 @@ import { envVars } from "../configs/envVars.config";
 export class S3Service {
   public async getS3DefaultUploadUrl(key: string): Promise<ServiceResponse> {
     try {
-      const imageUrl = await getSignedUrl(
+      const signedUrl = await getSignedUrl(
         s3Client,
         new PutObjectCommand({
           Bucket: envVars.S3_DEFAULT_BUCKET_NAME,
@@ -23,7 +23,7 @@ export class S3Service {
         },
       );
       logger.info("s3 Upload Url created");
-      return { status: 200, message: "s3 upload url created", url: imageUrl };
+      return { status: 200, message: "s3 upload url created", url: signedUrl };
     } catch (err) {
       logger.error("Unknown error in creating s3 upload url", err);
       throw new Error("error in getS3DefaultUploadUrl");
@@ -32,7 +32,7 @@ export class S3Service {
 
   public async getS3BadBucketUploadUrl(key: string): Promise<ServiceResponse> {
     try {
-      const imageUrl = await getSignedUrl(
+      const signedUrl = await getSignedUrl(
         s3Client,
         new PutObjectCommand({
           Bucket: envVars.S3_BAD_BUCKET_NAME,
@@ -46,7 +46,7 @@ export class S3Service {
       return {
         status: 200,
         message: "s3 Bad bucket upload url created",
-        data: imageUrl,
+        data: signedUrl,
       };
     } catch (err) {
       logger.error(
@@ -58,7 +58,7 @@ export class S3Service {
   }
   public async getS3DownloadUrl(key: string): Promise<ServiceResponse> {
     try {
-      const imageUrl = await getSignedUrl(
+      const signedUrl = await getSignedUrl(
         s3Client,
         new GetObjectCommand({
           Bucket: envVars.S3_DEFAULT_BUCKET_NAME,
@@ -72,7 +72,7 @@ export class S3Service {
       return {
         status: 200,
         message: "s3 signedDownload Url fetched",
-        url: imageUrl,
+        url: signedUrl,
       };
     } catch (err) {
       logger.error("Unknown error in getS3DownloadUrl", err);

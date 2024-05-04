@@ -58,7 +58,7 @@ describe("EmailerService", () => {
       const emailerService = new EmailerService();
       await expect(
         emailerService.constructEmailPayload(currentUserToken, subject, text),
-      ).rejects.toThrowError("error in constructEmailPayload");
+      ).rejects.toThrow("error in constructEmailPayload");
     });
   });
 
