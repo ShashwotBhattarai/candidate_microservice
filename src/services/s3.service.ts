@@ -26,7 +26,7 @@ export class S3Service {
       return { status: 200, message: "s3 upload url created", url: imageUrl };
     } catch (err) {
       logger.error("Unknown error in creating s3 upload url", err);
-      throw new Error("error in generateS3UploadURL");
+      throw new Error("error in getS3DefaultUploadUrl");
     }
   }
 
@@ -53,7 +53,7 @@ export class S3Service {
         "Unknown error in creating s3 Bad bucket upload url from s3",
         err,
       );
-      throw new Error("error in generateS3BadBucketUploadURL");
+      throw new Error("error in getS3BadBucketUploadUrl");
     }
   }
   public async getS3DownloadUrl(key: string): Promise<ServiceResponse> {

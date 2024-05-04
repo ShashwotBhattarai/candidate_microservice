@@ -32,7 +32,7 @@ describe("S3Service", () => {
       });
     });
 
-    it("should throw error message:error in generateS3UploadURL, if getSignedUrl fails", async () => {
+    it("should throw error message:error in getS3DefaultUploadUrl, if getSignedUrl fails", async () => {
       const s3Service = new S3Service();
       const key = "testKey";
 
@@ -43,7 +43,7 @@ describe("S3Service", () => {
       try {
         await s3Service.getS3DefaultUploadUrl(key);
       } catch (error) {
-        expect(error).toEqual(new Error("error in generateS3UploadURL"));
+        expect(error).toEqual(new Error("error in getS3DefaultUploadUrl"));
       }
     });
   });
@@ -76,9 +76,7 @@ describe("S3Service", () => {
       try {
         await s3Service.getS3BadBucketUploadUrl(key);
       } catch (error) {
-        expect(error).toEqual(
-          new Error("error in generateS3BadBucketUploadURL"),
-        );
+        expect(error).toEqual(new Error("error in getS3BadBucketUploadUrl"));
       }
     });
   });
