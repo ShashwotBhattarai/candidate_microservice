@@ -6,6 +6,7 @@ import { EmailerService } from "./emailer.service";
 import { CvUploadStatus } from "../constants/cvUploadStatus.enum";
 import { UtilsService } from "./utils.service";
 import { CandidateInfoType } from "../models/candidateInfo.type";
+import { DefaultS3Bucket } from "../constants/aws.constants";
 
 export class CandidateService {
   private s3Service = new S3Service();
@@ -41,7 +42,7 @@ export class CandidateService {
       } else {
         logger.info("Candidate not found");
         return {
-          status: 404,
+          status: 500,
           message: "Candidate not found",
         };
       }
@@ -132,7 +133,7 @@ export class CandidateService {
       const candidateService = new CandidateService();
       const current_user_id = this.utilsService.findCurrentuserId(accessToken);
 
-      if (bucket === "default") {
+      if (bucket === DefaultS3Bucket) {
         const findSavedS3keyResponse =
           await candidateService.findSavedS3key(accessToken);
 

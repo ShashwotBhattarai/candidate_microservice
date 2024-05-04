@@ -60,12 +60,12 @@ describe("CandidateService", () => {
       expect(result.message).toBe("candidate found but CV not found");
     });
 
-    it("should return 404 status with message:Candidate not found, when candidate is not found", async () => {
+    it("should return 500 status with message:Candidate not found, when candidate is not found", async () => {
       jest.spyOn(CandidateInfo, "findOne").mockResolvedValueOnce(null);
 
       const result = await candidateService.getOneCandidateInfo("123");
 
-      expect(result.status).toBe(404);
+      expect(result.status).toBe(500);
       expect(result.message).toBe("Candidate not found");
     });
 
@@ -291,7 +291,6 @@ describe("CandidateService", () => {
           message: "file deleted from s3",
         });
 
-      //this type was introduced to get rid of typescript error, turns our mockResolvedValueOnce in case of updateOne returns specific data type
       type MockUpdateResult = UpdateWriteOpResult & {
         n?: number;
         nModified?: number;
@@ -334,7 +333,6 @@ describe("CandidateService", () => {
         .spyOn(CandidateService.prototype, "findSavedS3key")
         .mockResolvedValueOnce(mockFindSavedS3keyResponse);
 
-      //this type was introduced to get rid of typescript error, turns our mockResolvedValueOnce in case of updateOne returns specific data type
       type MockUpdateResult = UpdateWriteOpResult & {
         n?: number;
         nModified?: number;

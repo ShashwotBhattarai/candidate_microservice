@@ -19,16 +19,16 @@ describe("Sqs service", () => {
     sqsClientMock.on(SendMessageCommand).resolves({
       $metadata: {
         httpStatusCode: 200,
-        requestId: "6b3e8e90-5cc2-5ab0-8271-d36853268a0e",
+        requestId: "mockRequesID",
         extendedRequestId: undefined,
         cfId: undefined,
         attempts: 1,
         totalRetryDelay: 0,
       },
-      MD5OfMessageAttributes: "8364c9f86971581747998a1be1bc61a7",
-      MD5OfMessageBody: "3f4c3c36d1208f4bd292aabf8b295141",
-      MessageId: "55029f88-98f9-41ef-88b0-e777c7da7629",
-      SequenceNumber: "74222882815101630464",
+      MD5OfMessageAttributes: "mockMD5OfMessageAttributes",
+      MD5OfMessageBody: "mockMD5OfMessageBody",
+      MessageId: "mockMessageId",
+      SequenceNumber: "mockSequenceNumber",
     });
     const emailPayload = {
       to: "babudallay@gmail.com",
