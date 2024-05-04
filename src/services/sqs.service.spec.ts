@@ -13,7 +13,7 @@ describe("Sqs service", () => {
     jest.clearAllMocks();
   });
 
-  it("responds with status: 200, message: messsage sent to sqs queue", async () => {
+  it("responds with status: 200, message: messsage sent to sqs queue when message is sent to queue", async () => {
     const sqsClientMock = mockClient(SQSClient);
 
     sqsClientMock.on(SendMessageCommand).resolves({

@@ -93,7 +93,7 @@ describe("EmailerService", () => {
       expect(response.status).toBe(200);
     });
 
-    it("should call con", async () => {
+    it("should throw an error:Error in sendEmail when any error occurs", async () => {
       const currentToken = "token";
       const status = CvUploadStatus.CV_UPLOADED_TO_BAD_BUCKET;
       const emailPayload: EmailPayload = {
